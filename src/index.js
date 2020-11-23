@@ -1,12 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
+import {createStore, Store} from 'redux';
+import {Provider} from 'react-redux';
 import reportWebVitals from './reportWebVitals';
+
+import SearchPage from './components/SearchPage';
+
+import songReducer from './reducers/SongReducer';
+
+import './index.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const LandingPage = () => <div className="container"><Link to="/search">Search</Link></div>
+const DetailsPage = () => <div className="container">Details Page</div>
+
+const store = createStore(songReducer);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/search" component={SearchPage} />
+          <Route exact path="/details/:detailsId" component={DetailsPage} />
+        </Switch>
+      </Router>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
