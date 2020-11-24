@@ -23,7 +23,7 @@ class Details extends React.Component {
                 </span>
                 <p>Title: {this.props.song.name}</p>
                 <p>Artist(s): {this.props.song.artists.map((artist, index) => (
-                    artist.name + (index > 0 && index < this.props.song.artists - 1 ? ', ' : '')
+                    artist.name + (index < this.props.song.artists.length - 1 ? ', ' : '')
                 ))}</p>
                 <img src={this.props.song.album.images[0].url}  alt=""/>
             </div>

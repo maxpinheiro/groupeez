@@ -3,13 +3,14 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import {search} from "../services/SpotifyService";
+import queryString from "querystring";
 
 class Search extends React.Component {
     state = {query: '', type: 'track,album,artist'};
 
-    search = () => {
+    search = (query) => {
         const queryParams = {
-            q: this.state.query,
+            q: query,
             type: this.state.type,
             limit: 10
         }
@@ -20,38 +21,49 @@ class Search extends React.Component {
         });
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const query = queryString.parse(this.props.location.search)["?criteria"];
+        if (query) {
+            this.search(query)
+        }
+    }
+
     render() {
         return (
             <div className="container-fluid">
                 <h3>Search Spotify</h3>
                 <div className="input-group">
-                    <input className="form-control" placeholder="search for songs, albums, or artists..." value={this.state.query}
+                    <input className="form-control" placeholder="search for a song..." value={this.state.query}
                             onChange={(e) => this.setState({query: e.target.value})}/>
                     <div className="input-group-append">
-                        <button className="btn btn-primary" onClick={this.search}>
+                        <Link className="btn btn-primary" to={`/search?${queryString.stringify({criteria: this.state.query})}`}>
                             Search
-                        </button>
+                        </Link>
                     </div>
                 </div>
-                <h4>Songs</h4>
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.props.songs.map(song =>
-                                <tr key={song.id}>
-                                    <th>
-                                        <Link to={`/details/${song.id}?spotify=true`}>{song.name}</Link>
-                                    </th>
-                                </tr>
-                            )
-                        }
-                    </tbody>
-                </table>
+                { this.props.location.search !== '' &&
+                 <div>
+                     <h4>Songs</h4>
+                     <table className="table table-striped">
+                         <thead>
+                         <tr>
+                             <th>Title</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         {
+                             this.props.songs.map(song =>
+                                 <tr key={song.id}>
+                                     <th>
+                                         <Link to={`/details/${song.id}?spotify=true`}>{song.name}</Link>
+                                     </th>
+                                 </tr>
+                             )
+                         }
+                         </tbody>
+                     </table>
+                 </div>
+                }
             </div>
         );
     }
