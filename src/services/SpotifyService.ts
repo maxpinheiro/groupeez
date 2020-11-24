@@ -1,7 +1,14 @@
-type restful = (s: string) => Promise<JSON>;
-const searchUrl: string = '';
+const queryString = require('querystring');
 
-export const search: restful = (query: string) => {
-    return fetch(searchUrl)
-        .then(response => response.json());
+type searchQuery = {q: string};
+type restful = (params: searchQuery) => Promise<JSON>;
+
+const searchUrl: string = 'https://api.spotify.com/v1/search';
+
+export const search: restful = (queryParams: searchQuery) => {
+    return fetch(`${searchUrl}?${queryString.stringify(queryParams)}`, {
+        headers: {
+            Authorization: ''
+        }
+    }).then(response => response.json());
 }
