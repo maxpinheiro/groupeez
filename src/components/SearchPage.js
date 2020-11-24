@@ -42,12 +42,13 @@ class Search extends React.Component {
                     </div>
                 </div>
                 { this.props.location.search !== '' &&
-                 <div>
-                     <h4>Songs</h4>
+                 <div className="my-3">
+                     <h4>Results</h4>
                      <table className="table table-striped">
                          <thead>
                          <tr>
                              <th>Title</th>
+                             <th>Type</th>
                          </tr>
                          </thead>
                          <tbody>
@@ -56,6 +57,9 @@ class Search extends React.Component {
                                  <tr key={song.id}>
                                      <th>
                                          <Link to={`/details/${song.id}?spotify=true`}>{song.name}</Link>
+                                     </th>
+                                     <th>
+                                         Song
                                      </th>
                                  </tr>
                              )
