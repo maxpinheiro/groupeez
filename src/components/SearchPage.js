@@ -31,7 +31,12 @@ class Search extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                <h3>Search Spotify</h3>
+                <span>
+                    <p className="h3 d-inline">Search Spotify</p>
+                    {this.props.location.search !== '' &&
+                    <Link to="/search">Clear search</Link>
+                    }
+                </span>
                 <div className="input-group">
                     <input className="form-control" placeholder="search for a song..." value={this.state.query}
                             onChange={(e) => this.setState({query: e.target.value})}/>
