@@ -10,7 +10,6 @@ import {CallbackPage, RedirectPage} from "./components/MiddleTier";
 import DetailsPage from "./components/DetailsPage";
 
 import spotifyReducer from "./reducers/SpotifyReducer";
-import songReducer from './reducers/SongReducer';
 
 import './index.css';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -21,7 +20,7 @@ const LandingPage = () =>
         <Link to="/authorize">Search</Link>
     </div>
 
-const store = createStore(combineReducers({spotifyReducer, songReducer}));
+const store = createStore(combineReducers({spotifyReducer}));
 
 ReactDOM.render(
   <React.StrictMode>
