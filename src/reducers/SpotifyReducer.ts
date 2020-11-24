@@ -7,10 +7,11 @@ type songModel = {
         images: {url: string}[]
     }
 };
-const initialState: {authCode: string, accessToken: string, refreshToken: string, songs: songModel[], albums: Object[], artists: Object[], resultSong: songModel} = {
+const initialState: {authCode: string, accessToken: string, refreshToken: string, searchQuery: string, songs: songModel[], albums: Object[], artists: Object[], resultSong: songModel} = {
     authCode: '',
     accessToken: '',
     refreshToken: '',
+    searchQuery: '',
     songs: [],
     albums: [],
     artists: [],
@@ -33,7 +34,8 @@ const spotifyReducer: Reducer = (state=initialState, action) => {
         case "SEARCH_SONGS":
             return {
                 ...state,
-                songs: action.songs
+                songs: action.songs,
+                searchQuery: action.query
             }
         case "RESULT_SONG":
             return {

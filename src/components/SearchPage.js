@@ -16,7 +16,7 @@ class Search extends React.Component {
         }
         search(queryParams, this.props.accessToken).then(response => {
             if (response.tracks) {
-                this.props.setSongs(response.tracks.items)
+                this.props.setSongs(response.tracks.items, query);
             }
         });
     };
@@ -76,7 +76,7 @@ const stateToProperty = (state) => ({
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
-    setSongs: (songs) => dispatch({type: 'SEARCH_SONGS', songs})
+    setSongs: (songs, query) => dispatch({type: 'SEARCH_SONGS', songs, query})
 })
 
 const SearchPage = connect(stateToProperty, propertyToDispatchMapper)(Search);
