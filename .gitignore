@@ -10,6 +10,8 @@
 
 # production
 /build
+.env
+src/private.json
 
 # misc
 .DS_Store

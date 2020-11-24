@@ -14,7 +14,6 @@ import songReducer from './reducers/SongReducer';
 import './index.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 
-require('dotenv').config();
 
 const LandingPage = () =>
     <div className="container">

@@ -3,9 +3,10 @@ import {connect} from "react-redux";
 import {Redirect} from "react-router-dom";
 import queryString from 'querystring';
 
+import env from '../private.json';
 import {fetchTokens} from "../services/SpotifyService";
 
-const clientId =  process.env.CLIENT_ID === undefined ? 'bfc0e2b164624c0caa413825fab9fa36' : process.env.CLIENT_ID;
+const clientId = env.CLIENT_ID;
 const authorizeUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${encodeURIComponent('user-read-private user-read-email')}&redirect_uri=${encodeURIComponent('http://localhost:3000/callback')}`
 
 export const RedirectPage = () => {
