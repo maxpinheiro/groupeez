@@ -1,10 +1,9 @@
 import env from '../private.json';
 
 const queryString = require('querystring');
-type searchQuery = {q: string};
-const searchUrl: string = 'https://api.spotify.com/v1/search';
+const searchUrl = 'https://api.spotify.com/v1/search';
 
-export const search: (params: searchQuery, accessToken: string) => Promise<JSON> = (queryParams: searchQuery, accessToken: string) => {
+export const search= (queryParams, accessToken) => {
     return fetch(`${searchUrl}?${queryString.stringify(queryParams)}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
@@ -12,7 +11,7 @@ export const search: (params: searchQuery, accessToken: string) => Promise<JSON>
     }).then(response => response.json());
 }
 
-export const findSong: (songId: string, accessToken: string) => Promise<JSON> = (songId: string, accessToken: string) => {
+export const findSong = (songId, accessToken) => {
     return fetch(`https://api.spotify.com/v1/tracks/${songId}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
@@ -20,7 +19,7 @@ export const findSong: (songId: string, accessToken: string) => Promise<JSON> = 
     }).then(response => response.json());
 }
 
-export const fetchTokens: (authCode: string) => Promise<JSON> = (authCode: string) => {
+export const fetchTokens = (authCode) => {
     return fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
