@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 import SearchPage from './components/SearchPage';
 import {CallbackPage, RedirectPage} from "./components/MiddleTier";
+import DetailsPage from "./components/DetailsPage";
 
 import spotifyReducer from "./reducers/SpotifyReducer";
 import songReducer from './reducers/SongReducer';
@@ -17,11 +18,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const LandingPage = () =>
     <div className="container">
-        <Link to="/search">Search</Link>
-        <Link to="/authorize">Authorize</Link>
+        <Link to="/authorize">Search</Link>
     </div>
-
-const DetailsPage = () => <div className="container">Details Page</div>
 
 const store = createStore(combineReducers({spotifyReducer, songReducer}));
 

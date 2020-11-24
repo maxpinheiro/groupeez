@@ -12,6 +12,14 @@ export const search: (params: searchQuery, accessToken: string) => Promise<JSON>
     }).then(response => response.json());
 }
 
+export const findSong: (songId: string, accessToken: string) => Promise<JSON> = (songId: string, accessToken: string) => {
+    return fetch(`https://api.spotify.com/v1/tracks/${songId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    }).then(response => response.json());
+}
+
 export const fetchTokens: (authCode: string) => Promise<JSON> = (authCode: string) => {
     return fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',

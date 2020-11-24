@@ -24,7 +24,6 @@ class Search extends React.Component {
         return (
             <div className="container-fluid">
                 <h3>Search Spotify</h3>
-                <div>{`access: ${this.props.accessToken} \n refresh: ${this.props.refreshToken}`}</div>
                 <div className="input-group">
                     <input className="form-control" placeholder="search for songs, albums, or artists..." value={this.state.query}
                             onChange={(e) => this.setState({query: e.target.value})}/>

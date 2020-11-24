@@ -1,12 +1,20 @@
 import { Reducer } from 'redux';
 
-const initialState: {authCode: string, accessToken: string, refreshToken: string, songs: Object[], albums: Object[], artists: Object[]} = {
+type songModel = {
+    name: string,
+    artists: {name: string}[],
+    album: {
+        images: {url: string}[]
+    }
+};
+const initialState: {authCode: string, accessToken: string, refreshToken: string, songs: songModel[], albums: Object[], artists: Object[], resultSong: songModel} = {
     authCode: '',
     accessToken: '',
     refreshToken: '',
     songs: [],
     albums: [],
-    artists: []
+    artists: [],
+    resultSong: {name: '', artists: [], album: {images: [{url: ''}]}}
 };
 
 const spotifyReducer: Reducer = (state=initialState, action) => {
@@ -26,6 +34,11 @@ const spotifyReducer: Reducer = (state=initialState, action) => {
             return {
                 ...state,
                 songs: action.songs
+            }
+        case "RESULT_SONG":
+            return {
+                ...state,
+                resultSong: action.song
             }
         default:
             return state
