@@ -6,7 +6,7 @@ import {Provider} from 'react-redux';
 import reportWebVitals from './reportWebVitals';
 
 import SearchPage from './components/SearchPage';
-import {CallBackPage, RedirectPage} from "./components/MiddleTier";
+import {CallbackPage, RedirectPage} from "./components/MiddleTier";
 
 import spotifyReducer from "./reducers/SpotifyReducer";
 import songReducer from './reducers/SongReducer';
@@ -35,7 +35,7 @@ ReactDOM.render(
           <Route exact path="/search" component={SearchPage} />
           <Route exact path="/details/:detailsId" component={DetailsPage} />
           <Route exact path="/authorize" component={RedirectPage} />
-          <Route exact path="/callback" component={CallBackPage} />
+          <Route exact path="/callback" component={CallbackPage} />
         </Switch>
       </Router>
     </Provider>
