@@ -1,40 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import {combineReducers, createStore} from 'redux';
 import {Provider} from 'react-redux';
+import {CookiesProvider} from 'react-cookie';
 import reportWebVitals from './reportWebVitals';
-
-import SearchPage from './components/SearchPage';
-import {CallbackPage, RedirectPage} from "./components/MiddleTier";
-import DetailsPage from "./components/DetailsPage";
 
 import spotifyReducer from "./reducers/SpotifyReducer";
 
 import './index.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-
-
-const LandingPage = () =>
-    <div className="container">
-        <Link to="/authorize">Search</Link>
-    </div>
+import App from "./App";
 
 const store = createStore(combineReducers({spotifyReducer}));
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/search" component={SearchPage} />
-          <Route exact path="/details/:detailsId" component={DetailsPage} />
-          <Route exact path="/authorize" component={RedirectPage} />
-          <Route exact path="/callback" component={CallbackPage} />
-        </Switch>
-      </Router>
-    </Provider>
+      <CookiesProvider>
+        <Provider store={store}>
+            <App />
+        </Provider>
+      </CookiesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

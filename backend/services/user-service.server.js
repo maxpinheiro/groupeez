@@ -1,23 +1,40 @@
-let users = [
-    {
-        username: "mpinheiro",
-        password: "thatsgreedy"
-    },
-    {
-        username: "ofloody",
-        password: "nowayjose"
-    }
-];
+const {generateId} = require('../utils/utils');
+const artistService = require('./artist-service.server');
+const listenerService = require('./listener-service.server');
 
-const findUserByCredentials = (username, password) => users.find(user => user.username === username);
+let users = [...(require('./users.json'))];
+let currentUser = null;
 
-const createUser = (username, password) => {
-    if (users.find(user => user.username === username)) {
+const findAllUsers = () => users;
+
+const findUserByCredentials = (username) => users.find(user => user.username === username);
+
+const findUserById = (userId) => users.find(user => user.id === userId);
+
+const createUser = (user) => {
+    // can't have two users with the same username
+    if (users.find(u => u.username === user.username)) {
         return undefined;
     } else {
-        users.push({username, password});
-        return {username, password};
+        let id = generateId(10);
+        // can't have two users with the same id
+        while (users.find(u => u.id === id)) {
+            id = generateId(10);
+        }
+        users.push({id, username: user.username, password: user.password, role: user.role});
+
+        // add user to artist/listener database
+        if (user.role === 'artist') {
+            artistService.createArtist(user);
+        } else {
+            listenerService.createListener(user);
+        }
+
+        return {id, username: user.username, password: user.password, role: user.role};
     }
 }
 
-module.exports = {findUserByCredentials, createUser};
+const getCurrentUser = () => currentUser;
+const setCurrentUser = (user) => currentUser = user;
+
+module.exports = {findAllUsers, findUserByCredentials, findUserById, createUser, getCurrentUser, setCurrentUser};
