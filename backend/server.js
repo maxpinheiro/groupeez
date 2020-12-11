@@ -31,5 +31,7 @@ app.get('/api', (req, res) => {
 require('./controllers/user-controller.server')(app);
 require('./controllers/artist-controller.server')(app);
 require('./controllers/listener-controller.server')(app);
+require('./controllers/song-controller.sever')(app);
+require('./controllers/review-controller.sever')(app);
 
 app.listen(4000, () => console.log("Listening on port 4000..."));

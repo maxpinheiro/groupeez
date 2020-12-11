@@ -14,7 +14,7 @@ const findUserById = (userId) => users.find(user => user.id === userId);
 const createUser = (user) => {
     // can't have two users with the same username
     if (users.find(u => u.username === user.username)) {
-        return undefined;
+        return null;
     } else {
         let id = generateId(10);
         // can't have two users with the same id
@@ -22,7 +22,7 @@ const createUser = (user) => {
             id = generateId(10);
         }
         users.push({id, username: user.username, password: user.password, role: user.role});
-
+        console.log('users: ' + users);
         // add user to artist/listener database
         if (user.role === 'artist') {
             artistService.createArtist(user);
