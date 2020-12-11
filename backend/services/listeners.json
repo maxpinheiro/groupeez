@@ -5,10 +5,10 @@
     "name": "Max Pinheiro",
     "bio": "Hi it's Max, welcome to my page :)",
     "profileUrl": "https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png",
-    "reviews": ["reviewId1, reviewId2"],
-    "favorites": ["songId1", "songId3"],
-    "following": ["artistId2, artistId3"],
-    "friends": ["listenerId2", "listenerId4"]
+    "reviews": ["nikes_review_id, chanel_review_id"],
+    "favorites": ["chanelId", "nikesId"],
+    "following": ["fb4gb3kwlh, 45xsji3bb1"],
+    "friends": ["c7st3sd724"]
   },
   {
     "id": "c7st3sd724",
@@ -16,9 +16,9 @@
     "name": "Olivia Floody",
     "bio": "I'm Olivia. Join the party.",
     "profileUrl": "https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png",
-    "reviews": ["reviewId3, reviewId4"],
-    "favorites": ["songId2", "songId4"],
-    "following": ["artistId1, artistId4"],
-    "friends": ["listenerId1", "listenerId3"]
+    "reviews": ["liftoffId_reviewId, snow_patrol_reviewId"],
+    "favorites": ["snow_patrolId", "chanelId"],
+    "following": ["45xsji3bb1"],
+    "friends": ["7lj02xh15g"]
   }
 ]

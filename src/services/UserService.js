@@ -14,4 +14,4 @@ export const getCurrentUser = () => {
     }).then(response => response.json());
 }
 
-export default {login, getCurrentUser};
+module.exports = {login, getCurrentUser};
