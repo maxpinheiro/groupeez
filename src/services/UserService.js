@@ -14,4 +14,9 @@ export const getCurrentUser = () => {
     }).then(response => response.json());
 }
 
-module.exports = {login, getCurrentUser};
+export const getUserById = (userId) => {
+    return fetch(`http://localhost:4000/api/user/${userId}`,
+        {}).then(response => response.json());
+}
+
+module.exports = {login, getCurrentUser, getUserById};
