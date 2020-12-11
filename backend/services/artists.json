@@ -5,7 +5,6 @@
     "name": "Frank Ocean",
     "spotifyId": "2h93pZq0e7k5yf4dywlkpM",
     "bio": "Yep, it's me - Frank Ocean.",
-    // "profileId" will come from Spotify Web API
     "library": ["nikesId", "chanelId"],
     "reviews": ["nikes_review_id", "chanel_review_id"],
     "posts": ["frank_tourId", "frank_messageId"],
@@ -24,14 +23,3 @@
     "followers": ["7lj02xh15g", "c7st3sd724"]
   }
 ]
-/*
-    "id": "c7st3sd724",
-    "username": "ofloody",
-    "name": "Olivia Floody",
-    "bio": "I'm Olivia. Join the party.",
-    "profileUrl": "https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png",
-    "reviews": ["reviewId3, reviewId4"],
-    "favorites": ["songId2", "songId4"],
-    "following": ["artistId1, artistId4"],
-    "friends": ["listenerId1", "listenerId3"]
-*/
