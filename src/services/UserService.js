@@ -13,7 +13,6 @@ export const getCurrentUser = () => {
         withCredentials: true
     }).then(response => response.json());
 }
-
 export const getUserById = (userId) => {
     return fetch(`http://localhost:4000/api/user/${userId}`,
         {}).then(response => response.json());

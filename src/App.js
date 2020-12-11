@@ -22,6 +22,7 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path="/" component={LandingPage} />
                         <Route exact path="/login" component={LoginPage} />
+                        <Route exact path="/register" component={LoginPage} />
                         <Route path={["/profile", "/profile/:userId"]} component={ProfilePage} />
                         <Route exact path="/search" component={SearchPage} />
                         <Route exact path="/details/:detailsId" component={DetailsPage} />
