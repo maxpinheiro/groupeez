@@ -1,12 +1,37 @@
 [
   {
     "id": "fb4gb3kwlh",
+    "username": "frankocean",
     "name": "Frank Ocean",
-    "spotifyId": "2h93pZq0e7k5yf4dywlkpM"
+    "spotifyId": "2h93pZq0e7k5yf4dywlkpM",
+    "bio": "Yep, it's me - Frank Ocean.",
+    // "profileId" will come from Spotify Web API
+    "library": ["nikesId", "chanelId"],
+    "reviews": ["nikes_review_id", "chanel_review_id"],
+    "posts": ["frank_tourId", "frank_messageId"],
+    "followers": ["7lj02xh15g"]
   },
   {
     "id": "45xsji3bb1",
+    "username": "cosmic_monkey",
     "name": "Cosmic Monkey",
-    "spotifyId": null
+    "spotifyId": null,
+    "bio": "Just a band called Cosmic Monkey.",
+    "profileId": "https://external-preview.redd.it/4zUxbvUR6kvAAEn9siuEOyEwb2eAUpelrk2v7XyQ3ew.jpg?auto=webp&s=3b68460c2ba8735449f4c8b6138d1f7aad98eda7",
+    "library": ["snow_patrolId", "liftoffId"],
+    "reviews": ["liftoffId_reviewId", "snow_patrol_reviewId"],
+    "posts": ["cosmic_tourId", "cosmic_messageId"],
+    "followers": ["7lj02xh15g"]
   }
 ]
+/*
+    "id": "c7st3sd724",
+    "username": "ofloody",
+    "name": "Olivia Floody",
+    "bio": "I'm Olivia. Join the party.",
+    "profileUrl": "https://e7.pngegg.com/pngimages/416/62/png-clipart-anonymous-person-login-google-account-computer-icons-user-activity-miscellaneous-computer.png",
+    "reviews": ["reviewId3, reviewId4"],
+    "favorites": ["songId2", "songId4"],
+    "following": ["artistId1, artistId4"],
+    "friends": ["listenerId1", "listenerId3"]
+*/
