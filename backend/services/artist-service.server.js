@@ -1,22 +1,23 @@
-let artists = [...(require('./artists.json'))];
+const {generateId} = require('../utils/utils');
 
-const findAllArtists = () => artists;
+let songs = [...(require('./songs.json'))];
 
-const findArtistById = (artistId) => artists.find(artist => artist.id === artistId);
+const findAllSongs = () => songs;
 
-const createArtist = (artist) => {
-    const spotifyId = artist.spotifyId || null;
-    artists.push({id: artist.id, name: 'New user', spotifyId});
-    console.log('artists: ' + artists);
-    return {id: artist.id, name: 'New user', spotifyId};
-};
+const findUserByCredentials = (songId) => songs.find(song => song.id === songId);
 
-const updateArtist = (artistId, newArtist) => {
+const findUserById = (songId) => songs.find(song => song.id === songId);
 
-};
+const createUser = (song) => {
+    let id = generateId(10);
+    // can't have two songs with the same id
+    while (songs.find(u => u.id === id)) {
+        id = generateId(10);
+    }
+    songs.push({id, artist: song.artist, artistId: song.artistId, name: song.name});
+    console.log('songs: ' + songs);
+    return {id, artist: song.artist, artistId: song.artistId, name: song.name};
+}
 
-const deleteArtist = (artistId, newArtist) => {
 
-};
-
-module.exports = {findAllArtists, findArtistById, createArtist, updateArtist, deleteArtist}
+module.exports = {findAllSongs, findUserByCredentials, findUserById, createUser};
