@@ -45,6 +45,41 @@ class Profile extends React.Component {
         }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        //console.log(this.props.match.params.userId);
+/*
+        const userId = this.props.match.params.userId;
+        if (!userId) { // personal profile path - viewing own page
+            userService.getCurrentUser()
+                .then(currentUser => {
+                    if (!currentUser.error) {
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                user: currentUser,
+                                personalPage: true,
+                            }
+                        })
+                    }
+                })
+        }
+        else if(userId !== this.prevProps.match.params.userId) {
+            userService.getUserById(userId)
+                .then(currentUser => {
+                    if(!currentUser.error) {
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                user: currentUser
+                            }
+                        })
+                    }
+                })
+        }
+
+ */
+    }
+
 
     render() {
         return (

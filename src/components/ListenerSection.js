@@ -34,6 +34,18 @@ class Listener extends React.Component {
     }
 
 
+    friendName = (listenerId) => {
+        ListenerService.findListenerById(listenerId)
+            .then(listener => {
+                if (!listener.error) {
+                    return listener.username;
+                }
+            });
+        return "";
+    };
+
+
+
     render() {
         return (
             <div className="container-fluid">
@@ -68,7 +80,7 @@ class Listener extends React.Component {
                                             {song.title}
                                         </div>
                                         <div className={"float-right"}>
-                                            {song.artists}
+                                            {song.artist}
                                         </div>
                                     </div>
                                 )
@@ -86,9 +98,6 @@ class Listener extends React.Component {
                                          className={"list-item"}>
                                         <div className={"float-left"}>
                                             {review.title}
-                                        </div>
-                                        <div className={"float-right"}>
-                                            {review.about}
                                         </div>
                                     </div>
                                 )
@@ -122,11 +131,11 @@ class Listener extends React.Component {
                             </div>
                             <div className={"list-group"}>
                                 {
-                                    this.state.listener.friends.map(friend =>
-                                        <div key={friend.id}
+                                    this.state.listener.friends.map(friendId =>
+                                        <div key={friendId}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
-                                                {friend.username}
+                                                {this.friendName(friendId)}
                                             </div>
                                         </div>
                                     )
