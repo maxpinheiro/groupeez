@@ -14,7 +14,7 @@ class Profile extends React.Component {
         if (!userId) { // logged in
             userService.getCurrentUser()
                 .then(currentUser => {
-                    console.log(currentUser);
+
                 })
         }
     }

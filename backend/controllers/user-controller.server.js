@@ -19,11 +19,10 @@ module.exports = function (app) {
     });
 
     app.post('/api/register', (req, res) => {
-        const username = req.body.username;
-        const password = req.body.password;
-        const user = userService.createUser(username, password);
+        const newUser = req.body;
+        const user = userService.createUser(newUser);
         if (user) {
-            req.session['currentUser'] = user;
+            //req.session['currentUser'] = user;
             userService.setCurrentUser(user);
             res.json(user);
         } else {
@@ -32,7 +31,7 @@ module.exports = function (app) {
     });
 
     app.post('/api/logout', (req, res) => {
-        req.session.destroy();
+        //req.session.destroy();
         userService.setCurrentUser(null);
         res.status(200);
     });

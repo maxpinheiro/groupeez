@@ -5,8 +5,10 @@ const findAllArtists = () => artists;
 const findArtistById = (artistId) => artists.find(artist => artist.id === artistId);
 
 const createArtist = (artist) => {
-    artists.push({id: artist.id, name: artist.name, spotifyId: artists.spotifyId});
-    return {id: artist.id, name: artist.name, spotifyId: artists.spotifyId};
+    const spotifyId = artist.spotifyId || null;
+    artists.push({id: artist.id, name: 'New user', spotifyId});
+    console.log('artists: ' + artists);
+    return {id: artist.id, name: 'New user', spotifyId};
 };
 
 const updateArtist = (artistId, newArtist) => {

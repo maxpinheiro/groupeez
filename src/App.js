@@ -7,6 +7,7 @@ import {CallbackPage, RedirectPage} from "./components/MiddleTier";
 import DetailsPage from "./components/DetailsPage";
 import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/ProfilePage";
+import RegisterPage from "./components/RegisterPage";
 
 const LandingPage = () =>
     <div className="container">
@@ -22,7 +23,7 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path="/" component={LandingPage} />
                         <Route exact path="/login" component={LoginPage} />
-                        <Route exact path="/register" component={LoginPage} />
+                        <Route exact path="/register" component={RegisterPage} />
                         <Route path={["/profile", "/profile/:userId"]} component={ProfilePage} />
                         <Route exact path="/search" component={SearchPage} />
                         <Route exact path="/details/:detailsId" component={DetailsPage} />
