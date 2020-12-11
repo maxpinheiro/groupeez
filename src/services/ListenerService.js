@@ -19,4 +19,4 @@ const deleteListener = (listenerId, newListener) => {
 
 };
 
-module.exports = {findAllListeners, findListenerById, createListener, updateListener, deleteListener}
+export default {findAllListeners, findListenerById, createListener, updateListener, deleteListener}

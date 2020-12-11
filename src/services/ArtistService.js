@@ -19,4 +19,4 @@ const deleteArtist = (listenerId, newListener) => {
 
 };
 
-module.exports = {findAllArtists, findArtistById, createArtist, updateArtist, deleteArtist}
+export default {findAllArtists, findArtistById, createArtist, updateArtist, deleteArtist}

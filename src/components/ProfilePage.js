@@ -19,7 +19,9 @@ class Profile extends React.Component {
             this.state.personPage = true;
             userService.getCurrentUser()
                 .then(currentUser => {
-                    this.state.user = currentUser;
+                    if (!currentUser.error) {
+                        this.state.user = currentUser;
+                    }
                 })
         }
         else {
@@ -35,11 +37,11 @@ class Profile extends React.Component {
         return (
             <div className="container-fluid">
                 {
-                    this.state.user.role === "listener" &&
+                    this.state.user && this.state.user.role === "listener" &&
                         <ListenerSection listenerId={this.state.user.id} private={this.state.personalPage}/>
                 }
                 {
-                    this.state.currentUser.role === "artist" &&
+                    this.state.user && this.state.currentUser.role === "artist" &&
                         <ArtistSection artistId={this.state.user.id} private={this.state.personalPage}/>
                 }
 

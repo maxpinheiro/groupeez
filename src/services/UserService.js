@@ -19,4 +19,4 @@ export const getUserById = (userId) => {
         {}).then(response => response.json());
 }
 
-module.exports = {login, getCurrentUser, getUserById};
+export default {login, getCurrentUser, getUserById};
