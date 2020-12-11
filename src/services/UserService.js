@@ -23,5 +23,9 @@ export const getCurrentUser = () => {
         withCredentials: true
     }).then(response => response.json());
 }
+export const getUserById = (userId) => {
+    return fetch(`http://localhost:4000/api/user/${userId}`,
+        {}).then(response => response.json());
+}
 
-export default {login, register, getCurrentUser};
+export default {login, register, getCurrentUser, getUserById};
