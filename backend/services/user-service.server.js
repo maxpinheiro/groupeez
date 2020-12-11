@@ -4,6 +4,8 @@ const listenerService = require('./listener-service.server');
 
 let users = [...(require('./users.json'))];
 let currentUser = null;
+let accessToken = "";
+let refreshToken = "";
 
 const findAllUsers = () => users;
 
@@ -37,4 +39,10 @@ const createUser = (user) => {
 const getCurrentUser = () => currentUser;
 const setCurrentUser = (user) => currentUser = user;
 
-module.exports = {findAllUsers, findUserByCredentials, findUserById, createUser, getCurrentUser, setCurrentUser};
+const getAccessToken = () => accessToken;
+const setAccessToken = (token) => accessToken = token;
+
+const getRefreshToken = () => refreshToken;
+const setRefreshToken = (token) => refreshToken = token;
+
+module.exports = {findAllUsers, findUserByCredentials, findUserById, createUser, getCurrentUser, setCurrentUser, getAccessToken, setAccessToken, getRefreshToken, setRefreshToken};

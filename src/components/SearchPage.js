@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import {search} from "../services/SpotifyService";
 import queryString from "querystring";
 
+import userService from '../services/UserService';
+
 class Search extends React.Component {
     state = {query: '', type: 'track,album,artist'};
 

@@ -24,8 +24,21 @@ export const getCurrentUser = () => {
     }).then(response => response.json());
 }
 export const getUserById = (userId) => {
-    return fetch(`http://localhost:4000/api/user/${userId}`,
-        {}).then(response => response.json());
+    return fetch(`http://localhost:4000/api/users/${userId}`).then(response => response.json());
 }
 
-export default {login, register, getCurrentUser, getUserById};
+export const getAccessToken= () => {
+    return fetch(`http://localhost:4000/api/accessToken`).then(response => response.json());
+}
+
+export const setAccessToken = (accessToken) => {
+    return fetch('http://localhost:4000/api/accessToken', {
+        method: 'POST',
+        body: JSON.stringify(accessToken),
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(response => response.json());
+}
+
+export default {login, register, getCurrentUser, getUserById, getAccessToken, setAccessToken};
