@@ -14,20 +14,33 @@ class Profile extends React.Component {
 
     componentDidMount() {
         //console.log(this.props.cookies.get('currentUser'));
+
         const userId = this.props.match.params.userId;
-        if (!userId) { // logged in
-            this.state.personPage = true;
+        if (!userId) { // personal profile path - viewing own page
             userService.getCurrentUser()
                 .then(currentUser => {
                     if (!currentUser.error) {
-                        this.state.user = currentUser;
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                user: currentUser,
+                                personalPage: true,
+                            }
+                        })
                     }
                 })
         }
         else {
             userService.getUserById(userId)
                 .then(currentUser => {
-                    this.state.user = currentUser;
+                    if(!currentUser.error) {
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                user: currentUser
+                            }
+                        })
+                    }
                 })
         }
     }
@@ -41,7 +54,7 @@ class Profile extends React.Component {
                         <ListenerSection listenerId={this.state.user.id} private={this.state.personalPage}/>
                 }
                 {
-                    this.state.user && this.state.currentUser.role === "artist" &&
+                    this.state.user && this.state.user.role === "artist" &&
                         <ArtistSection artistId={this.state.user.id} private={this.state.personalPage}/>
                 }
 
