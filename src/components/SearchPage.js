@@ -77,6 +77,15 @@ class Search extends React.Component {
                                          <Link to={`/details/songs/${song.id}?${queryString.stringify({spotify: true})}`}>{song.name}</Link>
                                      </th>
                                      <th>
+                                         {
+                                             song.artists.map((artist, index) => (
+                                                 <Link to={`/profile/${artist.id}`}>
+                                                     {artist.name + (index < this.state.song.artists.length - 1 ? ', ' : '')}
+                                                 </Link>
+                                             ))
+                                         }
+                                     </th>
+                                     <th>
                                          Song
                                      </th>
                                  </tr>
