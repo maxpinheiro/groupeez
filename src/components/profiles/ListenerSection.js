@@ -72,13 +72,13 @@ class Listener extends React.Component {
                         <div className={"h4 m-2"}>
                             Favorites
                         </div>
-                        <div className={"list-group overflow-auto"}>
+                        <div className={"list-group overflow-auto boarder"}>
                             {
                                 this.state.listener.favorites.map(song =>
                                     <div key={song.id}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            {song.title}
+                                            <Link to={`details/songs/${song.id}`}> {song.title} </Link>
                                         </div>
                                         <div className={"float-right"}>
                                             {song.artist}
@@ -92,13 +92,13 @@ class Listener extends React.Component {
                         <div className={"h4 m-2"}>
                             Reviews
                         </div>
-                        <div className={"list-group overflow-auto"}>
+                        <div className={"list-group overflow-auto boarder"}>
                             {
                                 this.state.listener.reviews.map(review =>
                                     <div key={review.id}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            {review.title}
+                                            <Link to={`/details/reviews/${review.id}`}> {review.title} </Link>
                                         </div>
                                     </div>
                                 )
@@ -119,7 +119,9 @@ class Listener extends React.Component {
                                         <div key={artist.id}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
-                                                {artist.name}
+                                                <Link to={`/profile/${artist.id}`}>
+                                                    {artist.name}
+                                                </Link>
                                             </div>
                                         </div>
                                     )
@@ -135,7 +137,9 @@ class Listener extends React.Component {
                                     this.state.listener.friends.map(friendId =>
                                         <div key={friendId}
                                              className={"list-item"}>
-                                            <Link to={`/profile/${friendId}`}>{this.friendName(friendId)}</Link>
+                                            <Link to={`/profile/${friendId}`}>
+                                                {this.friendName(friendId)}
+                                            </Link>
                                         </div>
                                     )
                                 }

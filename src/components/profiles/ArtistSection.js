@@ -139,7 +139,7 @@ class Artist extends React.Component {
                             </div>
                             <div className={"list-group overflow-auto"}>
                                 {
-                                    this.state.artist.followers.map(listenerId =>
+                                    this.state.artist.groupeez.map(listenerId =>
                                         <div key={listenerId}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
