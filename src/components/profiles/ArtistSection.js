@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import ArtistService from "../../services/ArtistService";
 import ListenerService from "../../services/ListenerService";
+import {Link} from "react-router-dom";
 
 class Artist extends React.Component {
     state = {
@@ -81,8 +82,10 @@ class Artist extends React.Component {
                                     <div className={"h5"}>
                                         {post.type}
                                     </div>
-                                    <div className={"h6"}>
-                                        {post.messege}
+                                    <div className={"float-left h6"}>
+                                        <Link to={`/details/posts/${post.id}`}>
+                                            {post.title}
+                                        </Link>
                                     </div>
                                 </div>
                             )
@@ -99,7 +102,9 @@ class Artist extends React.Component {
                                 <div key={song.id}
                                      className={"list-item"}>
                                     <div className={"float-left"}>
-                                        {song.title}
+                                        <Link to={`/details/songs/${song.id}`}>
+                                            {song.title}
+                                        </Link>
                                     </div>
                                 </div>
                             )
@@ -116,7 +121,9 @@ class Artist extends React.Component {
                                 <div key={review.id}
                                      className={"list-item"}>
                                     <div className={"float-left"}>
-                                        {review.title}
+                                        <Link to={`/details/reviews/${review.id}`}>
+                                            {review.title}
+                                        </Link>
                                     </div>
                                 </div>
                             )
@@ -136,7 +143,9 @@ class Artist extends React.Component {
                                         <div key={listenerId}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
-                                                {this.followerName(listenerId)}
+                                                <Link to={`/profile/${listenerId}`}>
+                                                    {this.followerName(listenerId)}
+                                                </Link>
                                             </div>
                                         </div>
                                     )
