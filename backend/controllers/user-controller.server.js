@@ -42,4 +42,30 @@ module.exports = function (app) {
         if (currentUser) res.json(currentUser);
         else res.json({error: "No current user"});
     });
+
+    app.get('/api/users', (req, res) => {
+        const users = userService.findAllUsers();
+        res.json(users);
+    });
+
+    app.get('/api/users/:userId', (req, res) => {
+        const userId = req.params.userId;
+        const user = userService.findUserById(userId);
+        if (user) res.json(user);
+        else res.json({error: "No user with id"});
+    });
+
+    app.get('/api/accessToken', (req, res) => {
+        //const currentUser = req.session['currentUser'];
+        const accessToken = userService.getAccessToken();
+        if (accessToken) res.json(accessToken);
+        else res.json({error: "No current access token"});
+    });
+
+    app.post('/api/accessToken', (req, res) => {
+        //const currentUser = req.session['currentUser'];
+        const accessToken = req.body.accessToken;
+        userService.setAccessToken(accessToken);
+        res.json({message: "all good"});
+    });
 }

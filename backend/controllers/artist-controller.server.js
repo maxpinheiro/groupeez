@@ -7,7 +7,7 @@ module.exports = function (app) {
     });
     app.get('/api/artists/:artistId', (req, res) => {
         const artistId = req.params.artistId;
-        const artist = artistService.findArtistById(artistService);
+        const artist = artistService.findArtistById(artistId);
         if (artist) res.json(artist);
         else res.json({error: "No artist with id"});
     });

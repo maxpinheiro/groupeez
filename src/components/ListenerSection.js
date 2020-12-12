@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import ListenerService from "../services/ListenerService";
+import {Link} from "react-router-dom";
 
 class Listener extends React.Component {
     state = {
@@ -19,7 +20,6 @@ class Listener extends React.Component {
 
     componentDidMount() {
         const listenerId = this.props.listenerId;
-        console.log(listenerId + "mount");
         ListenerService.findListenerById(listenerId)
             .then(listener => {
                 if (!listener.error) {
@@ -37,11 +37,12 @@ class Listener extends React.Component {
     friendName = (listenerId) => {
         ListenerService.findListenerById(listenerId)
             .then(listener => {
+                console.log(listener);
                 if (!listener.error) {
                     return listener.username;
                 }
             });
-        return "";
+        return "new user";
     };
 
 
@@ -134,9 +135,7 @@ class Listener extends React.Component {
                                     this.state.listener.friends.map(friendId =>
                                         <div key={friendId}
                                              className={"list-item"}>
-                                            <div className={"float-left"}>
-                                                {this.friendName(friendId)}
-                                            </div>
+                                            <Link to={`/profile/${friendId}`}>{this.friendName(friendId)}</Link>
                                         </div>
                                     )
                                 }

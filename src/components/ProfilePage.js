@@ -10,16 +10,27 @@ class Profile extends React.Component {
     state = {
         user: null,
         personalPage: false,
+        error: ""
     };
 
     componentDidMount() {
         //console.log(this.props.cookies.get('currentUser'));
 
         const userId = this.props.match.params.userId;
+        console.log('mount ' + userId);
         if (!userId) { // personal profile path - viewing own page
             userService.getCurrentUser()
                 .then(currentUser => {
-                    if (!currentUser.error) {
+                    if (currentUser.error) {
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                error: currentUser.error,
+                                user: null,
+                                personalPage: true,
+                            }
+                        })
+                    } else {
                         this.setState( function(prevState) {
                             return {
                                 ...prevState,
@@ -45,39 +56,8 @@ class Profile extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        //console.log(this.props.match.params.userId);
-/*
+    componentDidUpdate(prevProps, prevState, snapShot) {
         const userId = this.props.match.params.userId;
-        if (!userId) { // personal profile path - viewing own page
-            userService.getCurrentUser()
-                .then(currentUser => {
-                    if (!currentUser.error) {
-                        this.setState( function(prevState) {
-                            return {
-                                ...prevState,
-                                user: currentUser,
-                                personalPage: true,
-                            }
-                        })
-                    }
-                })
-        }
-        else if(userId !== this.prevProps.match.params.userId) {
-            userService.getUserById(userId)
-                .then(currentUser => {
-                    if(!currentUser.error) {
-                        this.setState( function(prevState) {
-                            return {
-                                ...prevState,
-                                user: currentUser
-                            }
-                        })
-                    }
-                })
-        }
-
- */
     }
 
 
@@ -92,7 +72,14 @@ class Profile extends React.Component {
                     this.state.user && this.state.user.role === "artist" &&
                         <ArtistSection artistId={this.state.user.id} private={this.state.personalPage}/>
                 }
+                {
+                    !this.state.user && this.state.personalPage &&
+                    <div>
+                        <p>You must be logged in to access this page.</p>
+                        <Link to="/login">Login</Link>
+                    </div>
 
+                }
             </div>
         );
     }
