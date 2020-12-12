@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import ListenerService from "../../services/ListenerService";
+import listenerService from "../../services/ListenerService";
 import {Link} from "react-router-dom";
 
 class Listener extends React.Component {
@@ -20,7 +20,7 @@ class Listener extends React.Component {
 
     componentDidMount() {
         const listenerId = this.props.listenerId;
-        ListenerService.findListenerById(listenerId)
+        listenerService.findListenerById(listenerId)
             .then(listener => {
                 if (!listener.error) {
                     this.setState(function(prevState){
@@ -35,7 +35,7 @@ class Listener extends React.Component {
 
 
     friendName = (listenerId) => {
-        ListenerService.findListenerById(listenerId)
+        listenerService.findListenerById(listenerId)
             .then(listener => {
                 console.log(listener);
                 if (!listener.error) {

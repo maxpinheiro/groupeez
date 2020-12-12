@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 
 import userService from '../../services/UserService';
 import ArtistSection from "./ArtistSection";
+import artistService from "../../services/ArtistService";
 
 class Profile extends React.Component {
     state = {
@@ -17,7 +18,6 @@ class Profile extends React.Component {
         //console.log(this.props.cookies.get('currentUser'));
 
         const userId = this.props.match.params.userId;
-        console.log('mount ' + userId);
         if (!userId) { // personal profile path - viewing own page
             userService.getCurrentUser()
                 .then(currentUser => {
@@ -41,7 +41,16 @@ class Profile extends React.Component {
                     }
                 })
         }
-        else {
+        else if (userId.length > 10) {
+            artistService.findArtistBySpotifyId(userId)
+                .then(artist => {
+                    if (!artist.error) {
+                        this.props.history.push(`/profile/${artist.id}`);
+                    } else {
+                        // search spotify API
+                    }
+                })
+        } else {
             userService.getUserById(userId)
                 .then(currentUser => {
                     if(!currentUser.error) {
@@ -58,6 +67,51 @@ class Profile extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapShot) {
         const userId = this.props.match.params.userId;
+        if (!userId) { // personal profile path - viewing own page
+            userService.getCurrentUser()
+                .then(currentUser => {
+                    if (currentUser.error) {
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                error: currentUser.error,
+                                user: null,
+                                personalPage: true,
+                            }
+                        })
+                    } else {
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                user: currentUser,
+                                personalPage: true,
+                            }
+                        })
+                    }
+                })
+        }
+        else if (userId.length > 10) {
+            artistService.findArtistBySpotifyId(userId)
+                .then(artist => {
+                    if (!artist.error) {
+                        this.props.history.push(`/profile/${artist.id}`);
+                    } else {
+                        // search spotify API
+                    }
+                })
+        } else if (!prevState.user || (userId !== prevState.user.id)) {
+            userService.getUserById(userId)
+                .then(currentUser => {
+                    if(!currentUser.error) {
+                        this.setState( function(prevState) {
+                            return {
+                                ...prevState,
+                                user: currentUser
+                            }
+                        })
+                    }
+                })
+        }
     }
 
 

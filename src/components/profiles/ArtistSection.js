@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import ArtistService from "../../services/ArtistService";
-import ListenerService from "../../services/ListenerService";
+import artistService from "../../services/ArtistService";
+import listenerService from "../../services/ListenerService";
 import {Link} from "react-router-dom";
 
 class Artist extends React.Component {
@@ -25,21 +25,58 @@ class Artist extends React.Component {
 
     componentDidMount() {
         const artistId = this.props.artistId;
-        ArtistService.findArtistById(artistId)
-            .then(artist => {
-                if (!artist.error) {
-                    this.setState(function(prevState){
-                        return {
-                            ...prevState,
-                            artist: artist,
-                        }
-                    })
-                }
-            })
+        if (artistId.length > 10) { // spotifyArtist
+            artistService.findArtistBySpotifyId(artistId)
+                .then(artist => {
+                    if (!artist.error) {
+                        this.props.history.push(`/profile/${artist.id}`);
+                    } else {
+                        // search spotify API
+                    }
+                })
+        } else {
+            artistService.findArtistById(artistId)
+                .then(artist => {
+                    if (!artist.error) {
+                        this.setState(function(prevState){
+                            return {
+                                ...prevState,
+                                artist: artist,
+                            }
+                        })
+                    }
+                })
+        }
     };
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const artistId = this.props.artistId;
+        if (artistId.length > 10) { // spotifyArtist
+            artistService.findArtistBySpotifyId(artistId)
+                .then(artist => {
+                    if (!artist.error) {
+                        this.props.history.push(`/profile/${artist.id}`);
+                    } else {
+                        // search spotify API
+                    }
+                })
+        } else if (artistId !== prevProps.artistId) {
+            artistService.findArtistById(artistId)
+                .then(artist => {
+                    if (!artist.error) {
+                        this.setState(function(prevState){
+                            return {
+                                ...prevState,
+                                artist: artist,
+                            }
+                        })
+                    }
+                })
+        }
+    }
+
     followerName = (listenerId) => {
-        ListenerService.findListenerById(listenerId)
+        listenerService.findListenerById(listenerId)
             .then(listener => {
                 if (!listener.error) {
                     return listener.username;
