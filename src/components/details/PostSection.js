@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import queryString from "querystring";
 
+import postService from '../../services/PostService';
+
 class Post extends React.Component {
     state = {
         searchQuery: "",
@@ -13,7 +15,11 @@ class Post extends React.Component {
 
     componentDidMount() {
         const detailId = this.props.detailId;
-        
+        postService.findPostById(detailId)
+            .then(post => this.setState(prevState => ({
+                ...prevState,
+                post
+            })));
     }
 
     render() {

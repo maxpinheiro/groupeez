@@ -4,9 +4,9 @@ import { withCookies } from 'react-cookie';
 
 import SearchPage from './components/SearchPage';
 import {CallbackPage, RedirectPage} from "./components/MiddleTier";
-import DetailsPage from "./components/DetailsPage";
+import DetailsPage from "./components/details/DetailsPage";
 import LoginPage from "./components/LoginPage";
-import ProfilePage from "./components/ProfilePage";
+import ProfilePage from "./components/profiles/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
 
 const LandingPage = () =>

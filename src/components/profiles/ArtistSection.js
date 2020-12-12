@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import ArtistService from "../services/ArtistService";
-import ListenerService from "../services/ListenerService";
+import ArtistService from "../../services/ArtistService";
+import ListenerService from "../../services/ListenerService";
 
 class Artist extends React.Component {
     state = {

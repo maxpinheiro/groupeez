@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import ListenerSection from "./ListenerSection";
 import {Link} from 'react-router-dom';
 
-import userService from '../services/UserService';
+import userService from '../../services/UserService';
 import ArtistSection from "./ArtistSection";
 
 class Profile extends React.Component {

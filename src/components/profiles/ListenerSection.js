@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import ListenerService from "../services/ListenerService";
+import ListenerService from "../../services/ListenerService";
 import {Link} from "react-router-dom";
 
 class Listener extends React.Component {
