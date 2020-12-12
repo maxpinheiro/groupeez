@@ -74,7 +74,7 @@ class Search extends React.Component {
                              this.props.songs.map(song =>
                                  <tr key={song.id}>
                                      <th>
-                                         <Link to={`/details/${song.id}?spotify=true`}>{song.name}</Link>
+                                         <Link to={`/details/songs/${song.id}?${queryString.stringify({spotify: true})}`}>{song.name}</Link>
                                      </th>
                                      <th>
                                          Song
