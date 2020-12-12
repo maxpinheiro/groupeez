@@ -17,5 +17,19 @@ const createReview = (review) => {
     return {id, creator: review.creator, creatorId: review.creatorId, songId: review.songId, text: review.text};
 }
 
+const updateReview = (reviewId, newReview) => {
+    const reviewIdx = reviews.indexOf(reviews.find(r => r.id === reviewId));
+    if (reviewIdx === -1) return 0;
+    reviews.splice(reviewIdx, 1, newReview);
+    return 1;
+}
 
-module.exports = {findAllReviews, findReviewById, createReview};
+const deleteReview = (reviewId) => {
+    const reviewIdx = reviews.indexOf(reviews.find(r => r.id === reviewId));
+    if (reviewIdx === -1) return 0;
+    reviews.splice(reviewIdx, 1);
+    return 1;
+}
+
+
+module.exports = {findAllReviews, findReviewById, createReview, updateReview, deleteReview};

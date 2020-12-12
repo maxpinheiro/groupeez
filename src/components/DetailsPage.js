@@ -5,6 +5,9 @@ import userService from '../services/UserService';
 import ArtistSection from "./ArtistSection";
 import SongSection from "./SongSection";
 import queryString from "querystring";
+import AlbumSection from "./AlbumSection";
+import ReviewSection from "./ReviewSection";
+import PostSection from "./PostSection";
 
 class Details extends React.Component {
     state = {
@@ -20,7 +23,6 @@ class Details extends React.Component {
         const spotify = queryString.parse(this.props.location.search)["?spotify"];
         userService.getAccessToken()
             .then(accessToken => {
-                console.log('access token: ' + accessToken);
                 this.setState(prevState => ({
                     ...prevState,
                     detailType,
@@ -39,8 +41,16 @@ class Details extends React.Component {
                     <SongSection detailId={this.state.detailId} accessToken={this.state.accessToken} spotify={this.state.spotify}/>
                 }
                 {
-                    this.state.user && this.state.user.role === "artist" &&
-                    <ArtistSection artistId={this.state.user.id} private={this.state.personalPage}/>
+                    this.state.detailType === "albums" &&
+                    <AlbumSection detailId={this.state.detailId} accessToken={this.state.accessToken} spotify={this.state.spotify}/>
+                }
+                {
+                    this.state.detailType === "reviews" &&
+                    <ReviewSection detailId={this.state.detailId} accessToken={this.state.accessToken}/>
+                }
+                {
+                    this.state.detailType === "posts" &&
+                    <PostSection detailId={this.state.detailId} accessToken={this.state.accessToken}/>
                 }
             </div>
         );

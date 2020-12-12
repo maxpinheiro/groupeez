@@ -33,5 +33,6 @@ require('./controllers/artist-controller.server')(app);
 require('./controllers/listener-controller.server')(app);
 require('./controllers/song-controller.server')(app);
 require('./controllers/review-controller.server')(app);
+require('./controllers/post-controller.server')(app);
 
 app.listen(4000, () => console.log("Listening on port 4000..."));

@@ -11,4 +11,23 @@ module.exports = function (app) {
         if (review) res.json(review);
         else res.json({error: "No review with id"});
     });
+    app.post('/api/reviews', (req, res) => {
+        const newReview = req.body;
+        const review = reviewService.createReview(newReview);
+        if (review) res.json(review);
+        else res.json({error: "Could not create review"});
+    });
+    app.put('/api/reviews/:reviewId', (req, res) => {
+        const reviewId = req.params.reviewId;
+        const newReview = req.body;
+        const review = reviewService.updateReview(reviewId, newReview);
+        if (review) res.json(review);
+        else res.json({error: "Could not update review"});
+    });
+    app.delete('/api/reviews/:reviewId', (req, res) => {
+        const reviewId = req.params.reviewId;
+        const newReview = req.body;
+        const status = reviewService.deleteReview(reviewId, newReview);
+        res.send(status);
+    });
 }

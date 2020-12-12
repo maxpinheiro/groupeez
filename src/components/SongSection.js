@@ -33,6 +33,7 @@ class Song extends React.Component {
                 });
         } else {
             console.log('not on spotify');
+            // go to local database
         }
     }
 

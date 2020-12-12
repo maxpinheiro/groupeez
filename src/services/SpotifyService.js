@@ -19,6 +19,14 @@ export const findSong = (songId, accessToken) => {
     }).then(response => response.json());
 }
 
+export const findAlbum = (albumId, accessToken) => {
+    return fetch(`https://api.spotify.com/v1/albums/${albumId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    }).then(response => response.json());
+}
+
 export const fetchTokens = (authCode) => {
     return fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -35,4 +43,4 @@ export const fetchTokens = (authCode) => {
     }).then(response => response.json());
 }
 
-export default {search, findSong, fetchTokens};
+export default {search, findSong, findAlbum, fetchTokens};
