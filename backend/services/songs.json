@@ -2,13 +2,13 @@
   {
     "id": "sps83rv85v",
     "title": "Snow Patrol",
-    "artist": "Cosmic Monkey",
-    "artistId": "45xsji3bb1"
+    "artists": ["Cosmic Monkey"],
+    "artistIds": ["45xsji3bb1"]
   },
   {
     "id": "lsl6ffg5b5",
     "title": "Liftoff",
-    "artist": "Cosmic Monkey",
-    "artistId": "45xsji3bb1"
+    "artists": ["Cosmic Monkey"],
+    "artistIds": ["45xsji3bb1"]
   }
 ]

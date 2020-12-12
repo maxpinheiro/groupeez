@@ -1,0 +1,34 @@
+[
+  {
+    "id": "fx05r14p81",
+    "type": "tour",
+    "artist": "frankocean",
+    "artistId": "fb4gb3kwlh",
+    "title": "Frank Ocean Tour",
+    "text": "I'm going on a tour. It's gonna be fun."
+  },
+  {
+    "id": "x3bxcfxbgg",
+    "type": "message",
+    "artist": "frankocean",
+    "artistId": "fb4gb3kwlh",
+    "title": "Hey Groupeez",
+    "text": "Here's my first post on Groupeez. Hi :)"
+  },
+  {
+    "id": "k9m46ux0mg",
+    "type": "tour",
+    "creator": "cosmic_monkey",
+    "creatorId": "45xsji3bb1",
+    "title": "Liftoff Tour",
+    "text": "We're going on tour to debut our new album, Liftoff"
+  },
+  {
+    "id": "l30bl9m1z4",
+    "type": "message",
+    "creator": "cosmic_monkey",
+    "creatorId": "45xsji3bb1",
+    "title": "Hi from Cosmic Monkey",
+    "text": "Good morning everyone! Welcome to Groupeez."
+  }
+]
