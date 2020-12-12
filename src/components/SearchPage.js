@@ -80,7 +80,7 @@ class Search extends React.Component {
                                          {
                                              song.artists.map((artist, index) => (
                                                  <Link to={`/profile/${artist.id}`}>
-                                                     {artist.name + (index < this.state.song.artists.length - 1 ? ', ' : '')}
+                                                     {artist.name + (index < song.artists.length - 1 ? ', ' : '')}
                                                  </Link>
                                              ))
                                          }
@@ -104,11 +104,11 @@ const stateToProperty = (state) => ({
     accessToken: state.spotifyReducer.accessToken,
     refreshToken: state.spotifyReducer.refreshToken,
     songs: state.spotifyReducer.songs
-})
+});
 
 const propertyToDispatchMapper = (dispatch) => ({
     setSongs: (songs, query) => dispatch({type: 'SEARCH_SONGS', songs, query})
-})
+});
 
 const SearchPage = connect(stateToProperty, propertyToDispatchMapper)(Search);
 export default SearchPage;
