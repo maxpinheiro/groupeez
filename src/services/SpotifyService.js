@@ -3,7 +3,7 @@ import env from '../private.json';
 const queryString = require('querystring');
 const searchUrl = 'https://api.spotify.com/v1/search';
 
-export const search= (queryParams, accessToken) => {
+export const search = (queryParams, accessToken) => {
     return fetch(`${searchUrl}?${queryString.stringify(queryParams)}`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
@@ -34,3 +34,5 @@ export const fetchTokens = (authCode) => {
         })
     }).then(response => response.json());
 }
+
+export default {search, findSong, fetchTokens};

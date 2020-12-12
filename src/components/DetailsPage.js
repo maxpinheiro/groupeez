@@ -1,33 +1,47 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-//import queryString from "querystring";
-import {findSong} from "../services/SpotifyService";
+import userService from '../services/UserService';
+import ArtistSection from "./ArtistSection";
+import SongSection from "./SongSection";
 import queryString from "querystring";
 
 class Details extends React.Component {
-    state = {};
+    state = {
+        detailType: "",
+        detailId: "",
+        accessToken: "",
+        spotify: false
+    };
 
     componentDidMount() {
-        const resultId = this.props.match.params.detailsId;
-        //const query = queryString.parse(this.props.location.search);
-        //const spotify = query["?spotify"], type = query.type;
-        findSong(resultId, this.props.accessToken).then(song => this.props.setSong(song))
+        const detailType = this.props.match.params.detailType;
+        const detailId = this.props.match.params.detailId;
+        const spotify = queryString.parse(this.props.location.search)["?spotify"];
+        userService.getAccessToken()
+            .then(accessToken => {
+                console.log('access token: ' + accessToken);
+                this.setState(prevState => ({
+                    ...prevState,
+                    detailType,
+                    detailId,
+                    accessToken: accessToken,
+                    spotify
+                }));
+            })
     }
 
     render() {
         return (
             <div className="container-fluid">
-                <span>
-                    <p className="h3 d-inline mr-2">Song Details</p>
-                    <Link to={`/search?${queryString.stringify({criteria: this.props.searchQuery})}`} className="mx-2">Back to results</Link>
-                    <Link to="/search" className="mx-2">Search for something else</Link>
-                </span>
-                <p>Title: {this.props.song.name}</p>
-                <p>Artist(s): {this.props.song.artists.map((artist, index) => (
-                    artist.name + (index < this.props.song.artists.length - 1 ? ', ' : '')
-                ))}</p>
-                <img src={this.props.song.album.images[0].url}  alt=""/>
+                {
+                    this.state.detailType === "songs" &&
+                    <SongSection detailId={this.state.detailId} accessToken={this.state.accessToken} spotify={this.state.spotify}/>
+                }
+                {
+                    this.state.user && this.state.user.role === "artist" &&
+                    <ArtistSection artistId={this.state.user.id} private={this.state.personalPage}/>
+                }
             </div>
         );
     }
