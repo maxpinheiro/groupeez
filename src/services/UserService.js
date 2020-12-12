@@ -28,13 +28,13 @@ export const getUserById = (userId) => {
 }
 
 export const getAccessToken= () => {
-    return fetch(`http://localhost:4000/api/accessToken`).then(response => response.json());
+    return fetch('http://localhost:4000/api/accessToken').then(response => response.json());
 }
 
 export const setAccessToken = (accessToken) => {
     return fetch('http://localhost:4000/api/accessToken', {
         method: 'POST',
-        body: JSON.stringify(accessToken),
+        body: JSON.stringify({accessToken: accessToken, message: "ok"}),
         headers: {
             'content-type': 'application/json'
         }

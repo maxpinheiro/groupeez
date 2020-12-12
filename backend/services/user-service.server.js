@@ -4,8 +4,8 @@ const listenerService = require('./listener-service.server');
 
 let users = [...(require('./users.json'))];
 let currentUser = null;
-let accessToken = "";
-let refreshToken = "";
+let accessToken = null;
+let refreshToken = null;
 
 const findAllUsers = () => users;
 
@@ -24,7 +24,6 @@ const createUser = (user) => {
             id = generateId(10);
         }
         users.push({id, username: user.username, password: user.password, role: user.role});
-        console.log('users: ' + users);
         // add user to artist/listener database
         if (user.role === 'artist') {
             artistService.createArtist(user);

@@ -64,8 +64,7 @@ module.exports = function (app) {
 
     app.post('/api/accessToken', (req, res) => {
         //const currentUser = req.session['currentUser'];
-        const accessToken = req.body;
-        console.log('access token: ' + accessToken);
+        const accessToken = req.body.accessToken;
         userService.setAccessToken(accessToken);
         res.json({message: "all good"});
     });

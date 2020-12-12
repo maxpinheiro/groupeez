@@ -21,7 +21,10 @@ class Callback extends React.Component {
         const authCode = queryString.parse(this.props.location.search)["?code"]
         this.props.setAuthorizationCode(authCode);
         fetchTokens(authCode).then(response => {
-            this.props.setTokens(response.access_token, response.refresh_token);
+            userService.setAccessToken(response.access_token)
+                .then(accessToken => {
+                    this.props.setTokens(accessToken, response.refresh_token);
+                })
         });
     }
     render() {

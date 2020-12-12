@@ -16,17 +16,28 @@ class Search extends React.Component {
             type: this.state.type,
             limit: 10
         }
-        search(queryParams, this.props.accessToken).then(response => {
-            if (response.tracks) {
-                this.props.setSongs(response.tracks.items, query);
-            }
-        });
+        userService.getAccessToken()
+            .then(accessToken => {
+                search(queryParams, accessToken).then(response => {
+                    if (response.tracks) {
+                        this.props.setSongs(response.tracks.items, query);
+                    }
+                });
+            })
+
     };
+
+    componentDidMount() {
+        const query = queryString.parse(this.props.location.search)["?criteria"];
+        if (query) {
+            this.search(query);
+        }
+    }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const query = queryString.parse(this.props.location.search)["?criteria"];
-        if (query) {
-            this.search(query)
+        if (query !== queryString.parse(prevProps.location.search)["?criteria"]) {
+            this.search(query);
         }
     }
 
