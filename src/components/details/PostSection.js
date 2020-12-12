@@ -31,7 +31,7 @@ class Post extends React.Component {
                 } else {
                     this.setState(prevState => ({
                         ...prevState,
-                        error: "There is no detail with this ID.",
+                        error: "There is no post with this ID.",
                         post: null
                     }))
                 }

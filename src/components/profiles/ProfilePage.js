@@ -52,14 +52,22 @@ class Profile extends React.Component {
                 })
         } else {
             userService.getUserById(userId)
-                .then(currentUser => {
-                    if(!currentUser.error) {
-                        this.setState( function(prevState) {
-                            return {
-                                ...prevState,
-                                user: currentUser
-                            }
-                        })
+                .then(user => {
+                    if (!user.error) {
+                        userService.getCurrentUser()
+                            .then(currentUser => {
+                                if (!currentUser.error && currentUser.id === user.id) {
+                                    this.props.history.push('/profile');
+                                } else {
+                                    this.setState( function(prevState) {
+                                        return {
+                                            ...prevState,
+                                            user
+                                        }
+                                    })
+                                }
+                            })
+
                     }
                 })
         }
@@ -67,7 +75,7 @@ class Profile extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapShot) {
         const userId = this.props.match.params.userId;
-        if (!userId) { // personal profile path - viewing own page
+        if (!userId && !prevState.user) { // personal profile path - viewing own page
             userService.getCurrentUser()
                 .then(currentUser => {
                     if (currentUser.error) {
@@ -90,7 +98,7 @@ class Profile extends React.Component {
                     }
                 })
         }
-        else if (userId.length > 10) {
+        else if (userId && userId.length > 10) {
             artistService.findArtistBySpotifyId(userId)
                 .then(artist => {
                     if (!artist.error) {
@@ -101,12 +109,12 @@ class Profile extends React.Component {
                 })
         } else if (!prevState.user || (userId !== prevState.user.id)) {
             userService.getUserById(userId)
-                .then(currentUser => {
-                    if(!currentUser.error) {
+                .then(user => {
+                    if (!user.error) {
                         this.setState( function(prevState) {
                             return {
                                 ...prevState,
-                                user: currentUser
+                                user: user
                             }
                         })
                     }
