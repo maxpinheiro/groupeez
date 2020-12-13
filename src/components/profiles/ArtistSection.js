@@ -1,9 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from "react-router-dom";
+
+import spotifyService from '../../services/SpotifyService';
+import reviewService from "../../services/ReviewService";
+import postService from "../../services/PostService";
 import artistService from "../../services/ArtistService";
 import listenerService from "../../services/ListenerService";
-import {Link} from "react-router-dom";
-import spotifyService from '../../services/SpotifyService';
+import songService from "../../services/SongService";
 
 class Artist extends React.Component {
     state = {
@@ -82,7 +86,7 @@ class Artist extends React.Component {
         }
     }
 
-    followerName = (listenerId) => {
+    groupeeName = (listenerId) => {
         listenerService.findListenerById(listenerId)
             .then(listener => {
                 if (!listener.error) {
@@ -92,6 +96,33 @@ class Artist extends React.Component {
         return "";
     };
 
+    reviewTitle = (reviewId) => {
+        reviewService.findReviewById(reviewId)
+            .then(review => {
+                if (!review.error) {
+                    return review.title;
+                }
+            });
+        return "new user";
+    };
+
+    getSong = (songId) => {
+        songService.findSongById(songId)
+            .then(song => {
+                if (!song.error) {
+                    return song;
+                }
+            })
+    };
+
+    getPost = (postId) => {
+        postService.findPostById(postId)
+            .then(post => {
+                if (!post.error) {
+                    return post;
+                }
+            })
+    };
 
     render() {
         return (
@@ -120,15 +151,15 @@ class Artist extends React.Component {
                     </div>
                     <div className={"list-group overflow-auto"}>
                         {
-                            this.state.artist.posts.map(post =>
-                                <div key={post.id}
+                            this.state.artist.posts.map(postId =>
+                                <div key={postId}
                                      className={"list-item"}>
                                     <div className={"h5"}>
-                                        {post.type}
+                                        {this.getPost(postId).type}
                                     </div>
                                     <div className={"float-left h6"}>
-                                        <Link to={`/details/posts/${post.id}`}>
-                                            {post.title}
+                                        <Link to={`/details/posts/${postId}`}>
+                                            {this.getPost(postId).title}
                                         </Link>
                                     </div>
                                 </div>
@@ -142,12 +173,12 @@ class Artist extends React.Component {
                     </div>
                     <div className={"list-group overflow-auto"}>
                         {
-                            this.state.songs.map(song =>
-                                <div key={song.id}
+                            this.state.songs.map(songId =>
+                                <div key={songId}
                                      className={"list-item"}>
                                     <div className={"float-left"}>
-                                        <Link to={`/details/songs/${song.id}`}>
-                                            {song.title}
+                                        <Link to={`/details/songs/${songId}`}>
+                                            {this.getSong(songId).title}
                                         </Link>
                                     </div>
                                 </div>
@@ -161,12 +192,12 @@ class Artist extends React.Component {
                     </div>
                     <div className={"list-group overflow-auto"}>
                         {
-                            this.state.reviews.map(review =>
-                                <div key={review.id}
+                            this.state.reviews.map(reviewId =>
+                                <div key={reviewId}
                                      className={"list-item"}>
                                     <div className={"float-left"}>
-                                        <Link to={`/details/reviews/${review.id}`}>
-                                            {review.title}
+                                        <Link to={`/details/reviews/${reviewId}`}>
+                                            {this.reviewTitle(reviewId)}
                                         </Link>
                                     </div>
                                 </div>
@@ -188,7 +219,7 @@ class Artist extends React.Component {
                                              className={"list-item"}>
                                             <div className={"float-left"}>
                                                 <Link to={`/profile/${listenerId}`}>
-                                                    {this.followerName(listenerId)}
+                                                    {this.groupeeName(listenerId)}
                                                 </Link>
                                             </div>
                                         </div>
