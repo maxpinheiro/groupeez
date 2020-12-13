@@ -3,12 +3,14 @@
     "id": "sps83rv85v",
     "title": "Snow Patrol",
     "artists": ["Cosmic Monkey"],
-    "artistIds": ["45xsji3bb1"]
+    "artistIds": ["45xsji3bb1"],
+    "images": [{"url":"https://www.planetware.com/wpimages/2019/11/east-coast-top-ski-resorts-2020-intro-new-hampshire.jpg"}]
   },
   {
     "id": "lsl6ffg5b5",
     "title": "Liftoff",
     "artists": ["Cosmic Monkey"],
-    "artistIds": ["45xsji3bb1"]
+    "artistIds": ["45xsji3bb1"],
+    "images": [{"url":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwzUbX3r_NA-gIKLAzgwxm4ekjy0QGYSNI6w&usqp=CAU"}]
   }
 ]

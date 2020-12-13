@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import ListenerSection from "./ListenerSection";
 import {Link} from 'react-router-dom';
 
+import spotifyService from '../../services/SpotifyService';
 import userService from '../../services/UserService';
 import ArtistSection from "./ArtistSection";
 import artistService from "../../services/ArtistService";

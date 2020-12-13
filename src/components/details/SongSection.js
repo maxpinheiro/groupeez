@@ -69,11 +69,18 @@ class Song extends React.Component {
                     !this.state.noSong &&
                     <div className="border border-2 border-secondary">
                         <div className="m-2">
-                            <p>Title: {this.state.song.name}</p>
+                            <p>Title: {this.state.song.name || this.state.song.title}</p>
                             <p>Artist(s): {this.state.song.artists.map((artist, index) => (
-                                artist.name + (index < this.state.song.artists.length - 1 ? ', ' : '')
+                                (artist.name || artist) + (index < this.state.song.artists.length - 1 ? ', ' : '')
                             ))}</p>
-                            <img src={this.state.song.album.images[0].url}  alt=""/>
+                            {
+                                this.state.song.album &&
+                                <img src={this.state.song.album.images[0].url}  alt=""/>
+                            }
+                            {
+                                this.state.song.images &&
+                                <img src={this.state.song.images[0].url}  alt=""/>
+                            }
                         </div>
                     </div>
                 }

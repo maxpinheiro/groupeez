@@ -5,6 +5,8 @@ import {Link} from "react-router-dom";
 import reviewService from "../../services/ReviewService";
 import artistService from "../../services/ArtistService";
 import listenerService from "../../services/ListenerService";
+import songService from "../../services/SongService";
+import spotifyService from "../../services/SpotifyService";
 
 class Listener extends React.Component {
     state = {
@@ -14,10 +16,10 @@ class Listener extends React.Component {
             name: "",
             bio: "",
             profileUrl: "",
-            reviews: [{id: "", title: ""}],
-            favorites: [ {id: "", title: "", artists: ""}], //should be a list of artists
-            following: [ {id: "", name: ""} ],
-            friends: [ {id: "", name: ""} ]
+            reviews: [],
+            favorites: [],
+            following: [],
+            friends: []
         },
         private: false,
 
@@ -29,12 +31,7 @@ class Listener extends React.Component {
         listenerService.findListenerById(listenerId)
             .then(listener => {
                 if (!listener.error) {
-                    this.setState(function(prevState){
-                        return {
-                            ...prevState,
-                            listener: listener,
-                        }
-                    })
+                    this.populateListener(listener);
                 }
             })
 
@@ -48,17 +45,54 @@ class Listener extends React.Component {
                 .then(listener => {
                     if (!listener.error) {
                         //console.log(listener);
-                        this.setState(function(prevState){
-                            return {
-                                ...prevState,
-                                listener: listener,
-                            }
-                        })
+                        this.populateListener(listener);
                     }
                 })
         }
     }
 
+    findReviews = (reviewIds) => Promise.all(reviewIds.map(reviewId => reviewService.findReviewById(reviewId)));
+
+    findArtists = (artistIds) => Promise.all(artistIds.map(artistId => artistService.findArtistById(artistId)));
+
+    findSongs = (songIds) => Promise.all(songIds.map(songId => {
+        if (songId.length === 10) return songService.findSongById(songId);
+        return spotifyService.findSong(songId, this.state.accessToken);
+    }));
+
+    findGroupeez = (groupeeIds) => Promise.all(groupeeIds.map(groupeeId => listenerService.findListenerById(groupeeId)));
+
+    populateListener = (listener) => {
+        this.findReviews(listener.reviews)
+            .then(reviews => {
+                this.findArtists(listener.following)
+                    .then(following => {
+                        this.findGroupeez(listener.friends)
+                            .then(friends => {
+                                this.findSongs(listener.favorites)
+                                    .then(favorites => {
+                                        console.log({
+                                            ...listener,
+                                            reviews,
+                                            following,
+                                            friends,
+                                            favorites
+                                        });
+                                        this.setState(prevState => ({
+                                            ...prevState,
+                                            listener: {
+                                                ...listener,
+                                                reviews,
+                                                following,
+                                                friends,
+                                                favorites
+                                            }
+                                        }))
+                                    })
+                            })
+                    })
+            })
+    }
 
     render() {
         return (
@@ -80,21 +114,18 @@ class Listener extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className={"row"}>
+                <div className={"row my-3"}>
                     <div className={"col-6"}>
-                        <div className={"h4 m-2"}>
+                        <div className={"h4"}>
                             Favorites
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
                             {
                                 this.state.listener.favorites.map(song =>
-                                    <div key={song.id}
-                                         className={"list-item"}>
-                                        <div className={"float-left"}>
-                                            <Link to={`details/songs/${song.id}`}> {song.title} </Link>
-                                        </div>
-                                        <div className={"float-right"}>
-                                            {song.artist}
+                                    <div key={song.id} className={"list-item"}>
+                                        <Link to={`/details/songs/${song.id}`} className="d-inline"> {song.title || song.name} </Link>
+                                        <div className={"ml-1 d-inline"}>
+                                            by <Link to={`/profile/${song.artists[0].id || song.artistIds[0]}`} className="d-inline"> {song.artists[0].name || song.artists[0]} </Link>
                                         </div>
                                     </div>
                                 )
@@ -102,7 +133,7 @@ class Listener extends React.Component {
                         </div>
                     </div>
                     <div className={"col-6"}>
-                        <div className={"h4 m-2"}>
+                        <div className={"h4"}>
                             Reviews
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
@@ -121,9 +152,9 @@ class Listener extends React.Component {
                 </div>
                 {
                     this.props.private &&
-                    <div className={"row"}>
+                    <div className={"row my-3"}>
                         <div className={"col-6"}>
-                            <div className={"h4 m-2"}>
+                            <div className={"h4"}>
                                 Following
                             </div>
                             <div className={"list-group overflow-auto"}>
@@ -142,16 +173,16 @@ class Listener extends React.Component {
                             </div>
                         </div>
                         <div className={"col-6"}>
-                            <div className={"h4 m-2"}>
+                            <div className={"h4"}>
                                 Friends
                             </div>
                             <div className={"list-group"}>
                                 {
-                                    this.state.friends.map(friend =>
+                                    this.state.listener.friends.map(friend =>
                                         <div key={friend.id}
                                              className={"list-item"}>
                                             <Link to={`/profile/${friend.id}`}>
-                                                {friend.name}
+                                                {friend.username}
                                             </Link>
                                         </div>
                                     )
