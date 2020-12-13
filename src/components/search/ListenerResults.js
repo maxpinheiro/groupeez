@@ -3,8 +3,14 @@ import queryString from "querystring";
 import React from "react";
 import {connect} from "react-redux";
 
+class Listener extends React.Component {
+    componentDidMount() {
+        //console.log('Artists: ' + this.props.artists);
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        //console.log('Artists: ' + this.props.artists);
+    }
 
-class Post extends React.Component {
     render() {
         return (
 
@@ -14,22 +20,22 @@ class Post extends React.Component {
                     <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Artist(s)</th>
                         <th>Type</th>
+                        <th>Name</th>
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        this.props.posts.map(post =>
-                            <tr key={post.id}>
+                        this.props.listeners.map(listener =>
+                            <tr key={listener.id}>
                                 <th>
-                                    <Link to={`/details/posts/${post.id}`}>{post.title}</Link>
+                                    <Link to={`/profile/${listener.id}`}>{listener.username}</Link>
                                 </th>
                                 <th>
-
+                                    Listener
                                 </th>
                                 <th>
-                                    Post
+                                    {listener.name}
                                 </th>
                             </tr>
                         )
@@ -42,10 +48,11 @@ class Post extends React.Component {
 }
 
 const stateToProperty = (state) => ({
+    artist: state.spotifyReducer.artists
 });
 
 const propertyToDispatchMapper = (dispatch) => ({
 });
 
-const PostResults = connect(stateToProperty, propertyToDispatchMapper)(Post);
-export default PostResults;
+const ListenerResults = connect(stateToProperty, propertyToDispatchMapper)(Listener);
+export default ListenerResults;

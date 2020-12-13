@@ -3,8 +3,14 @@ import queryString from "querystring";
 import React from "react";
 import {connect} from "react-redux";
 
-
 class Artist extends React.Component {
+    componentDidMount() {
+        console.log('Artists: ' + this.props.artists);
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('Artists: ' + this.props.artists);
+    }
+
     render() {
         return (
 
@@ -14,28 +20,22 @@ class Artist extends React.Component {
                     <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Artist(s)</th>
                         <th>Type</th>
+                        <th>On Spotify?</th>
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        this.props.songs.map(song =>
-                            <tr key={song.id}>
+                        this.props.artists.map(artist =>
+                            <tr key={artist.id}>
                                 <th>
-                                    <Link to={`/details/songs/${song.id}?${queryString.stringify({spotify: true})}`}>{song.name}</Link>
-                                </th>
-                                <th>
-                                    {
-                                        song.artists.map((artist, index) => (
-                                            <Link to={`/profile/${artist.id}`}>
-                                                {artist.name + (index < song.artists.length - 1 ? ', ' : '')}
-                                            </Link>
-                                        ))
-                                    }
+                                    <Link to={`/profile/${artist.id}`}>{artist.name}</Link>
                                 </th>
                                 <th>
                                     Song
+                                </th>
+                                <th>
+                                    {artist.spotifyId && artist.spotifyId !== '' ? "Yes" : "No"}
                                 </th>
                             </tr>
                         )
@@ -48,6 +48,7 @@ class Artist extends React.Component {
 }
 
 const stateToProperty = (state) => ({
+    artist: state.spotifyReducer.artists
 });
 
 const propertyToDispatchMapper = (dispatch) => ({

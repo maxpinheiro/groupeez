@@ -22,7 +22,7 @@ class App extends React.Component {
         return (
             <div className="container-fluid">
                 <Router>
-                    <div>
+                    <div className="mb-2">
                         <Link to={"/"} className="">
                             <AiFillHome />
                         </Link>

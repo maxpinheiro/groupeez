@@ -20,22 +20,16 @@ class Review extends React.Component {
                     </thead>
                     <tbody>
                     {
-                        this.props.songs.map(song =>
-                            <tr key={song.id}>
+                        this.props.reviews.map(review =>
+                            <tr key={review.id}>
                                 <th>
-                                    <Link to={`/details/songs/${song.id}?${queryString.stringify({spotify: true})}`}>{song.name}</Link>
+                                    <Link to={`/details/reviews/${review.id}`}>{review.title}</Link>
                                 </th>
                                 <th>
-                                    {
-                                        song.artists.map((artist, index) => (
-                                            <Link to={`/profile/${artist.id}`}>
-                                                {artist.name + (index < song.artists.length - 1 ? ', ' : '')}
-                                            </Link>
-                                        ))
-                                    }
+
                                 </th>
                                 <th>
-                                    Song
+                                    Review
                                 </th>
                             </tr>
                         )

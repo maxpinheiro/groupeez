@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from "react-router-dom";
+
+import spotifyService from '../../services/SpotifyService';
+import reviewService from "../../services/ReviewService";
+import postService from "../../services/PostService";
 import artistService from "../../services/ArtistService";
 import listenerService from "../../services/ListenerService";
-import {Link} from "react-router-dom";
-import ReviewService from "../../services/ReviewService";
-import PostService from "../../services/PostService";
-import SongService from "../../services/SongService";
-
 class Artist extends React.Component {
     state = {
         artist:{
@@ -33,7 +33,7 @@ class Artist extends React.Component {
                     if (!artist.error) {
                         this.props.history.push(`/profile/${artist.id}`);
                     } else {
-                        // search spotify API
+
                     }
                 })
         } else {
@@ -61,6 +61,12 @@ class Artist extends React.Component {
                         this.props.history.push(`/profile/${artist.id}`);
                     } else {
                         // search spotify API
+                        /*
+                        spotifyService.findArtist(artistId)
+                            .then(artist => {
+
+                            })
+                        */
                     }
                 })
         } else if (artistId !== prevProps.artistId) {
@@ -93,17 +99,17 @@ class Artist extends React.Component {
                     Promise.all(old.followers.map(groupeeId =>
                         listenerService.findListenerById(groupeeId)
                     )).then(groupeez => {
-                        return {...old,
-                        reviews: reviews,
-                        posts: posts,
-                        followers: groupeez,
-                        library: songs
+                        return {
+                            ...old,
+                            reviews: reviews,
+                            posts: posts,
+                            followers: groupeez,
+                            library: songs
                         }
                     });
                 });
             });
         });
-
     }
 
 
