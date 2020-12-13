@@ -33,11 +33,29 @@ class Listener extends React.Component {
             })
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const listenerId = this.props.listenerId;
+        if (listenerId !== prevProps.listenerId) {
+            listenerService.findListenerById(listenerId)
+                .then(listener => {
+                    if (!listener.error) {
+                        //console.log(listener);
+                        this.setState(function(prevState){
+                            return {
+                                ...prevState,
+                                listener: listener,
+                            }
+                        })
+                    }
+                })
+        }
+    }
+
 
     friendName = (listenerId) => {
         listenerService.findListenerById(listenerId)
             .then(listener => {
-                console.log(listener);
+                //console.log(listener);
                 if (!listener.error) {
                     return listener.username;
                 }
@@ -49,7 +67,7 @@ class Listener extends React.Component {
 
     render() {
         return (
-            <div className="container-fluid">
+            <div className="container-fluid border border-2 border-secondary">
 
                 <div className={"h1"}>
                     {this.state.listener.name}

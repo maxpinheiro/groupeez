@@ -39,7 +39,7 @@ class Song extends React.Component {
 
     render() {
         return (
-            <div className="container-fluid">
+            <div className="container-fluid border border-2 border-secondary">
                 <span>
                     <p className="h3 d-inline mr-2">Song Details</p>
                     <Link to={`/search?${queryString.stringify({criteria: this.props.searchQuery})}`} className="mx-2">Back to results</Link>
