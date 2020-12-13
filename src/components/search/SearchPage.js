@@ -7,6 +7,10 @@ import queryString from "querystring";
 
 import userService from '../../services/UserService';
 import SongResults from "./SongResults";
+import AlbumResults from "./AlbumResults";
+import ReviewResults from "./ReviewResults";
+import PostResults from "./PostResults";
+import ArtistResults from "./ArtistResults";
 
 class Search extends React.Component {
     state = {query: '', type: 'track'};
@@ -130,28 +134,30 @@ class Search extends React.Component {
                             Search
                         </Link>
                     </div>
+                </div>
+                <div className="input-group">
                     <div className={"row"}>
-                        <div className={"form-check"}>
+                        <div className={"form-check mx-3"}>
                             <input className={"form-check-input"} type={"radio"} value={"songs"} name={"queryType"}
-                                    onChange={e => this.setState((prevState) => ({...prevState, type: "songs"}))}/>
+                                   onChange={e => this.setState((prevState) => ({...prevState, type: "songs"}))}/>
                             <label className={"form-check-label"}>Songs</label>
                         </div>
-                        <div className={"form-check"}>
+                        <div className={"form-check mx-3"}>
                             <input className={"form-check-input"} type={"radio"} value={"artists"} name={"queryType"}
                                    onChange={e => this.setState((prevState) => ({...prevState, type: "artists"}))}/>
                             <label className={"form-check-label"}>Artists</label>
                         </div>
-                        <div className={"form-check"}>
+                        <div className={"form-check mx-3"}>
                             <input className={"form-check-input"} type={"radio"} value={"posts"} name={"queryType"}
                                    onChange={e => this.setState((prevState) => ({...prevState, type: "posts"}))}/>
                             <label className={"form-check-label"}>Posts</label>
                         </div>
-                        <div className={"form-check"}>
+                        <div className={"form-check mx-3"}>
                             <input className={"form-check-input"} type={"radio"} value={"groupeez"} name={"queryType"}
                                    onChange={e => this.setState((prevState) => ({...prevState, type: "groupeez"}))}/>
                             <label className={"form-check-label"}>Groupeez</label>
                         </div>
-                        <div className={"form-check"}>
+                        <div className={"form-check mx-3"}>
                             <input className={"form-check-input"} type={"radio"} value={"reviews"} name={"queryType"}
                                    onChange={e => this.setState((prevState) => ({...prevState, type: "reviews"}))}/>
                             <label className={"form-check-label"}>Reviews</label>
@@ -164,15 +170,19 @@ class Search extends React.Component {
                 }
                 {
                     this.props.location.search !== '' && this.state.type === "albums" &&
-                    <AlbumResults songs={this.props.albums}/>
+                    <AlbumResults albums={this.props.albums}/>
                 }
                 {
                     this.props.location.search !== '' && this.state.type === "artists" &&
-                    <ArtistResults songs={this.props.artists}/>
+                    <ArtistResults artists={this.props.artists}/>
                 }
                 {
                     this.props.location.search !== '' && this.state.type === "posts" &&
-                    <PostsResults songs={}/>
+                    <PostResults posts={this.props.posts}/>
+                }
+                {
+                    this.props.location.search !== '' && this.state.type === "reviews" &&
+                    <PostResults reviews={this.props.reviews}/>
                 }
             </div>
         );
@@ -185,7 +195,6 @@ const stateToProperty = (state) => ({
     songs: state.spotifyReducer.songs,
     albums: state.spotifyReducer.albums,
     artists: state.spotifyReducer.artists,
-
 });
 
 const propertyToDispatchMapper = (dispatch) => ({

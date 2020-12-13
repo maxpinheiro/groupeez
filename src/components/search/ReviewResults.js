@@ -4,7 +4,7 @@ import React from "react";
 import {connect} from "react-redux";
 
 
-class Song extends React.Component {
+class Review extends React.Component {
     render() {
         return (
 
@@ -53,5 +53,5 @@ const stateToProperty = (state) => ({
 const propertyToDispatchMapper = (dispatch) => ({
 });
 
-const SongResults = connect(stateToProperty, propertyToDispatchMapper)(Song);
-export default SongResults;
+const ReviewResults = connect(stateToProperty, propertyToDispatchMapper)(Review);
+export default ReviewResults;
