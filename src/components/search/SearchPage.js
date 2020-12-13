@@ -170,10 +170,6 @@ class Search extends React.Component {
                     this.props.location.search !== '' && this.state.type === "artists" &&
                     <ArtistResults songs={this.props.artists}/>
                 }
-                {
-                    this.props.location.search !== '' && this.state.type === "posts" &&
-                    <PostsResults songs={}/>
-                }
             </div>
         );
     }

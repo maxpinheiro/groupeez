@@ -2,6 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import listenerService from "../../services/ListenerService";
 import {Link} from "react-router-dom";
+import ReviewService from "../../services/ReviewService";
+import ArtistService from "../../services/ArtistService";
 
 class Listener extends React.Component {
     state = {
@@ -56,13 +58,41 @@ class Listener extends React.Component {
     friendName = (listenerId) => {
         listenerService.findListenerById(listenerId)
             .then(listener => {
-                //console.log(listener);
                 if (!listener.error) {
                     return listener.username;
                 }
             });
         return "new user";
     };
+
+    reviewTitle = (reviewId) => {
+        ReviewService.findReviewById(reviewId)
+            .then(review => {
+                if (!review.error) {
+                    return review.title;
+                }
+            });
+        return "new user";
+    };
+
+    artistName = (artistId) => {
+        ArtistService.findArtistById(artistId)
+            .then(artist => {
+                if (!artist.error) {
+                    return artist.name;
+                }
+            })
+    };
+
+    getSong = (songId) => {
+        SongService.findSongById(songId)
+            .then(song => {
+                if (!song.error) {
+                    return song;
+                }
+            })
+    };
+
 
 
 
@@ -93,14 +123,14 @@ class Listener extends React.Component {
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
                             {
-                                this.state.listener.favorites.map(song =>
-                                    <div key={song.id}
+                                this.state.listener.favorites.map(songId =>
+                                    <div key={songId}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            <Link to={`details/songs/${song.id}`}> {song.title} </Link>
+                                            <Link to={`details/songs/${songId}`}> {this.getSong(songId).title} </Link>
                                         </div>
                                         <div className={"float-right"}>
-                                            {song.artist}
+                                            {this.getSong(songId).artist}
                                         </div>
                                     </div>
                                 )
@@ -113,11 +143,11 @@ class Listener extends React.Component {
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
                             {
-                                this.state.listener.reviews.map(review =>
-                                    <div key={review.id}
+                                this.state.listener.reviews.map(reviewId =>
+                                    <div key={reviewId}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            <Link to={`/details/reviews/${review.id}`}> {review.title} </Link>
+                                            <Link to={`/details/reviews/${reviewId}`}> {this.reviewTitle(reviewId)} </Link>
                                         </div>
                                     </div>
                                 )
@@ -134,12 +164,12 @@ class Listener extends React.Component {
                             </div>
                             <div className={"list-group overflow-auto"}>
                                 {
-                                    this.state.listener.following.map(artist =>
-                                        <div key={artist.id}
+                                    this.state.listener.following.map(artistId =>
+                                        <div key={artistId}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
-                                                <Link to={`/profile/${artist.id}`}>
-                                                    {artist.name}
+                                                <Link to={`/profile/${artistId}`}>
+                                                    {this.artistName(artistId)}
                                                 </Link>
                                             </div>
                                         </div>
