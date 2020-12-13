@@ -49,7 +49,7 @@ class Album extends React.Component {
                 </span>
                 {
                     !this.state.noAlbum &&
-                    <div className="border border-2 border-secondary container-fluid">
+                    <div className="border border-2 border-secondary container-fluid mt-2">
                         <div className="m-2">
                             <p>Title: {this.state.album.name}</p>
                             <p>Artist(s): {this.state.album.artists.map((artist, index) => (

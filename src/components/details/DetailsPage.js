@@ -35,7 +35,6 @@ class Details extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         const detailType = this.props.match.params.detailType;
         const detailId = this.props.match.params.detailId;
-        console.log(detailId);
         const spotify = (queryString.parse(this.props.location.search)["?spotify"] === true) || detailId.length > 10;
         if (detailId !== prevState.detailId) {
             userService.getAccessToken()

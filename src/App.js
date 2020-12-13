@@ -9,6 +9,8 @@ import DetailsPage from "./components/details/DetailsPage";
 import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/profiles/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
+import ReviewCreator from "./components/details/ReviewCreator";
+import PostCreator from "./components/profiles/PostCreator";
 
 
 const LandingPage = () =>
@@ -40,6 +42,8 @@ class App extends React.Component {
                         <Route exact path="/details/:detailType/:detailId" component={DetailsPage} />
                         <Route exact path="/authorize" component={RedirectPage} />
                         <Route exact path="/callback" component={CallbackPage} />
+                        <Route exact path="/review/:detailType/:detailId" component={ReviewCreator} />
+                        <Route exact path="/post" component={PostCreator} />
                     </Switch>
                 </Router>
             </div>

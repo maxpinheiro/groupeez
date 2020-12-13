@@ -12,9 +12,8 @@ const createReview = (review) => {
     while (reviews.find(u => u.id === id)) {
         id = generateId(10);
     }
-    reviews.push({id, creator: review.creator, creatorId: review.creatorId, songId: review.songId, text: review.text});
-    console.log('reviews: ' + reviews);
-    return {id, creator: review.creator, creatorId: review.creatorId, songId: review.songId, text: review.text};
+    reviews.push({id, creator: review.creator, creatorId: review.creatorId, songId: review.songId, title: review.title, text: review.text});
+    return {id, creator: review.creator, creatorId: review.creatorId, songId: review.songId, title: review.title, text: review.text};
 }
 
 const updateReview = (reviewId, newReview) => {

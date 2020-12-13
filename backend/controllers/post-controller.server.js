@@ -1,4 +1,5 @@
 const postService = require('../services/post-service.server');
+const artistService = require('../services/artist-service.server');
 
 module.exports = function (app) {
     app.get('/api/posts', (req, res) => {
@@ -14,6 +15,7 @@ module.exports = function (app) {
     app.post('/api/posts', (req, res) => {
         const newPost = req.body;
         const post = postService.createPost(newPost);
+        artistService.createPostForArtist(post.artistId, post.id);
         if (post) res.json(post);
         else res.json({error: "Could not create post"});
     });

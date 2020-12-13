@@ -16,7 +16,8 @@ class Song extends React.Component {
                 images: [{
                     url: ""
                 }]
-            }
+            },
+            id: ''
         },
         noSong: true,
         spotify: false
@@ -66,7 +67,7 @@ class Song extends React.Component {
         const detailId = this.props.detailId;
         const accessToken = this.props.accessToken;
         const spotify = this.props.spotify;
-        if (spotify && !prevProps.spotifyId) {
+        if (spotify && !prevProps.spotify) {
             spotifyService.findSong(detailId, accessToken)
                 .then(song => {
                     if (!song.error) {
@@ -102,21 +103,6 @@ class Song extends React.Component {
         }
     }
 
-    /*refreshToken = () => {
-        userService.getRefreshToken()
-            .then(refreshToken => {
-                spotifyService.refreshToken(refreshToken)
-                    .then(res => {
-                        const accessToken = res.access_token;
-                        console.log('access token: ' + accessToken);
-                        this.setState(prevState => ({
-                            ...prevState,
-                            accessToken
-                        }))
-                    })
-            })
-    }*/
-
     render() {
         return (
             <div className="container-fluid">
@@ -127,7 +113,7 @@ class Song extends React.Component {
                 </span>
                 {
                     !this.state.noSong &&
-                    <div className="border border-2 border-secondary">
+                    <div className="border border-2 border-secondary mt-2">
                         <div className="m-2">
                             {
                                 this.state.spotify &&
@@ -151,7 +137,7 @@ class Song extends React.Component {
                                     <img src={this.state.song.images[0].url}  alt=""/>
                                 </div>
                             }
-
+                            <Link to={`/review/songs/${this.state.song.id}`}>Leave a review!</Link>
                         </div>
                     </div>
                 }

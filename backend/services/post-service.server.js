@@ -12,9 +12,8 @@ const createPost = (post) => {
     while (posts.find(u => u.id === id)) {
         id = generateId(10);
     }
-    posts.push({id, creator: post.creator, creatorId: post.creatorId, songId: post.songId, text: post.text});
-    console.log('posts: ' + posts);
-    return {id, creator: post.creator, creatorId: post.creatorId, songId: post.songId, text: post.text};
+    posts.push({id, type: post.type, artist: post.artist, artistId: post.artistId, title: post.title, text: post.text});
+    return {id, type: post.type, artist: post.artist, artistId: post.artistId, title: post.title, text: post.text};
 }
 
 const updatePost = (postId, newPost) => {
