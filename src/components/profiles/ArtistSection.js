@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import artistService from "../../services/ArtistService";
 import listenerService from "../../services/ListenerService";
 import {Link} from "react-router-dom";
+import spotifyService from '../../services/SpotifyService';
 
 class Artist extends React.Component {
     state = {
@@ -31,7 +32,7 @@ class Artist extends React.Component {
                     if (!artist.error) {
                         this.props.history.push(`/profile/${artist.id}`);
                     } else {
-                        // search spotify API
+
                     }
                 })
         } else {
@@ -58,6 +59,12 @@ class Artist extends React.Component {
                         this.props.history.push(`/profile/${artist.id}`);
                     } else {
                         // search spotify API
+                        /*
+                        spotifyService.findArtist(artistId)
+                            .then(artist => {
+
+                            })
+                        */
                     }
                 })
         } else if (artistId !== prevProps.artistId) {
