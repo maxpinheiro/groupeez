@@ -1,6 +1,7 @@
 import React from "react";
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
-import { withCookies } from 'react-cookie';
+import {FaUserCircle} from 'react-icons/fa';
+import {AiFillHome} from "react-icons/ai";
 
 import SearchPage from './components/SearchPage';
 import {CallbackPage, RedirectPage} from "./components/MiddleTier";
@@ -8,6 +9,7 @@ import DetailsPage from "./components/details/DetailsPage";
 import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/profiles/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
+
 
 const LandingPage = () =>
     <div className="container">
@@ -18,8 +20,16 @@ const LandingPage = () =>
 class App extends React.Component {
     render() {
         return (
-            <div>
+            <div className="container-fluid">
                 <Router>
+                    <div>
+                        <Link to={"/"} className="">
+                            <AiFillHome />
+                        </Link>
+                        <Link to={"/profile"} className="float-right">
+                            <FaUserCircle />
+                        </Link>
+                    </div>
                     <Switch>
                         <Route exact path="/" component={LandingPage} />
                         <Route exact path="/login" component={LoginPage} />

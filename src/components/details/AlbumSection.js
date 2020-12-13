@@ -10,11 +10,9 @@ class Album extends React.Component {
         album: {
             name: "",
             artists: [{name: ""}],
-            album: {
-                images: [{
-                    url: ""
-                }]
-            }
+            images: [{
+                url: ""
+            }]
         }
     };
 
@@ -26,6 +24,7 @@ class Album extends React.Component {
             spotifyService.findAlbum(detailId, accessToken)
                 .then(album => {
                     //this.props.setSong(song)
+                    console.log(album);
                     this.setState(prevState => ({
                         ...prevState,
                         album
@@ -44,16 +43,13 @@ class Album extends React.Component {
                     <Link to={`/search?${queryString.stringify({criteria: this.props.searchQuery})}`} className="mx-2">Back to results</Link>
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
-                {
-                    /*
+                <div className="border border-2 border-secondary container-fluid">
                     <p>Title: {this.state.album.name}</p>
                     <p>Artist(s): {this.state.album.artists.map((artist, index) => (
-                    artist.name + (index < this.state.album.artists.length - 1 ? ', ' : '')
-                ))}</p>
-                    <img src={this.state.album.album.images[0].url}  alt=""/>
-                    *
-                     */
-                }
+                        artist.name + (index < this.state.album.artists.length - 1 ? ', ' : '')
+                    ))}</p>
+                    <img src={this.state.album.images[0].url}  alt=""/>
+                </div>
             </div>
         );
     }

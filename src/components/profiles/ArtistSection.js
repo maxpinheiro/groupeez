@@ -88,7 +88,7 @@ class Artist extends React.Component {
 
     render() {
         return (
-            <div className="container-fluid">
+            <div className="container-fluid border border-2 border-secondary">
 
                 <div className={"h1"}>
                     {this.state.artist.name}

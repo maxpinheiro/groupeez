@@ -75,7 +75,8 @@ class Profile extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapShot) {
         const userId = this.props.match.params.userId;
-        if (!userId && !prevState.user) { // personal profile path - viewing own page
+        if (!userId && prevProps.match.params.userId) { // personal profile path - viewing own page
+            //console.log('get current')
             userService.getCurrentUser()
                 .then(currentUser => {
                     if (currentUser.error) {
@@ -99,6 +100,7 @@ class Profile extends React.Component {
                 })
         }
         else if (userId && userId.length > 10) {
+            //console.log('get spotify')
             artistService.findArtistBySpotifyId(userId)
                 .then(artist => {
                     if (!artist.error) {
@@ -107,7 +109,8 @@ class Profile extends React.Component {
                         // search spotify API
                     }
                 })
-        } else if (!prevState.user || (userId !== prevState.user.id)) {
+        } else if (!prevState.user || (userId && userId !== prevState.user.id)) {
+            //console.log('get local')
             userService.getUserById(userId)
                 .then(user => {
                     if (!user.error) {
