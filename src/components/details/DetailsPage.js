@@ -19,7 +19,7 @@ class Details extends React.Component {
     componentDidMount() {
         const detailType = this.props.match.params.detailType;
         const detailId = this.props.match.params.detailId;
-        const spotify = queryString.parse(this.props.location.search)["?spotify"];
+        const spotify = queryString.parse(this.props.location.search)["?spotify"] || detailId.length > 10;
         userService.getAccessToken()
             .then(accessToken => {
                 this.setState(prevState => ({

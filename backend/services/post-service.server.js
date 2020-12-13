@@ -31,6 +31,6 @@ const deletePost = (postId) => {
     return 1;
 }
 
-const queryPost = (query) => posts.filter(p => stringSimilarity(query, p.title) >= 0.6);
+const queryPost = (query) => posts.filter(p => stringSimilarity(query, p.title) >= 0.6 || p.title.includes(query));
 
 module.exports = {findAllPosts, findPostById, createPost, updatePost, deletePost, queryPost};

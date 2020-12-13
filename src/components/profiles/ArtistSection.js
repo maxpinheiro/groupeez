@@ -25,7 +25,6 @@ class Artist extends React.Component {
             },
         reviews: [],
         songs: []
-
     };
 
     componentDidMount() {
@@ -155,11 +154,11 @@ class Artist extends React.Component {
                                 <div key={postId}
                                      className={"list-item"}>
                                     <div className={"h5"}>
-                                        {this.getPost(postId).type}
+                                        {'this.getPost(postId).type'}
                                     </div>
                                     <div className={"float-left h6"}>
                                         <Link to={`/details/posts/${postId}`}>
-                                            {this.getPost(postId).title}
+                                            {'this.getPost(postId).title'}
                                         </Link>
                                     </div>
                                 </div>
@@ -178,7 +177,7 @@ class Artist extends React.Component {
                                      className={"list-item"}>
                                     <div className={"float-left"}>
                                         <Link to={`/details/songs/${songId}`}>
-                                            {this.getSong(songId).title}
+                                            {'this.getSong(songId).title'}
                                         </Link>
                                     </div>
                                 </div>
@@ -197,7 +196,7 @@ class Artist extends React.Component {
                                      className={"list-item"}>
                                     <div className={"float-left"}>
                                         <Link to={`/details/reviews/${reviewId}`}>
-                                            {this.reviewTitle(reviewId)}
+                                            {'this.reviewTitle(reviewId)'}
                                         </Link>
                                     </div>
                                 </div>
@@ -219,7 +218,7 @@ class Artist extends React.Component {
                                              className={"list-item"}>
                                             <div className={"float-left"}>
                                                 <Link to={`/profile/${listenerId}`}>
-                                                    {this.groupeeName(listenerId)}
+                                                    {'this.groupeeName(listenerId)'}
                                                 </Link>
                                             </div>
                                         </div>

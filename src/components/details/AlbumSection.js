@@ -13,7 +13,8 @@ class Album extends React.Component {
             images: [{
                 url: ""
             }]
-        }
+        },
+        noAlbum: true
     };
 
     componentDidMount() {
@@ -25,10 +26,13 @@ class Album extends React.Component {
                 .then(album => {
                     //this.props.setSong(song)
                     console.log(album);
-                    this.setState(prevState => ({
-                        ...prevState,
-                        album
-                    }));
+                    if (!album.error) {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            album,
+                            noAlbum: false
+                        }));
+                    }
                 });
         } else {
             console.log('not on spotify');
@@ -43,13 +47,25 @@ class Album extends React.Component {
                     <Link to={`/search?${queryString.stringify({criteria: this.props.searchQuery})}`} className="mx-2">Back to results</Link>
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
-                <div className="border border-2 border-secondary container-fluid">
-                    <p>Title: {this.state.album.name}</p>
-                    <p>Artist(s): {this.state.album.artists.map((artist, index) => (
-                        artist.name + (index < this.state.album.artists.length - 1 ? ', ' : '')
-                    ))}</p>
-                    <img src={this.state.album.images[0].url}  alt=""/>
-                </div>
+                {
+                    !this.state.noAlbum &&
+                    <div className="border border-2 border-secondary container-fluid">
+                        <div className="m-2">
+                            <p>Title: {this.state.album.name}</p>
+                            <p>Artist(s): {this.state.album.artists.map((artist, index) => (
+                                artist.name + (index < this.state.album.artists.length - 1 ? ', ' : '')
+                            ))}</p>
+                            <img src={this.state.album.images[0].url}  alt=""/>
+                        </div>
+                    </div>
+                }
+                {
+                    this.state.noAlbum &&
+                    <div className="my-2">
+                        <p className="d-inline">We couldn't find any album with this ID. Try a different </p>
+                        <Link to="/search" className="">search.</Link>
+                    </div>
+                }
             </div>
         );
     }

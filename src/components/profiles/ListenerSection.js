@@ -1,9 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import listenerService from "../../services/ListenerService";
 import {Link} from "react-router-dom";
-import ReviewService from "../../services/ReviewService";
-import ArtistService from "../../services/ArtistService";
+
+import reviewService from "../../services/ReviewService";
+import artistService from "../../services/ArtistService";
+import listenerService from "../../services/ListenerService";
+import songService from "../../services/SongService";
 
 class Listener extends React.Component {
     state = {
@@ -66,7 +68,7 @@ class Listener extends React.Component {
     };
 
     reviewTitle = (reviewId) => {
-        ReviewService.findReviewById(reviewId)
+        reviewService.findReviewById(reviewId)
             .then(review => {
                 if (!review.error) {
                     return review.title;
@@ -76,7 +78,7 @@ class Listener extends React.Component {
     };
 
     artistName = (artistId) => {
-        ArtistService.findArtistById(artistId)
+        artistService.findArtistById(artistId)
             .then(artist => {
                 if (!artist.error) {
                     return artist.name;
@@ -85,7 +87,7 @@ class Listener extends React.Component {
     };
 
     getSong = (songId) => {
-        SongService.findSongById(songId)
+        songService.findSongById(songId)
             .then(song => {
                 if (!song.error) {
                     return song;
@@ -127,10 +129,10 @@ class Listener extends React.Component {
                                     <div key={songId}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            <Link to={`details/songs/${songId}`}> {this.getSong(songId).title} </Link>
+                                            <Link to={`details/songs/${songId}`}> {'this.getSong(songId).title'} </Link>
                                         </div>
                                         <div className={"float-right"}>
-                                            {this.getSong(songId).artist}
+                                            {'this.getSong(songId).artist'}
                                         </div>
                                     </div>
                                 )

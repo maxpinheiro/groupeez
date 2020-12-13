@@ -18,16 +18,16 @@
   {
     "id": "k9m46ux0mg",
     "type": "tour",
-    "creator": "cosmic_monkey",
-    "creatorId": "45xsji3bb1",
+    "artist": "cosmic_monkey",
+    "artistId": "45xsji3bb1",
     "title": "Liftoff Tour",
     "text": "We're going on tour to debut our new album, Liftoff"
   },
   {
     "id": "l30bl9m1z4",
     "type": "message",
-    "creator": "cosmic_monkey",
-    "creatorId": "45xsji3bb1",
+    "artist": "cosmic_monkey",
+    "artistId": "45xsji3bb1",
     "title": "Hi from Cosmic Monkey",
     "text": "Good morning everyone! Welcome to Groupeez."
   }

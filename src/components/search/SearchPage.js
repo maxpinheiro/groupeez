@@ -184,20 +184,11 @@ class Search extends React.Component {
                     </div>
                     <div className="input-group mt-2">
                         <div className={"row"}>
-                            <div className={"form-check ml-3 mr-2"}>
+                            <label className={"form-check-label font-weight-bold ml-3"}>Data: </label>
+                            <div className={"form-check mx-2"}>
                                 <input className={"form-check-input"} type={"radio"} value={"songs"} name={"queryType"} id={"songs"}
                                        onChange={e => this.setState((prevState) => ({...prevState, typeInput: "songs"}))}/>
                                 <label className={"form-check-label"}>Songs</label>
-                            </div>
-                            <div className={"form-check mx-2"}>
-                                <input className={"form-check-input"} type={"radio"} value={"artists"} name={"queryType"} id={"artists"}
-                                       onChange={e => this.setState((prevState) => ({...prevState, typeInput: "artists"}))}/>
-                                <label className={"form-check-label"}>Artists</label>
-                            </div>
-                            <div className={"form-check mx-2"}>
-                                <input className={"form-check-input"} type={"radio"} value={"groupeez"} name={"queryType"} id={"groupeez"}
-                                       onChange={e => this.setState((prevState) => ({...prevState, typeInput: "groupeez"}))}/>
-                                <label className={"form-check-label"}>Groupeez</label>
                             </div>
                             <div className={"form-check mx-2"}>
                                 <input className={"form-check-input"} type={"radio"} value={"posts"} name={"queryType"} id={"posts"}
@@ -208,6 +199,17 @@ class Search extends React.Component {
                                 <input className={"form-check-input"} type={"radio"} value={"reviews"} name={"queryType"} id={"reviews"}
                                        onChange={e => this.setState((prevState) => ({...prevState, typeInput: "reviews"}))}/>
                                 <label className={"form-check-label"}>Reviews</label>
+                            </div>
+                            <label className={"form-check-label font-weight-bold ml-3"}>Users: </label>
+                            <div className={"form-check mx-2"}>
+                                <input className={"form-check-input"} type={"radio"} value={"artists"} name={"queryType"} id={"artists"}
+                                       onChange={e => this.setState((prevState) => ({...prevState, typeInput: "artists"}))}/>
+                                <label className={"form-check-label"}>Artists</label>
+                            </div>
+                            <div className={"form-check mx-2"}>
+                                <input className={"form-check-input"} type={"radio"} value={"groupeez"} name={"queryType"} id={"groupeez"}
+                                       onChange={e => this.setState((prevState) => ({...prevState, typeInput: "groupeez"}))}/>
+                                <label className={"form-check-label"}>Groupeez</label>
                             </div>
                         </div>
                     </div>

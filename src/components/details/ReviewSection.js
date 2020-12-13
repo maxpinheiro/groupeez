@@ -8,7 +8,6 @@ import reviewService from '../../services/ReviewService';
 class Review extends React.Component {
     state = {
         searchQuery: "",
-        error: "",
         review: {
             id: "",
             creator: "",
@@ -16,7 +15,8 @@ class Review extends React.Component {
             songId: "",
             title: "",
             text: ""
-        }
+        },
+        noReview: true
     };
 
     componentDidMount() {
@@ -26,13 +26,13 @@ class Review extends React.Component {
                 if (!review.error) {
                     this.setState(prevState => ({
                         ...prevState,
-                        review
+                        review,
+                        noReview: false
                     }))
                 } else {
                     this.setState(prevState => ({
                         ...prevState,
-                        error: "There is no review with this ID.",
-                        review: null
+                        noReview: true
                     }))
                 }
 
@@ -48,27 +48,33 @@ class Review extends React.Component {
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
                 {
-                    this.state.error !== "" &&
-                    <p className="p-2 rounded border-secondary text-danger">{this.state.error}</p>
-                }
-                <div className="border border-2 border-secondary container-fluid mt-2">
-                    <div className="m-2">
-                        <div className="row">
-                            <p className="h2 my-auto">
-                                {this.state.review.title}
-                            </p>
-                            <p className="h4 mx-4 my-auto">
-                                By
-                                <Link to={`/profile/${this.state.review.creatorId}`} className="ml-2">{this.state.review.creator}</Link>
-                            </p>
-                        </div>
-                        <div className="row">
-                            <p className="text-body my-auto">
-                                {this.state.review.text}
-                            </p>
+                    !this.state.noReview &&
+                    <div className="border border-2 border-secondary container-fluid mt-2">
+                        <div className="m-2">
+                            <div className="row">
+                                <p className="h2 my-auto">
+                                    {this.state.review.title}
+                                </p>
+                                <p className="h4 mx-4 my-auto">
+                                    By
+                                    <Link to={`/profile/${this.state.review.creatorId}`} className="ml-2">{this.state.review.creator}</Link>
+                                </p>
+                            </div>
+                            <div className="row">
+                                <p className="text-body my-auto">
+                                    {this.state.review.text}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
+                {
+                    this.state.noReview &&
+                    <div className="my-2">
+                        <p className="d-inline">We couldn't find any review with this ID. Try a different </p>
+                        <Link to="/search" className="">search.</Link>
+                    </div>
+                }
             </div>
         );
     }
