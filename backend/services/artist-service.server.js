@@ -1,4 +1,4 @@
-const {generateId} = require('../utils/utils');
+const {generateId, stringSimilarity} = require('../utils/utils');
 
 let artists = [...(require('./artists.json'))];
 
@@ -26,5 +26,6 @@ const createArtist = (artist) => {
     return {id: artist.id, username: artist.username, name: 'New user', spotifyId: artist.spotifyId, bio: ''};
 }
 
+const queryArtist = (query) => artists.filter(a => stringSimilarity(query, a.username) >= 0.6 || stringSimilarity(query, a.name) >= 0.6);
 
-module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist};
+module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, queryArtist};

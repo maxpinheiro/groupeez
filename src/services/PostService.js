@@ -34,4 +34,9 @@ const deletePost = (postId) => {
     }).then(response => response.json());
 };
 
-export default {findAllPosts, findPostById, createPost, updatePost, deletePost};
+const queryPost = (query) => {
+    return fetch(`http://localhost:4000/api/posts/search/${query}`)
+        .then(response => response.json());
+};
+
+export default {findAllPosts, findPostById, createPost, updatePost, deletePost, queryPost};

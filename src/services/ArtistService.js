@@ -24,4 +24,9 @@ const deleteArtist = (listenerId, newListener) => {
 
 };
 
-export default {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, updateArtist, deleteArtist};
+const queryArtist = (query) => {
+    return fetch(`http://localhost:4000/api/artists/search/${query}`)
+        .then(response => response.json());
+};
+
+export default {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, updateArtist, deleteArtist, queryArtist};

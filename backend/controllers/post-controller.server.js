@@ -30,4 +30,9 @@ module.exports = function (app) {
         const status = postService.deletePost(postId, newPost);
         res.send(status);
     });
+    app.get('/api/posts/search/:query', (req, res) => {
+        const query = req.params.query;
+        const posts = postService.queryPost(query);
+        res.json(posts);
+    });
 }

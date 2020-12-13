@@ -34,4 +34,9 @@ const deleteReview = (reviewId) => {
     }).then(response => response.json());
 };
 
-export default {findAllReviews, findReviewById, createReview, updateReview, deleteReview};
+const queryReview = (query) => {
+    return fetch(`http://localhost:4000/api/reviews/search/${query}`)
+        .then(response => response.json());
+};
+
+export default {findAllReviews, findReviewById, createReview, updateReview, deleteReview, queryReview};

@@ -1,3 +1,5 @@
+const {stringSimilarity} = require('../utils/utils');
+
 let songs = [...(require('./songs.json'))];
 
 const findAllSongs = () => songs;
@@ -18,6 +20,6 @@ const deleteSong = (songId, newSong) => {
 
 };
 
+const querySong = (query) => songs.filter(s => stringSimilarity(query, s.title) >= 0.6);
 
-
-module.exports = {findAllSongs, findSongById, createSong, updateSong, deleteSong}
+module.exports = {findAllSongs, findSongById, createSong, updateSong, deleteSong, querySong}

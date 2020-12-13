@@ -1,3 +1,5 @@
+const {stringSimilarity} = require('../utils/utils');
+
 let listeners = [...(require('./listeners.json'))];
 
 const findAllListeners = () => listeners;
@@ -18,4 +20,6 @@ const deleteListener = (listenerId, newListener) => {
 
 };
 
-module.exports = {findAllListeners, findListenerById, createListener, updateListener, deleteListener}
+const queryListener = (query) => listeners.filter(l => stringSimilarity(query, l.username) >= 0.6 || stringSimilarity(query, l.name) >= 0.6);
+
+module.exports = {findAllListeners, findListenerById, createListener, updateListener, deleteListener, queryListener}

@@ -11,4 +11,9 @@ module.exports = function (app) {
         if (artist) res.json(artist);
         else res.json({error: "No artist with id"});
     });
+    app.get('/api/artists/search/:query', (req, res) => {
+        const query = req.params.query;
+        const artists = artistService.queryArtist(query);
+        res.json(artists);
+    });
 }

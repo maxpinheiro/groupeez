@@ -11,4 +11,9 @@ module.exports = function (app) {
         if (song) res.json(song);
         else res.json({error: "No song with id"});
     });
+    app.get('/api/songs/search/:query', (req, res) => {
+        const query = req.params.query;
+        const songs = songService.querySong(query);
+        res.json(songs);
+    });
 }

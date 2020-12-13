@@ -1,4 +1,4 @@
-const {generateId} = require('../utils/utils');
+const {generateId, stringSimilarity} = require('../utils/utils');
 
 let posts = [...(require('./posts.json'))];
 
@@ -31,4 +31,6 @@ const deletePost = (postId) => {
     return 1;
 }
 
-module.exports = {findAllPosts, findPostById, createPost, updatePost, deletePost};
+const queryPost = (query) => posts.filter(p => stringSimilarity(query, p.title) >= 0.6);
+
+module.exports = {findAllPosts, findPostById, createPost, updatePost, deletePost, queryPost};

@@ -1,3 +1,5 @@
+const ss = require('string-similarity');
+
 const generateId = (length) => {
     const options = 'abcdefghijklmnopqrstuvwxyz1234567890';
     let result = "";
@@ -8,4 +10,6 @@ const generateId = (length) => {
     return result;
 };
 
-module.exports = {generateId};
+const stringSimilarity = (str1, str2) => ss.compareTwoStrings(str1, str2);
+
+module.exports = {generateId, stringSimilarity};

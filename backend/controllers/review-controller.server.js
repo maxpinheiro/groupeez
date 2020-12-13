@@ -30,4 +30,9 @@ module.exports = function (app) {
         const status = reviewService.deleteReview(reviewId, newReview);
         res.send(status);
     });
+    app.get('/api/reviews/search/:query', (req, res) => {
+        const query = req.params.query;
+        const reviews = reviewService.queryReview(query);
+        res.json(reviews);
+    });
 }

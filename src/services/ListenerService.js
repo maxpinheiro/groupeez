@@ -19,4 +19,9 @@ const deleteListener = (listenerId, newListener) => {
 
 };
 
-export default {findAllListeners, findListenerById, createListener, updateListener, deleteListener};
+const queryListener = (query) => {
+    return fetch(`http://localhost:4000/api/listeners/search/${query}`)
+        .then(response => response.json());
+};
+
+export default {findAllListeners, findListenerById, createListener, updateListener, deleteListener, queryListener};

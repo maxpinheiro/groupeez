@@ -1,4 +1,4 @@
-const {generateId} = require('../utils/utils');
+const {generateId, stringSimilarity} = require('../utils/utils');
 
 let reviews = [...(require('./reviews.json'))];
 
@@ -31,5 +31,6 @@ const deleteReview = (reviewId) => {
     return 1;
 }
 
+const queryReview = (query) => reviews.filter(r => stringSimilarity(query, r.title) >= 0.6);
 
-module.exports = {findAllReviews, findReviewById, createReview, updateReview, deleteReview};
+module.exports = {findAllReviews, findReviewById, createReview, updateReview, deleteReview, queryReview};

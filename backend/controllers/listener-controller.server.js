@@ -11,4 +11,9 @@ module.exports = function (app) {
         if (listener) res.json(listener);
         else res.json({error: "No listener with id"});
     });
+    app.get('/api/listeners/search/:query', (req, res) => {
+        const query = req.params.query;
+        const listeners = listenerService.queryListener(query);
+        res.json(listeners);
+    });
 }
