@@ -42,8 +42,9 @@ class App extends React.Component {
                         <Route exact path="/details/:detailType/:detailId" component={DetailsPage} />
                         <Route exact path="/authorize" component={RedirectPage} />
                         <Route exact path="/callback" component={CallbackPage} />
-                        <Route exact path="/review/:detailType/:detailId" component={ReviewCreator} />
+                        <Route exact path="/review/:reviewType/:detailId" component={ReviewCreator} />
                         <Route exact path="/post" component={PostCreator} />
+                        <Route exact path="/post/:postType/:postId" component={PostCreator} />
                     </Switch>
                 </Router>
             </div>

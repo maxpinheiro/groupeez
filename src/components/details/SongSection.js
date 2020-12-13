@@ -137,7 +137,7 @@ class Song extends React.Component {
                                     <img src={this.state.song.images[0].url}  alt=""/>
                                 </div>
                             }
-                            <Link to={`/review/songs/${this.state.song.id}`}>Leave a review!</Link>
+                            <Link to={`/review/create/${this.state.song.id}`}>Leave a review!</Link>
                         </div>
                     </div>
                 }

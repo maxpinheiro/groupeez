@@ -22,10 +22,32 @@ class Post extends React.Component {
           username: ""
         },
         error: '',
-        currentUser: {id: ''}
+        currentUser: {id: ''},
+        postType: ''
     };
 
     componentDidMount() {
+        const postType = this.props.match.params.postType;
+        const postId = this.props.match.params.postId;
+
+        if (postType === 'edit') {
+            postService.findPostById(postId)
+                .then(post => {
+                    if (!post.error) {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            post,
+                            postType
+                        }))
+                    } else {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            error: "We couldn't find any post with this id."
+                        }))
+                    }
+                })
+        }
+
         userService.getCurrentUser()
             .then(currentUser => {
                 if (!currentUser.error) {
@@ -81,11 +103,37 @@ class Post extends React.Component {
         }
     }
 
+    savePost = () => {
+        if (this.state.post.type === '' || this.state.post.title === '' || this.state.post.text === '') {
+            this.setState(prevState => ({
+                ...prevState,
+                error: "Your post must have a type, title, and body."
+            }))
+        } else {
+            const post = {
+                type: this.state.post.type,
+                artist: this.state.currentUser.username,
+                artistId: this.state.currentUser.id,
+                title: this.state.post.title,
+                text: this.state.post.text
+            }
+            console.log(post);
+            postService.updatePost(post)
+                .then(newPost => {
+                    this.props.history.push(`/details/posts/${newPost.id}`);
+                })
+        }
+    }
+
     render() {
         return (
             <div className="container-fluid">
                 <span>
-                    <p className="h3 d-inline mr-2">Create a Post</p>
+                    {
+                        this.state.postType === 'edit' ?
+                            <p className="h3 d-inline mr-2">Edit your Post</p> :
+                            <p className="h3 d-inline mr-2">Create a Post</p>
+                    }
                 </span>
                 {
                     (!this.state.noSong && this.state.currentUser.id !== '') &&
@@ -110,12 +158,12 @@ class Post extends React.Component {
                                     </div>
                                     <div className="input-group">
                                         <input onChange={(e) => this.setState(prevState => ({...prevState, post: {...prevState.post, title: e.target.value}}))}
-                                               type="text" className="form-control" placeholder="post title"
+                                               type="text" className="form-control" placeholder="post title" value={this.state.post.title}
                                                id="titleFld"/>
                                     </div>
                                     <div className="input-group">
                                     <textarea onChange={(e) => this.setState(prevState => ({...prevState, post: {...prevState.post, text: e.target.value}}))}
-                                              className="form-control" placeholder="post text" rows="3"
+                                              className="form-control" placeholder="post text" rows="3" value={this.state.post.text}
                                               id="titleFld"/>
                                     </div>
                                 </div>
@@ -130,9 +178,15 @@ class Post extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            <button onClick={this.createPost} className="btn btn-primary mx-2">
-                                Create Post
-                            </button>
+                            {
+                                this.state.postType === 'edit' ?
+                                <button onClick={this.createPost} className="btn btn-primary mx-2">
+                                    Save Post
+                                </button> :
+                                <button onClick={this.savePost} className="btn btn-primary mx-2">
+                                    Create Post
+                                </button>
+                            }
                             <Link to="/profile" className="btn btn-warning mx-2">
                                 Cancel
                             </Link>

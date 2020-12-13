@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import queryString from "querystring";
 
 import reviewService from '../../services/ReviewService';
+import userService from '../../services/UserService';
 
 class Review extends React.Component {
     state = {
@@ -16,11 +17,21 @@ class Review extends React.Component {
             title: "",
             text: ""
         },
+        currentUser: {id: ''},
         noReview: true
     };
 
     componentDidMount() {
         const detailId = this.props.detailId;
+        userService.getCurrentUser()
+            .then(currentUser => {
+                if (!currentUser.error) {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        currentUser
+                    }))
+                }
+            })
         reviewService.findReviewById(detailId)
             .then(review => {
                 if (!review.error) {
@@ -65,6 +76,10 @@ class Review extends React.Component {
                                     {this.state.review.text}
                                 </p>
                             </div>
+                            {
+                                this.state.review.creatorId === this.state.currentUser.id &&
+                                <Link to={`/review/edit/${this.state.review.id}`}>Edit your review</Link>
+                            }
                         </div>
                     </div>
                 }
