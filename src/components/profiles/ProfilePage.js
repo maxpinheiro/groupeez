@@ -117,6 +117,7 @@ class Profile extends React.Component {
                         this.setState( function(prevState) {
                             return {
                                 ...prevState,
+                                personalPage: false,
                                 user: user
                             }
                         })

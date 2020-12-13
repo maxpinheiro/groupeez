@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import {FaUserCircle} from 'react-icons/fa';
 import {AiFillHome} from "react-icons/ai";
 
-import SearchPage from './components/SearchPage';
+import SearchPage from './components/search/SearchPage';
 import {CallbackPage, RedirectPage} from "./components/MiddleTier";
 import DetailsPage from "./components/details/DetailsPage";
 import LoginPage from "./components/LoginPage";
