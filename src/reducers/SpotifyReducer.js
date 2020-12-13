@@ -43,6 +43,18 @@ const spotifyReducer = (state=initialState, action) => {
                 ...state,
                 resultSong: action.song
             }
+        case "SEARCH_ALBUMS":
+            return {
+                ...state,
+                albums: action.albums,
+                searchQueary: action.query
+            }
+        case "SEARCH_ARTISTS":
+            return {
+                ...state,
+                artists: action.artists,
+                searchQueary: action.query
+            }
         default:
             return state
     }

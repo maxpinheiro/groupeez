@@ -95,11 +95,11 @@ class Search extends React.Component {
                 }
                 {
                     this.props.location.search !== '' && this.state.type === "artists" &&
-                    <SongResults songs={this.props.songs}/>
+                    <ArtistResults songs={this.props.songs}/>
                 }
                 {
                     this.props.location.search !== '' && this.state.type === "posts" &&
-                    <SongResults songs={this.props.songs}/>
+                    <PostsResults songs={this.props.songs}/>
                 }
             </div>
         );
@@ -109,7 +109,10 @@ class Search extends React.Component {
 const stateToProperty = (state) => ({
     accessToken: state.spotifyReducer.accessToken,
     refreshToken: state.spotifyReducer.refreshToken,
-    songs: state.spotifyReducer.songs
+    songs: state.spotifyReducer.songs,
+    albums: state.spotifyReducer.albums,
+    artists: state.spotifyReducer.artists,
+
 });
 
 const propertyToDispatchMapper = (dispatch) => ({
