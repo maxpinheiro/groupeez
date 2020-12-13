@@ -6,14 +6,42 @@ import {search} from "../services/SpotifyService";
 import queryString from "querystring";
 
 import userService from '../services/UserService';
+import PostService from "../../services/PostService";
 
 class Search extends React.Component {
     state = {query: '', type: 'track'};
 
-    search = (query) => {
+    search = (query, quearyType) => {
+
+        switch(quearyType){
+            case "songs":
+                this.searchSongs(query);
+                break;
+            case "albums":
+                this.searchAlbums(query);
+                break;
+            case "artists":
+                this.searchArtists(query);
+                break;
+            case "posts":
+                this.searchPosts(query);
+                break;
+            case "reviews":
+                this.searchReviews(query);
+                break;
+            case "groupeez":
+                this.searchGroupeez(query);
+                break;
+            default:
+                break;
+        }
+
+    };
+
+    searchSongs = (query) => {
         const queryParams = {
             q: query,
-            type: this.state.type,
+            type: "tracks",
             limit: 10
         }
         userService.getAccessToken()
@@ -24,23 +52,64 @@ class Search extends React.Component {
                     }
                 });
             })
-
     };
+
+    searchAlbums = (query) => {
+        const queryParams = {
+            q: query,
+            type: "albums",
+            limit: 10
+        }
+        userService.getAccessToken()
+            .then(accessToken => {
+                search(queryParams, accessToken).then(response => {
+                    if (response.albums) {
+                        this.props.setAlbums(response.albums.items, query);
+                    }
+                });
+            })
+    };
+
+    searchArtists = (query) => {
+        const queryParams = {
+            q: query,
+            type: "artists",
+            limit: 10
+        }
+        userService.getAccessToken()
+            .then(accessToken => {
+                search(queryParams, accessToken).then(response => {
+                    if (response.artists) {
+                        this.props.setArtists(response.artists.items, query);
+                    }
+                });
+            })
+    };
+
+    searchPosts = (queary) => {
+    }
+
+    searchReviews = (queary) => {
+
+    }
+
+    searchGroupeez = (queary) => {
+
+    }
 
     componentDidMount() {
         const query = queryString.parse(this.props.location.search)["?criteria"];
-        if (query) {
-            this.search(query);
-        }
-
         const queryType = queryString.parse(this.props.location.search)["type"];
-
+        if (query) {
+            this.search(query, queryType);
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const query = queryString.parse(this.props.location.search)["?criteria"];
+        const queryType = queryString.parse(this.props.location.search)["type"];
         if (query !== queryString.parse(prevProps.location.search)["?criteria"]) {
-            this.search(query);
+            this.search(query, queryType);
         }
     }
 
@@ -94,12 +163,16 @@ class Search extends React.Component {
                     <SongResults songs={this.props.songs}/>
                 }
                 {
+                    this.props.location.search !== '' && this.state.type === "albums" &&
+                    <AlbumResults songs={this.props.albums}/>
+                }
+                {
                     this.props.location.search !== '' && this.state.type === "artists" &&
-                    <ArtistResults songs={this.props.songs}/>
+                    <ArtistResults songs={this.props.artists}/>
                 }
                 {
                     this.props.location.search !== '' && this.state.type === "posts" &&
-                    <PostsResults songs={this.props.songs}/>
+                    <PostsResults songs={}/>
                 }
             </div>
         );
@@ -116,7 +189,9 @@ const stateToProperty = (state) => ({
 });
 
 const propertyToDispatchMapper = (dispatch) => ({
-    setSongs: (songs, query) => dispatch({type: 'SEARCH_SONGS', songs, query})
+    setSongs: (songs, query) => dispatch({type: 'SEARCH_SONGS', songs, query}),
+    setAlbums: (songs, query) => dispatch({type: 'SEARCH_ALBUMS', songs, query}),
+    setArtists: (songs, query) => dispatch({type: 'SEARCH_ARTISTS', songs, query})
 });
 
 const SearchPage = connect(stateToProperty, propertyToDispatchMapper)(Search);
