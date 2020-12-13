@@ -7,8 +7,6 @@ import reviewService from "../../services/ReviewService";
 import postService from "../../services/PostService";
 import artistService from "../../services/ArtistService";
 import listenerService from "../../services/ListenerService";
-import songService from "../../services/SongService";
-
 class Artist extends React.Component {
     state = {
         artist:{
@@ -22,9 +20,7 @@ class Artist extends React.Component {
                 reviews: [],
                 posts: [],
                 followers: []
-            },
-        reviews: [],
-        songs: []
+            }
     };
 
     componentDidMount() {
@@ -42,10 +38,11 @@ class Artist extends React.Component {
             artistService.findArtistById(artistId)
                 .then(artist => {
                     if (!artist.error) {
+                        const newArtist = this.populateArtist(artist);
                         this.setState(function(prevState){
                             return {
                                 ...prevState,
-                                artist: artist,
+                                artist: newArtist,
                             }
                         })
                     }
@@ -74,10 +71,11 @@ class Artist extends React.Component {
             artistService.findArtistById(artistId)
                 .then(artist => {
                     if (!artist.error) {
+                        const newArtist = this.populateArtist(artist);
                         this.setState(function(prevState){
                             return {
                                 ...prevState,
-                                artist: artist,
+                                artist: newArtist,
                             }
                         })
                     }
@@ -85,43 +83,33 @@ class Artist extends React.Component {
         }
     }
 
-    groupeeName = (listenerId) => {
-        listenerService.findListenerById(listenerId)
-            .then(listener => {
-                if (!listener.error) {
-                    return listener.username;
-                }
+    populateArtist = (old) => {
+
+        Promise.all(old.reviews.map(reviewId =>
+            reviewService.findReviewById(reviewId)
+        )).then(reviews => {
+            Promise.all(old.library.map(songId =>
+                songService.findSongById(songId)
+            )).then(songs => {
+                Promise.all(old.posts.map(postId =>
+                    postService.findPostById(postId)
+                )).then(posts => {
+                    Promise.all(old.followers.map(groupeeId =>
+                        listenerService.findListenerById(groupeeId)
+                    )).then(groupeez => {
+                        return {
+                            ...old,
+                            reviews: reviews,
+                            posts: posts,
+                            followers: groupeez,
+                            library: songs
+                        }
+                    });
+                });
             });
-        return "";
-    };
+        });
+    }
 
-    reviewTitle = (reviewId) => {
-        reviewService.findReviewById(reviewId)
-            .then(review => {
-                if (!review.error) {
-                    return review.title;
-                }
-            });
-        return "new user";
-    };
-
-    getSong = (songId) => {
-        songService.findSongById(songId)
-            .then(song => {
-                if (!song.error) {
-                    return song;
-                }
-            })
-    };
-
-    getPost = (postId) => {
-        postService.findPostById(postId)
-            .then(post => {
-                if (!post.error) {
-                    return post;
-                }
-            })
-    };
 
     render() {
         return (
@@ -150,15 +138,15 @@ class Artist extends React.Component {
                     </div>
                     <div className={"list-group overflow-auto"}>
                         {
-                            this.state.artist.posts.map(postId =>
-                                <div key={postId}
+                            this.state.artist.posts.map(post =>
+                                <div key={post.id}
                                      className={"list-item"}>
                                     <div className={"h5"}>
-                                        {'this.getPost(postId).type'}
+                                        {post.type}
                                     </div>
                                     <div className={"float-left h6"}>
-                                        <Link to={`/details/posts/${postId}`}>
-                                            {'this.getPost(postId).title'}
+                                        <Link to={`/details/posts/${post.id}`}>
+                                            {post.title}
                                         </Link>
                                     </div>
                                 </div>
@@ -172,12 +160,12 @@ class Artist extends React.Component {
                     </div>
                     <div className={"list-group overflow-auto"}>
                         {
-                            this.state.songs.map(songId =>
-                                <div key={songId}
+                            this.state.songs.map(song =>
+                                <div key={song.id}
                                      className={"list-item"}>
                                     <div className={"float-left"}>
-                                        <Link to={`/details/songs/${songId}`}>
-                                            {'this.getSong(songId).title'}
+                                        <Link to={`/details/songs/${song.id}`}>
+                                            {song.title}
                                         </Link>
                                     </div>
                                 </div>
@@ -191,12 +179,12 @@ class Artist extends React.Component {
                     </div>
                     <div className={"list-group overflow-auto"}>
                         {
-                            this.state.reviews.map(reviewId =>
-                                <div key={reviewId}
+                            this.state.reviews.map(review =>
+                                <div key={review.id}
                                      className={"list-item"}>
                                     <div className={"float-left"}>
-                                        <Link to={`/details/reviews/${reviewId}`}>
-                                            {'this.reviewTitle(reviewId)'}
+                                        <Link to={`/details/reviews/${review.id}`}>
+                                            {review.title}
                                         </Link>
                                     </div>
                                 </div>
@@ -213,12 +201,12 @@ class Artist extends React.Component {
                             </div>
                             <div className={"list-group overflow-auto"}>
                                 {
-                                    this.state.artist.groupeez.map(listenerId =>
-                                        <div key={listenerId}
+                                    this.state.artist.groupeez.map(groupee =>
+                                        <div key={groupee.id}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
-                                                <Link to={`/profile/${listenerId}`}>
-                                                    {'this.groupeeName(listenerId)'}
+                                                <Link to={`/profile/${groupee.id}`}>
+                                                    {groupee.name}
                                                 </Link>
                                             </div>
                                         </div>

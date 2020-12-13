@@ -5,7 +5,6 @@ import {Link} from "react-router-dom";
 import reviewService from "../../services/ReviewService";
 import artistService from "../../services/ArtistService";
 import listenerService from "../../services/ListenerService";
-import songService from "../../services/SongService";
 
 class Listener extends React.Component {
     state = {
@@ -15,12 +14,14 @@ class Listener extends React.Component {
             name: "",
             bio: "",
             profileUrl: "",
-            reviews: [],
-            favorites: [],
-            following: [],
-            friends: []
+            reviews: [{id: "", title: ""}],
+            favorites: [ {id: "", title: "", artists: ""}], //should be a list of artists
+            following: [ {id: "", name: ""} ],
+            friends: [ {id: "", name: ""} ]
         },
-        private: false
+        private: false,
+
+
     };
 
     componentDidMount() {
@@ -36,6 +37,8 @@ class Listener extends React.Component {
                     })
                 }
             })
+
+
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -55,47 +58,6 @@ class Listener extends React.Component {
                 })
         }
     }
-
-
-    friendName = (listenerId) => {
-        listenerService.findListenerById(listenerId)
-            .then(listener => {
-                if (!listener.error) {
-                    return listener.username;
-                }
-            });
-        return "new user";
-    };
-
-    reviewTitle = (reviewId) => {
-        reviewService.findReviewById(reviewId)
-            .then(review => {
-                if (!review.error) {
-                    return review.title;
-                }
-            });
-        return "new user";
-    };
-
-    artistName = (artistId) => {
-        artistService.findArtistById(artistId)
-            .then(artist => {
-                if (!artist.error) {
-                    return artist.name;
-                }
-            })
-    };
-
-    getSong = (songId) => {
-        songService.findSongById(songId)
-            .then(song => {
-                if (!song.error) {
-                    return song;
-                }
-            })
-    };
-
-
 
 
     render() {
@@ -125,14 +87,14 @@ class Listener extends React.Component {
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
                             {
-                                this.state.listener.favorites.map(songId =>
-                                    <div key={songId}
+                                this.state.listener.favorites.map(song =>
+                                    <div key={song.id}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            <Link to={`details/songs/${songId}`}> {'this.getSong(songId).title'} </Link>
+                                            <Link to={`details/songs/${song.id}`}> {song.title} </Link>
                                         </div>
                                         <div className={"float-right"}>
-                                            {'this.getSong(songId).artist'}
+                                            {song.artist}
                                         </div>
                                     </div>
                                 )
@@ -145,11 +107,11 @@ class Listener extends React.Component {
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
                             {
-                                this.state.listener.reviews.map(reviewId =>
-                                    <div key={reviewId}
+                                this.state.listener.reviews.map(review =>
+                                    <div key={review.id}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            <Link to={`/details/reviews/${reviewId}`}> {this.reviewTitle(reviewId)} </Link>
+                                            <Link to={`/details/reviews/${review.id}`}> {review.title} </Link>
                                         </div>
                                     </div>
                                 )
@@ -166,12 +128,12 @@ class Listener extends React.Component {
                             </div>
                             <div className={"list-group overflow-auto"}>
                                 {
-                                    this.state.listener.following.map(artistId =>
-                                        <div key={artistId}
+                                    this.state.listener.following.map(artist =>
+                                        <div key={artist.id}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
-                                                <Link to={`/profile/${artistId}`}>
-                                                    {this.artistName(artistId)}
+                                                <Link to={`/profile/${artist.id}`}>
+                                                    {artist.name}
                                                 </Link>
                                             </div>
                                         </div>
@@ -185,11 +147,11 @@ class Listener extends React.Component {
                             </div>
                             <div className={"list-group"}>
                                 {
-                                    this.state.listener.friends.map(friendId =>
-                                        <div key={friendId}
+                                    this.state.friends.map(friend =>
+                                        <div key={friend.id}
                                              className={"list-item"}>
-                                            <Link to={`/profile/${friendId}`}>
-                                                {this.friendName(friendId)}
+                                            <Link to={`/profile/${friend.id}`}>
+                                                {friend.name}
                                             </Link>
                                         </div>
                                     )
