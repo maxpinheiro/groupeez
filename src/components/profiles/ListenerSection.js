@@ -16,6 +16,7 @@ class Listener extends React.Component {
             following: [],
             friends: []
         },
+        private: false
     };
 
     componentDidMount() {

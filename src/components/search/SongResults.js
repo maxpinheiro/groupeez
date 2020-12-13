@@ -4,7 +4,7 @@ import React from "react";
 import {connect} from "react-redux";
 
 
-class SongResults extends React.Component {
+export default class SongResults extends React.Component {
     render() {
         return (
 

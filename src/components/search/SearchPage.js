@@ -2,11 +2,11 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import {search} from "../services/SpotifyService";
+import {search} from "../../services/SpotifyService";
 import queryString from "querystring";
 
-import userService from '../services/UserService';
-import PostService from "../../services/PostService";
+import userService from '../../services/UserService';
+import SongResults from "./SongResults";
 
 class Search extends React.Component {
     state = {query: '', type: 'track'};
