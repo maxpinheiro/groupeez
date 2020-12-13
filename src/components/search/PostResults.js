@@ -14,7 +14,7 @@ class Post extends React.Component {
                     <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Artist(s)</th>
+                        <th>Artist</th>
                         <th>Type</th>
                     </tr>
                     </thead>
@@ -26,7 +26,7 @@ class Post extends React.Component {
                                     <Link to={`/details/posts/${post.id}`}>{post.title}</Link>
                                 </th>
                                 <th>
-
+                                    <Link to={`/profile/${post.artistId}`}>{post.artist}</Link>
                                 </th>
                                 <th>
                                     Post

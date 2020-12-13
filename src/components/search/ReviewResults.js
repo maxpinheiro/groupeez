@@ -14,7 +14,7 @@ class Review extends React.Component {
                     <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Artist(s)</th>
+                        <th>Creator</th>
                         <th>Type</th>
                     </tr>
                     </thead>
@@ -26,7 +26,7 @@ class Review extends React.Component {
                                     <Link to={`/details/reviews/${review.id}`}>{review.title}</Link>
                                 </th>
                                 <th>
-
+                                    <Link to={`/profile/${review.creatorId}`}>{review.creator}</Link>
                                 </th>
                                 <th>
                                     Review

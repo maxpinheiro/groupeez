@@ -39,7 +39,7 @@ class Search extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         const query = queryString.parse(this.props.location.search)["?criteria"];
         const queryType = queryString.parse(this.props.location.search)["type"];
-        console.log(queryType !== prevState.type)
+
         if (queryType !== prevState.type) {
             if (queryType) document.getElementById(queryType).checked=true;
             this.setState(prevState => ({

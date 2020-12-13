@@ -23,13 +23,13 @@ class Song extends React.Component {
                         this.props.songs.map(song =>
                             <tr key={song.id}>
                                 <th>
-                                    <Link to={`/details/songs/${song.id}?${queryString.stringify({spotify: true})}`}>{song.name}</Link>
+                                    <Link to={`/details/songs/${song.id}?${queryString.stringify({spotify: !!song.disc_number})}`}>{song.name || song.title}</Link>
                                 </th>
                                 <th>
                                     {
                                         song.artists.map((artist, index) => (
                                             <Link to={`/profile/${artist.id}`}>
-                                                {artist.name + (index < song.artists.length - 1 ? ', ' : '')}
+                                                {(artist.name || artist) + (index < song.artists.length - 1 ? ', ' : '')}
                                             </Link>
                                         ))
                                     }

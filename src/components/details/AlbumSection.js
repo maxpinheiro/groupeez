@@ -44,7 +44,7 @@ class Album extends React.Component {
             <div className="container-fluid">
                 <span>
                     <p className="h3 d-inline mr-2">Album Details</p>
-                    <Link to={`/search?${queryString.stringify({criteria: this.props.searchQuery})}`} className="mx-2">Back to results</Link>
+                    <Link to={`/search?${queryString.stringify({criteria: this.props.searchQuery, type: 'albums'})}`} className="mx-2">Back to results</Link>
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
                 {

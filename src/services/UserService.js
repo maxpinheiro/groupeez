@@ -41,4 +41,18 @@ export const setAccessToken = (accessToken) => {
     }).then(response => response.json());
 }
 
-export default {login, register, getCurrentUser, getUserById, getAccessToken, setAccessToken};
+export const getRefreshToken= () => {
+    return fetch('http://localhost:4000/api/accessToken').then(response => response.json());
+}
+
+export const setRefreshToken = (refreshToken) => {
+    return fetch('http://localhost:4000/api/refreshToken', {
+        method: 'POST',
+        body: JSON.stringify({refreshToken: refreshToken, message: "ok"}),
+        headers: {
+            'content-type': 'application/json'
+        }
+    }).then(response => response.json());
+}
+
+export default {login, register, getCurrentUser, getUserById, getAccessToken, setAccessToken, getRefreshToken, setRefreshToken};

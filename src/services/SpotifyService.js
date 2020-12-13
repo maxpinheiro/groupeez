@@ -52,4 +52,20 @@ export const fetchTokens = (authCode) => {
     }).then(response => response.json());
 }
 
-export default {search, findSong, findAlbum, findArtist, fetchTokens};
+export const refreshToken = (refreshToken) => {
+    return fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type':'application/x-www-form-urlencoded'
+        },
+        body: queryString.stringify({
+            refresh_token: refreshToken,
+            redirect_uri: 'http://localhost:3000/callback',
+            grant_type: 'refresh_token',
+            client_id: env.CLIENT_ID,
+            client_secret: env.CLIENT_SECRET
+        })
+    }).then(response => response.json());
+}
+
+export default {search, findSong, findAlbum, findArtist, fetchTokens, refreshToken};

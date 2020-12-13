@@ -68,4 +68,18 @@ module.exports = function (app) {
         userService.setAccessToken(accessToken);
         res.json({message: "all good"});
     });
+
+    app.get('/api/refreshToken', (req, res) => {
+        //const currentUser = req.session['currentUser'];
+        const refreshToken = userService.getRefreshToken();
+        if (refreshToken) res.json(refreshToken);
+        else res.json({error: "No current access token"});
+    });
+
+    app.post('/api/refreshToken', (req, res) => {
+        //const currentUser = req.session['currentUser'];
+        const refreshToken = req.body.refreshToken;
+        userService.setRefreshToken(refreshToken);
+        res.json({message: "all good"});
+    });
 }

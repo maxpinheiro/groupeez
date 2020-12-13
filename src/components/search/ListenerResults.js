@@ -19,9 +19,9 @@ class Listener extends React.Component {
                 <table className="table table-striped">
                     <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Type</th>
+                        <th>Username</th>
                         <th>Name</th>
+                        <th>Type</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,10 +32,10 @@ class Listener extends React.Component {
                                     <Link to={`/profile/${listener.id}`}>{listener.username}</Link>
                                 </th>
                                 <th>
-                                    Listener
+                                    {listener.name}
                                 </th>
                                 <th>
-                                    {listener.name}
+                                    Listener
                                 </th>
                             </tr>
                         )

@@ -19,9 +19,9 @@ class Artist extends React.Component {
                 <table className="table table-striped">
                     <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Type</th>
+                        <th>Name</th>
                         <th>On Spotify?</th>
+                        <th>Type</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,10 +32,10 @@ class Artist extends React.Component {
                                     <Link to={`/profile/${artist.id}`}>{artist.name}</Link>
                                 </th>
                                 <th>
-                                    Song
+                                    {artist.id.length > 10 || artist.spotifyId.length > 10 ? "Yes" : "No"}
                                 </th>
                                 <th>
-                                    {artist.spotifyId && artist.spotifyId !== '' ? "Yes" : "No"}
+                                    Artist
                                 </th>
                             </tr>
                         )
