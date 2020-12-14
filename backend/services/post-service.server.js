@@ -1,5 +1,19 @@
 const {generateId, stringSimilarity} = require('../utils/utils');
+const postsDao = require('../daos/posts.dao.server');
 
+const findAllPosts = () => postsDao.findAllPosts();
+
+const findPostById = (postId) => postsDao.findPostById(postId);
+
+const createPost = (post) => postsDao.createPost(post);
+
+const updatePost = (postId, newPost) => postsDao.updatePost(postId, newPost);
+
+const deletePost = (postId) => postsDao.deletePost(postId);
+
+const queryPost = (query) => postsDao.queryPost(query);
+
+/*
 let posts = [...(require('./posts.json'))];
 
 const findAllPosts = () => posts;
@@ -12,9 +26,8 @@ const createPost = (post) => {
     while (posts.find(u => u.id === id)) {
         id = generateId(10);
     }
-    posts.push({id, creator: post.creator, creatorId: post.creatorId, songId: post.songId, text: post.text});
-    console.log('posts: ' + posts);
-    return {id, creator: post.creator, creatorId: post.creatorId, songId: post.songId, text: post.text};
+    posts.push({id, type: post.type, artist: post.artist, artistId: post.artistId, title: post.title, text: post.text});
+    return {id, type: post.type, artist: post.artist, artistId: post.artistId, title: post.title, text: post.text};
 }
 
 const updatePost = (postId, newPost) => {
@@ -32,5 +45,6 @@ const deletePost = (postId) => {
 }
 
 const queryPost = (query) => posts.filter(p => stringSimilarity(query, p.title) >= 0.6 || p.title.includes(query));
+*/
 
 module.exports = {findAllPosts, findPostById, createPost, updatePost, deletePost, queryPost};

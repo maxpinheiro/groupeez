@@ -199,20 +199,23 @@ class Artist extends React.Component {
                                 <div className={"h4 m-2"}>
                                     Following
                                 </div>
-                                <div className={"list-group overflow-auto"}>
+                                <div className={"list-group overflow-auto ml-2"}>
                                     {
-                                        this.state.artist.groupeez.map(groupee =>
-                                            <div key={groupee.id}
+                                        this.state.artist.followers.map(groupee =>
+                                            <div key={groupee.id} className=""
                                                  className={"list-item"}>
                                                 <div className={"float-left"}>
                                                     <Link to={`/profile/${groupee.id}`}>
-                                                        {groupee.name}
+                                                        {groupee.username}
                                                     </Link>
                                                 </div>
                                             </div>
                                         )
                                     }
                                 </div>
+                            </div>
+                            <div className="col-6">
+                                <Link to="/post">Create a Post</Link>
                             </div>
                         </div>
                     }

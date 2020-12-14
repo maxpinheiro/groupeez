@@ -1,4 +1,5 @@
 const reviewService = require('../services/review-service.server');
+const listenerService = require('../services/listener-service.server');
 
 module.exports = function (app) {
     app.get('/api/reviews', (req, res) => {
@@ -14,6 +15,7 @@ module.exports = function (app) {
     app.post('/api/reviews', (req, res) => {
         const newReview = req.body;
         const review = reviewService.createReview(newReview);
+        listenerService.createReviewForListener(newReview.creatorId, review.id)
         if (review) res.json(review);
         else res.json({error: "Could not create review"});
     });

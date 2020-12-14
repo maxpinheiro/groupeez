@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import queryString from "querystring";
 
 import postService from '../../services/PostService';
+import userService from "../../services/UserService";
 
 class Post extends React.Component {
     state = {
@@ -16,11 +17,21 @@ class Post extends React.Component {
             title: "",
             text: ""
         },
-        noPost: true
+        noPost: true,
+        currentUser: {id: ''}
     };
 
     componentDidMount() {
         const detailId = this.props.detailId;
+        userService.getCurrentUser()
+            .then(currentUser => {
+                if (!currentUser.error) {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        currentUser
+                    }))
+                }
+            })
         postService.findPostById(detailId)
             .then(post => {
                 if (!post.error) {
@@ -68,6 +79,10 @@ class Post extends React.Component {
                                     {this.state.post.text}
                                 </p>
                             </div>
+                            {
+                                this.state.post.artistId === this.state.currentUser.id &&
+                                <Link to={`/post/edit/${this.state.post.id}`}>Edit your post</Link>
+                            }
                         </div>
                     </div>
                 }
