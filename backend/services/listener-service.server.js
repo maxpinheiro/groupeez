@@ -41,4 +41,4 @@ const createReviewForListener = (listenerId, reviewId) => {
 }
 */
 
-module.exports = {findAllListeners, findListenerById, createListener, updateListener, deleteListener, queryListener, createReviewForListener}
+module.exports = {findAllListeners, findListenerById, createListener, queryListener, createReviewForListener}

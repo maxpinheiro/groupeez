@@ -38,7 +38,6 @@ class HomePage extends React.Component {
                             }
                         }
 
-
                         userService.getCurrentUser()
                             .then(user => {
                                 if (!user.error) {
@@ -123,7 +122,7 @@ class HomePage extends React.Component {
                     <div className={"col"}>
                         {
                             this.state.recentPosts.map(post =>
-                                <div className={"card container m-2 "}>
+                                <div key={post.id} className={"card container m-2 "}>
                                     <div className={"card-body"}>
                                         <span className={"card-title"}>
                                             <div className={"h3"}>{post.title}</div>
@@ -163,11 +162,11 @@ class HomePage extends React.Component {
                             <div className={"col"}>
                                 {
                                     this.state.yourFeed.map(post =>
-                                        <div className={"card container m-2 "}>
+                                        <div key={post.id} className={"card container m-2 "}>
                                             <div className={"card-body"}>
-                                        <div className={"card-title"}>
+                                                <div className={"card-title"}>
                                             <div className={"h3"}>{post.title}</div>
-                                        </div>
+                                                </div>
                                                 <div className={"card-text"}>{post.text} </div>
                                             </div>
                                         </div>

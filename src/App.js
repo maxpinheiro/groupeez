@@ -10,6 +10,8 @@ import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/profiles/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
 import HomePage from "./components/HomePage";
+import PostCreator from "./components/profiles/PostCreator";
+import ReviewCreator from "./components/details/ReviewCreator";
 
 const LandingPage = () =>
     <div className="container">
