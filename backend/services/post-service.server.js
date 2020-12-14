@@ -1,5 +1,19 @@
 const {generateId, stringSimilarity} = require('../utils/utils');
+const postsDao = require('../daos/posts.dao.server');
 
+const findAllPosts = () => postsDao.findAllPosts();
+
+const findPostById = (postId) => postsDao.findPostById(postId);
+
+const createPost = (post) => postsDao.createPost(post);
+
+const updatePost = (postId, newPost) => postsDao.updatePost(postId, newPost);
+
+const deletePost = (postId) => postsDao.deletePost(postId);
+
+const queryPost = (query) => postsDao.queryPost(query);
+
+/*
 let posts = [...(require('./posts.json'))];
 
 const findAllPosts = () => posts;
@@ -31,5 +45,6 @@ const deletePost = (postId) => {
 }
 
 const queryPost = (query) => posts.filter(p => stringSimilarity(query, p.title) >= 0.6 || p.title.includes(query));
+*/
 
 module.exports = {findAllPosts, findPostById, createPost, updatePost, deletePost, queryPost};

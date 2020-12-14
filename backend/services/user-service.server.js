@@ -1,11 +1,29 @@
 const {generateId} = require('../utils/utils');
 const artistService = require('./artist-service.server');
 const listenerService = require('./listener-service.server');
+const usersDao = require('../daos/users.dao.server');
 
-let users = [...(require('./users.json'))];
 let currentUser = null;
 let accessToken = null;
 let refreshToken = null;
+
+const findAllUsers = () => usersDao.findAllUsers();
+
+const findUserByCredentials = (username) => usersDao.findUserByCredentials(username);
+
+const findUserById = (userId) => usersDao.findUserById(userId);
+
+const createUser = (user) => {
+    if (user.role === 'artist') {
+        artistService.createArtist(user);
+    } else {
+        listenerService.createListener(user);
+    }
+    return usersDao.createUser(user);
+}
+
+/*
+let users = [...(require('./users.json'))];
 
 const findAllUsers = () => users;
 
@@ -34,6 +52,7 @@ const createUser = (user) => {
         return {id, username: user.username, password: user.password, role: user.role};
     }
 }
+*/
 
 const getCurrentUser = () => currentUser;
 const setCurrentUser = (user) => currentUser = user;

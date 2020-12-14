@@ -12,7 +12,7 @@ app.use(session({
     secret: 'something'
 }));
 
-//mongoose.connect('mongodb://localhost/whiteboard', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/groupeez', {useNewUrlParser: true});
 
 // general preprocessing for all requests
 app.use((req, res, next) => {

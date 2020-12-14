@@ -1,5 +1,17 @@
 const {stringSimilarity} = require('../utils/utils');
+const listenersDao = require('../daos/listeners.dao.server');
 
+const findAllListeners = () => listenersDao.findAllListeners();
+
+const findListenerById = (listenerId) => listenersDao.findListenerById(listenerId);
+
+const createListener = (listener) => listenersDao.createListener(listener);
+
+const queryListener = (query) => listenersDao.queryListener(query);
+
+const createReviewForListener = (listenerId, reviewId) => listenersDao.createReviewForListener(listenerId, reviewId);
+
+/*
 let listeners = [...(require('./listeners.json'))];
 
 const findAllListeners = () => listeners;
@@ -27,5 +39,6 @@ const createReviewForListener = (listenerId, reviewId) => {
     listeners[listeners.indexOf(listener)] = {...listener, reviews: [...listener.reviews, reviewId]};
     return 1;
 }
+*/
 
 module.exports = {findAllListeners, findListenerById, createListener, updateListener, deleteListener, queryListener, createReviewForListener}
