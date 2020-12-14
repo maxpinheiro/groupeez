@@ -38,81 +38,81 @@ class HomePage extends React.Component {
                             }
                         }
 
-                        if()
-                        this.setState((prevState) => ({
-                            ...prevState,
-                            recentPosts: p,
-                            newArtists: a,
-                        }));
 
-                        this.setPersonalFeed();
+                        userService.getCurrentUser()
+                            .then(user => {
+                                if (!user.error) {
+                                    const feed = this.setPersonalFeed(user);
+                                    this.setState((prevState) => ({
+                                        ...prevState,
+                                        recentPosts: p,
+                                        newArtists: a,
+                                        loggedIn: true,
+                                        yourFeed: feed,
+                                    }));
+                                } else {
+                                    this.setState((prevState) => ({
+                                        ...prevState,
+                                        recentPosts: p,
+                                        newArtists: a,
+                                    }));
+                                }
+
+
+
+                            });
                     });
             });
-        console.log(this.state.yourFeed)
     }
 
     setPersonalFeed = (user) => {
 
         let f = [];
-        userService.getCurrentUser()
-            .then(user => {
-                if (!user.error) {
-                    if (user.role === "listener") {
-                        listenerService.findListenerById(user.id)
-                            .then(listener => {
-                                if (!listener.error) {
-                                    for (let i = 0; i < 5; i++) {
-                                        if (listener.following.length > i) {
-                                            artistService.findArtistById(listener.following[i])
-                                                .then(art => {
-                                                    if (!art.error) {
-                                                        const lastPost = art.posts.pop();
-                                                        if(!lastPost.error) {
-                                                            postsService.findPostById(lastPost)
-                                                                .then(post => {
-                                                                    f.push(post);
-                                                                });
-                                                        }
-                                                    }
-                                                })
+        if (user.role === "listener") {
+            listenerService.findListenerById(user.id)
+                .then(listener => {
+                    if (!listener.error) {
+                        for (let i = 0; i < 5; i++) {
+                            if (listener.following.length > i) {
+                                artistService.findArtistById(listener.following[i])
+                                    .then(art => {
+                                        if (!art.error) {
+                                            const lastPost = art.posts.pop();
+                                            if(!lastPost.error) {
+                                                postsService.findPostById(lastPost)
+                                                    .then(post => {
+                                                        f.push(post);
+                                                    });
+                                            }
                                         }
-                                    }
-                                    this.setState((prevState) => ({
-                                        ...prevState,
-                                        loggedIn: true,
-                                        yourFeed: f,
-                                    }));
+                                    })
+                            }
+                        }
 
-                                }
-                            })
-                    } else {
-                        artistService.findArtistById(user.id)
-                            .then(artist => {
-                                for (let i = 0; i < 5; i++) {
-                                    if (artist.posts.length > 0) {
-                                        const lastPost = artist.posts.pop();
-                                        if(!lastPost.error) {
-                                            postsService.findPostById(lastPost)
-                                                .then(post => {
-                                                    f.push(post);
-                                                });
-                                        }
-                                    }
-                                }
-                                this.setState((prevState) => ({
-                                    ...prevState,
-                                    loggedIn: true,
-                                    yourFeed: f,
-                                }))
-                            })
                     }
-                }
-
-            });
+                })
+        } else {
+            artistService.findArtistById(user.id)
+                .then(artist => {
+                    for (let i = 0; i < 5; i++) {
+                        if (artist.posts.length > 0) {
+                            const lastPost = artist.posts.pop();
+                            if(!lastPost.error) {
+                                postsService.findPostById(lastPost)
+                                    .then(post => {
+                                        f.push(post);
+                                    });
+                            }
+                        }
+                    }
+                })
+        }
         return f;
     };
 
     render() {
+
+        console.log(this.state.yourFeed)
         return (
             <div className={"container-fluid"}>
                 <div className={"h1"}>Groupeez</div>
