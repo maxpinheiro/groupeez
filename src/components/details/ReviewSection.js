@@ -8,46 +8,33 @@ import userService from '../../services/UserService';
 
 class Review extends React.Component {
     state = {
-        searchQuery: "",
-        review: {
-            id: "",
-            creator: "",
-            creatorId: "",
-            songId: "",
-            title: "",
-            text: ""
-        },
-        currentUser: {id: ''},
-        noReview: true
+        currentUser: '',
+        error: ''
     };
 
     componentDidMount() {
         const detailId = this.props.detailId;
+
         userService.getCurrentUser()
             .then(currentUser => {
                 if (!currentUser.error) {
                     this.setState(prevState => ({
                         ...prevState,
-                        currentUser
+                        currentUser: currentUser._id
                     }))
                 }
-            })
-        reviewService.findReviewById(detailId)
-            .then(review => {
-                if (!review.error) {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        review,
-                        noReview: false
-                    }))
-                } else {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        noReview: true
-                    }))
-                }
-
             });
+
+        reviewService.findReviewById(detailId).then(review => {
+            if (!review.error) {
+               this.props.setReview(review);
+            } else { // can't find review with id
+                this.setState(prevState => ({
+                    ...prevState,
+                    error: 'Cannot find review with id.'
+                }))
+            }
+        });
     }
 
     render() {
@@ -59,34 +46,34 @@ class Review extends React.Component {
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
                 {
-                    !this.state.noReview &&
+                    this.props.review._id !== '' &&
                     <div className="border border-2 border-secondary container-fluid mt-2">
                         <div className="m-2">
                             <div className="row">
                                 <p className="h2 my-auto">
-                                    {this.state.review.title}
+                                    {this.props.review.title}
                                 </p>
                                 <p className="h4 mx-4 my-auto">
                                     By
-                                    <Link to={`/profile/${this.state.review.creatorId}`} className="ml-2">{this.state.review.creator}</Link>
+                                    <Link to={`/profile/${this.props.review.creatorId}`} className="ml-2">{this.props.review.creator}</Link>
                                 </p>
                             </div>
                             <div className="row">
                                 <p className="text-body my-auto">
-                                    {this.state.review.text}
+                                    {this.props.review.text}
                                 </p>
                             </div>
                             {
-                                this.state.review.creatorId === this.state.currentUser.id &&
-                                <Link to={`/review/edit/${this.state.review.id}`}>Edit your review</Link>
+                                this.props.review.creatorId === this.state.currentUser &&
+                                <Link to={`/reviews/edit/${this.props.review._id}`}>Edit your review</Link>
                             }
                         </div>
                     </div>
                 }
                 {
-                    this.state.noReview &&
+                    this.state.error !== '' &&
                     <div className="my-2">
-                        <p className="d-inline">We couldn't find any review with this ID. Try a different </p>
+                        <p className="d-inline">{this.state.error + ' Try a different'}</p>
                         <Link to="/search" className="">search.</Link>
                     </div>
                 }
@@ -96,14 +83,12 @@ class Review extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    //accessToken: state.spotifyReducer.accessToken,
-    refreshToken: state.spotifyReducer.refreshToken,
-    song: state.spotifyReducer.resultSong,
-    searchQuery: state.spotifyReducer.searchQuery
+    searchQuery: state.spotifyReducer.searchQuery,
+    review: state.detailsReducer.review
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
-    setSong: (song) => dispatch({type: 'RESULT_SONG', song})
+    setReview: (review) => dispatch({type: 'SET_REVIEW', review})
 })
 
 const ReviewSection = connect(stateToProperty, propertyToDispatchMapper)(Review);

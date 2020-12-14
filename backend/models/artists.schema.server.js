@@ -7,7 +7,7 @@ const artistsSchema = mongoose.Schema({
     spotifyId: String,
     bio: String,
     profileUrl: String,
-    library: [{type: mongoose.Schema.Types.ObjectId, ref: 'SongsModel'}],
+    library: [String],
     reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'ReviewsModel'}],
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'PostsModel'}],
     groupeez: [{type: mongoose.Schema.Types.ObjectId, ref: 'ListenersModel'}]

@@ -10,12 +10,113 @@ import artistService from "../../services/ArtistService";
 
 class Profile extends React.Component {
     state = {
-        user: null,
-        personalPage: false,
         error: ""
     };
 
     componentDidMount() {
+        const userId = this.props.match.params.userId;
+
+        if (!userId) { // '/profile'
+            userService.getCurrentUser().then(currentUser => {
+                if (!currentUser.error) { // logged in
+                    this.props.setProfile(currentUser.role, currentUser._id, true);
+                } else { // not logged in: error
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: "You must be logged in to view this page."
+                    }));
+                }
+            })
+        } else if (userId.length === 24) { // '/profile/localId'
+            userService.getUserById(userId).then(user => {
+                if (!user.error) { // user exists for id
+                    userService.getCurrentUser().then(currentUser => {
+                        if (!currentUser.error && currentUser._id === userId) { // viewing on profile -> redirect
+                            this.props.history.push('/profile');
+                        } else { // viewing different profile
+                            this.props.setProfile(user.role, user._id, false);
+                        }
+                    })
+
+                } else { // no user with id
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: "We can't find a user with this ID."
+                    }));
+                }
+            })
+        } else if (userId.length === 22) { // '/profile/spotifyId'
+            artistService.findArtistBySpotifyId(userId).then(artist => {
+                if (!artist.error) { // spotify artist has account -> redirect
+                    this.props.history.push(`/profile/${artist._id}`);
+                } else { // spotify artist doesnt have account
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: "Groupeez does not provide profile pages for Spotify artists."
+                    }));
+                }
+            })
+        } else { // no user with id
+            this.setState(prevState => ({
+                ...prevState,
+                error: "We can't find a user with this ID."
+            }));
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapShot) {
+        const userId = this.props.match.params.userId;
+
+        if (!userId && (!prevProps.match.params.userId || prevProps.match.params.userId !== '')) { // '/profile' from '/profile/Id'
+            userService.getCurrentUser().then(currentUser => {
+                if (!currentUser.error) { // logged in
+                    this.props.setProfile(currentUser.role, currentUser._id, true);
+                } else { // not logged in: error
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: "You must be logged in to view this page."
+                    }));
+                }
+            })
+        } else if (userId && userId.length === 24 && prevProps.match.params.userId !== userId) { // '/profile/localId'
+            userService.getUserById(userId).then(user => {
+                if (!user.error) { // user exists for id
+                    userService.getCurrentUser().then(currentUser => {
+                        if (!currentUser.error && currentUser._id === userId) { // viewing on profile -> redirect
+                            this.props.history.push('/profile');
+                        } else { // viewing different profile
+                            this.props.setProfile(user.role, user._id, false);
+                        }
+                    })
+
+                } else { // no user with id
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: "We can't find a user with this ID."
+                    }));
+                }
+            })
+        } else if (userId && userId.length === 22 && prevProps.match.params.userId !== userId) { // '/profile/spotifyId'
+            artistService.findArtistBySpotifyId(userId).then(artist => {
+                if (!artist.error) { // spotify artist has account -> redirect
+                    this.props.history.push(`/profile/${artist._id}`);
+                } else { // spotify artist doesnt have account
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: "Groupeez does not provide profile pages for Spotify artists."
+                    }));
+                }
+            })
+        } else if (userId && userId.length !== 22 && userId.length !== 24) { // no user with id
+            this.setState(prevState => ({
+                ...prevState,
+                error: "We can't find a user with this ID."
+            }));
+        }
+
+    }
+
+    /*componentDidMount() {
         //console.log(this.props.cookies.get('currentUser'));
 
         const userId = this.props.match.params.userId;
@@ -42,13 +143,13 @@ class Profile extends React.Component {
                     }
                 })
         }
-        else if (userId.length > 10) {
+        else if (userId.length === 22) {
             artistService.findArtistBySpotifyId(userId)
                 .then(artist => {
                     if (!artist.error) {
-                        this.props.history.push(`/profile/${artist.id}`);
+                        this.props.history.push(`/profile/${artist._id}`);
                     } else {
-                        // search spotify API
+                        this.props.history.push(`/profile/${userId}`);
                     }
                 })
         } else {
@@ -57,7 +158,7 @@ class Profile extends React.Component {
                     if (!user.error) {
                         userService.getCurrentUser()
                             .then(currentUser => {
-                                if (!currentUser.error && currentUser.id === user.id) {
+                                if (!currentUser.error && currentUser._id === user._id) {
                                     this.props.history.push('/profile');
                                 } else {
                                     this.setState( function(prevState) {
@@ -72,12 +173,13 @@ class Profile extends React.Component {
                     }
                 })
         }
-    }
+    }*/
 
+    /*
     componentDidUpdate(prevProps, prevState, snapShot) {
         const userId = this.props.match.params.userId;
-        if (!userId && prevProps.match.params.userId) { // personal profile path - viewing own page
-            //console.log('get current')
+        if (!userId && prevProps.match.params.userId !== '') { // personal profile path - viewing own page
+            console.log('get current')
             userService.getCurrentUser()
                 .then(currentUser => {
                     if (currentUser.error) {
@@ -100,17 +202,18 @@ class Profile extends React.Component {
                     }
                 })
         }
-        else if (userId && userId.length > 10) {
-            //console.log('get spotify')
+        else if (userId && userId.length === 22) {
+            console.log('get by spotify')
             artistService.findArtistBySpotifyId(userId)
                 .then(artist => {
+                    console.log(artist);
                     if (!artist.error) {
-                        this.props.history.push(`/profile/${artist.id}`);
+                        this.props.history.push(`/profile/${artist._id}`);
                     } else {
-                        // search spotify API
+                        this.props.history.push(`/profile/${userId}`);
                     }
                 })
-        } else if (!prevState.user || (userId && userId !== prevState.user.id)) {
+        } else if ((userId && userId !== prevState.user._id)) {
             //console.log('get local')
             userService.getUserById(userId)
                 .then(user => {
@@ -126,26 +229,26 @@ class Profile extends React.Component {
                 })
         }
     }
+    */
 
 
     render() {
         return (
             <div className="container-fluid">
                 {
-                    this.state.user && this.state.user.role === "listener" &&
-                        <ListenerSection listenerId={this.state.user.id} private={this.state.personalPage}/>
+                    this.props.profileType === "listener" &&
+                        <ListenerSection listenerId={this.props.profileId} private={this.props.personalPage}/>
                 }
                 {
-                    this.state.user && this.state.user.role === "artist" &&
-                        <ArtistSection artistId={this.state.user.id} private={this.state.personalPage}/>
+                    this.props.profileType === "artist" &&
+                        <ArtistSection artistId={this.props.profileId} private={this.props.personalPage}/>
                 }
                 {
-                    !this.state.user && this.state.personalPage &&
+                    this.state.error !== "" &&
                     <div>
-                        <p>You must be logged in to access this page.</p>
-                        <Link to="/login">Login</Link>
+                        <p>{this.state.error}</p>
+                        {this.state.error === "You must be logged in to view this page." && <Link to="/login">Login</Link>}
                     </div>
-
                 }
             </div>
         );
@@ -153,11 +256,13 @@ class Profile extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    //cookies: ownProps.cookies
-
+    profileType: state.profileReducer.profileType,
+    profileId: state.profileReducer.profileId,
+    personalPage: state.profileReducer.personalPage,
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
+    setProfile: (profileType, profileId, personalPage) => dispatch({type: "SET_PROFILE", profileType, profileId, personalPage})
 })
 
 const ProfilePage = connect(stateToProperty, propertyToDispatchMapper)(Profile);

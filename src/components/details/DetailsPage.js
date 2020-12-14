@@ -10,43 +10,20 @@ import PostSection from "./PostSection";
 
 class Details extends React.Component {
     state = {
-        detailType: "",
-        detailId: "",
-        accessToken: "",
-        spotify: false
+
     };
 
     componentDidMount() {
         const detailType = this.props.match.params.detailType;
         const detailId = this.props.match.params.detailId;
-        const spotify = queryString.parse(this.props.location.search)["?spotify"] || detailId.length > 10;
-        userService.getAccessToken()
-            .then(accessToken => {
-                this.setState(prevState => ({
-                    ...prevState,
-                    detailType,
-                    detailId,
-                    accessToken: accessToken,
-                    spotify
-                }));
-            })
+        this.props.setDetails(detailType, detailId);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const detailType = this.props.match.params.detailType;
         const detailId = this.props.match.params.detailId;
-        const spotify = (queryString.parse(this.props.location.search)["?spotify"] === true) || detailId.length > 10;
         if (detailId !== prevState.detailId) {
-            userService.getAccessToken()
-                .then(accessToken => {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        detailType,
-                        detailId,
-                        accessToken: accessToken,
-                        spotify
-                    }));
-                })
+            this.props.setDetails(detailType, detailId);
         }
     }
 
@@ -54,20 +31,20 @@ class Details extends React.Component {
         return (
             <div className="container-fluid">
                 {
-                    this.state.detailType === "songs" &&
-                    <SongSection detailId={this.state.detailId} accessToken={this.state.accessToken} spotify={this.state.spotify}/>
+                    this.props.detailType === "songs" &&
+                    <SongSection detailId={this.props.detailId} />
                 }
                 {
-                    this.state.detailType === "albums" &&
-                    <AlbumSection detailId={this.state.detailId} accessToken={this.state.accessToken} spotify={this.state.spotify}/>
+                    this.props.detailType === "albums" &&
+                    <AlbumSection detailId={this.props.detailId} />
                 }
                 {
-                    this.state.detailType === "reviews" &&
-                    <ReviewSection detailId={this.state.detailId} accessToken={this.state.accessToken}/>
+                    this.props.detailType === "reviews" &&
+                    <ReviewSection detailId={this.props.detailId} />
                 }
                 {
-                    this.state.detailType === "posts" &&
-                    <PostSection detailId={this.state.detailId} accessToken={this.state.accessToken}/>
+                    this.props.detailType === "posts" &&
+                    <PostSection detailId={this.props.detailId} />
                 }
             </div>
         );
@@ -75,14 +52,12 @@ class Details extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    accessToken: state.spotifyReducer.accessToken,
-    refreshToken: state.spotifyReducer.refreshToken,
-    song: state.spotifyReducer.resultSong,
-    searchQuery: state.spotifyReducer.searchQuery
+    detailType: state.detailsReducer.detailType,
+    detailId: state.detailsReducer.detailId
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
-    setSong: (song) => dispatch({type: 'RESULT_SONG', song})
+    setDetails: (detailType, detailId) => dispatch({type: "SET_DETAILS", detailType, detailId})
 })
 
 const DetailsPage = connect(stateToProperty, propertyToDispatchMapper)(Details);

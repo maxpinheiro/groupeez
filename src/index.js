@@ -6,12 +6,15 @@ import {CookiesProvider} from 'react-cookie';
 import reportWebVitals from './reportWebVitals';
 
 import spotifyReducer from "./reducers/SpotifyReducer";
+import searchReducer from "./reducers/SearchReducer";
+import detailsReducer from "./reducers/DetailsReducer";
+import profileReducer from "./reducers/ProfileReducer";
 
 import './index.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 
-const store = createStore(combineReducers({spotifyReducer}));
+const store = createStore(combineReducers({spotifyReducer, searchReducer, detailsReducer, profileReducer}));
 
 ReactDOM.render(
   <React.StrictMode>

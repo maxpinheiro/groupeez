@@ -7,7 +7,7 @@ const listenersSchema = mongoose.Schema({
     bio: String,
     profileUrl: String,
     reviews: [{type: mongoose.Schema.Types.ObjectId, ref: 'ReviewsModel'}],
-    favorites: [{type: mongoose.Schema.Types.ObjectId, ref: 'SongsModel'}],
+    favorites: [String],
     following: [{type: mongoose.Schema.Types.ObjectId, ref: 'ArtistsModel'}],
     friends: [{type: mongoose.Schema.Types.ObjectId, ref: 'ListenersModel'}]
 }, {collection: 'listeners'});

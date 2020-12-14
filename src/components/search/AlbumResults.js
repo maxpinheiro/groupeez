@@ -1,10 +1,35 @@
 import {Link} from "react-router-dom";
-import queryString from "querystring";
 import React from "react";
 import {connect} from "react-redux";
 
+import userService from "../../services/UserService";
+import spotifyService from "../../services/SpotifyService";
 
 class Album extends React.Component {
+    componentDidMount() {
+        const searchType = this.props.searchType;
+        const searchQuery = this.props.searchQuery;
+        if (searchQuery !== '' && searchType === 'albums') {
+            this.searchAlbums(searchQuery);
+        }
+    }
+
+    searchAlbums = (query) => {
+        const queryParams = {
+            q: query,
+            type: "album",
+            limit: 10
+        }
+        userService.getAccessToken()
+            .then(accessToken => {
+                spotifyService.search(queryParams, accessToken).then(response => {
+                    if (response.albums) {
+                        this.props.setAlbums(response.albums.items, query);
+                    }
+                });
+            })
+    };
+
     render() {
         return (
 
@@ -20,22 +45,22 @@ class Album extends React.Component {
                     </thead>
                     <tbody>
                     {
-                        this.props.songs.map(song =>
-                            <tr key={song.id}>
+                        this.props.albums.map(album =>
+                            <tr key={album.id}>
                                 <th>
-                                    <Link to={`/details/songs/${song.id}?${queryString.stringify({spotify: true})}`}>{song.name}</Link>
+                                    <Link to={`/details/albums/${album.id}`}>{album.name}</Link>
                                 </th>
                                 <th>
                                     {
-                                        song.artists.map((artist, index) => (
-                                            <Link to={`/profile/${artist.id}`}>
-                                                {artist.name + (index < song.artists.length - 1 ? ', ' : '')}
+                                        album.artists.map((artist, index) => (
+                                            <Link to={`/profile/${artist._id}`} id={index}>
+                                                {artist.name + (index < album.artists.length - 1 ? ', ' : '')}
                                             </Link>
                                         ))
                                     }
                                 </th>
                                 <th>
-                                    Song
+                                    Album
                                 </th>
                             </tr>
                         )
@@ -48,9 +73,13 @@ class Album extends React.Component {
 }
 
 const stateToProperty = (state) => ({
+    albums: state.searchReducer.albumResults,
+    searchType: state.searchReducer.searchType,
+    searchQuery: state.searchReducer.searchQuery
 });
 
 const propertyToDispatchMapper = (dispatch) => ({
+    setAlbums: (albums) => dispatch({type: 'SET_ALBUMS', albums})
 });
 
 const AlbumResults = connect(stateToProperty, propertyToDispatchMapper)(Album);

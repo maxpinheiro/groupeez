@@ -1,15 +1,43 @@
 import {Link} from "react-router-dom";
-import queryString from "querystring";
 import React from "react";
 import {connect} from "react-redux";
 
+import userService from "../../services/UserService";
+import spotifyService from "../../services/SpotifyService";
+import artistService from "../../services/ArtistService";
+
 class Artist extends React.Component {
     componentDidMount() {
-        console.log('Artists: ' + this.props.artists);
+        const searchType = this.props.searchType;
+        const searchQuery = this.props.searchQuery;
+        //console.log('search type: ' + searchType + ' search query: ' + searchQuery);
+        if (searchQuery !== '' && searchType === 'artists') {
+            this.searchArtists(searchQuery);
+        }
     }
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('Artists: ' + this.props.artists);
-    }
+
+    searchArtists = (query) => {
+        const queryParams = {
+            q: query,
+            type: "artist",
+            limit: 10
+        }
+        userService.getAccessToken()
+            .then(accessToken => {
+                spotifyService.search(queryParams, accessToken).then(response => {
+                    let combinedArtists = [];
+                    if (response.artists) {
+                        combinedArtists = combinedArtists.concat(response.artists.items);
+                    }
+                    artistService.queryArtist(query)
+                        .then(artists => {
+                            combinedArtists = combinedArtists.concat(artists);
+                            console.log('artists: ' + artists);
+                            this.props.setArtists(combinedArtists, query);
+                        })
+                });
+            })
+    };
 
     render() {
         return (
@@ -27,12 +55,12 @@ class Artist extends React.Component {
                     <tbody>
                     {
                         this.props.artists.map(artist =>
-                            <tr key={artist.id}>
+                            <tr key={artist._id}>
                                 <th>
-                                    <Link to={`/profile/${artist.id}`}>{artist.name}</Link>
+                                    <Link to={`/profile/${artist._id}`}>{artist.name}</Link>
                                 </th>
                                 <th>
-                                    {artist.id.length > 10 || artist.spotifyId.length > 10 ? "Yes" : "No"}
+                                    {artist._id.length > 10 || artist.spotifyId.length > 10 ? "Yes" : "No"}
                                 </th>
                                 <th>
                                     Artist
@@ -48,10 +76,13 @@ class Artist extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    artist: state.spotifyReducer.artists
+    artist: state.searchReducer.artistResults,
+    searchType: state.searchReducer.searchType,
+    searchQuery: state.searchReducer.searchQuery
 });
 
 const propertyToDispatchMapper = (dispatch) => ({
+    setArtists: (artists) => dispatch({type: 'SET_ARTISTS', artists})
 });
 
 const ArtistResults = connect(stateToProperty, propertyToDispatchMapper)(Artist);

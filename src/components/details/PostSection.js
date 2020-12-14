@@ -8,46 +8,33 @@ import userService from "../../services/UserService";
 
 class Post extends React.Component {
     state = {
-        searchQuery: "",
-        post: {
-            id: "",
-            type: "",
-            artist: "",
-            artistId: "",
-            title: "",
-            text: ""
-        },
-        noPost: true,
-        currentUser: {id: ''}
+        currentUser: '',
+        error: ''
     };
 
     componentDidMount() {
         const detailId = this.props.detailId;
+
         userService.getCurrentUser()
             .then(currentUser => {
                 if (!currentUser.error) {
                     this.setState(prevState => ({
                         ...prevState,
-                        currentUser
+                        currentUser: currentUser._id
                     }))
                 }
-            })
-        postService.findPostById(detailId)
-            .then(post => {
-                if (!post.error) {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        post,
-                        noPost: false
-                    }))
-                } else {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        noPost: true
-                    }))
-                }
-
             });
+
+        postService.findPostById(detailId).then(post => {
+            if (!post.error) {
+                this.props.setPost(post);
+            } else { // can't find review with id
+                this.setState(prevState => ({
+                    ...prevState,
+                    error: 'Cannot find post with id.'
+                }))
+            }
+        });
     }
 
     render() {
@@ -59,37 +46,37 @@ class Post extends React.Component {
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
                 {
-                    !this.state.noPost &&
+                    this.state.error === "" &&
                     <div className="border border-2 border-secondary container-fluid mt-2">
                         <div className="m-2">
                             <div className="row">
                                 <p className="h2 my-auto">
-                                    {this.state.post.title}
+                                    {this.props.post.title}
                                 </p>
                                 <p className="h4 mx-4 my-auto">
                                     By
-                                    <Link to={`/profile/${this.state.post.artistId}`} className="ml-2">{this.state.post.artist}</Link>
+                                    <Link to={`/profile/${this.props.post.artistId}`} className="ml-2">{this.props.post.artist}</Link>
                                 </p>
                                 <p className="text-body my-auto">
-                                    Type: {this.state.post.type}
+                                    Type: {this.props.post.type}
                                 </p>
                             </div>
                             <div className="row">
                                 <p className="text-body my-auto">
-                                    {this.state.post.text}
+                                    {this.props.post.text}
                                 </p>
                             </div>
                             {
-                                this.state.post.artistId === this.state.currentUser.id &&
-                                <Link to={`/post/edit/${this.state.post.id}`}>Edit your post</Link>
+                                (this.props.post.artistId === this.state.currentUser && this.state.currentUser !== '') &&
+                                <Link to={`/posts/edit/${this.props.post._id}`}>Edit your post</Link>
                             }
                         </div>
                     </div>
                 }
                 {
-                    this.state.noPost &&
+                    this.state.error !== '' &&
                     <div className="my-2">
-                        <p className="d-inline">We couldn't find any post with this ID. Try a different </p>
+                        <p className="d-inline">{this.state.error + ' Try a different'}</p>
                         <Link to="/search" className="">search.</Link>
                     </div>
                 }
@@ -99,14 +86,12 @@ class Post extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    //accessToken: state.spotifyReducer.accessToken,
-    refreshToken: state.spotifyReducer.refreshToken,
-    song: state.spotifyReducer.resultSong,
-    searchQuery: state.spotifyReducer.searchQuery
+    searchQuery: state.spotifyReducer.searchQuery,
+    post: state.detailsReducer.post
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
-    setSong: (song) => dispatch({type: 'RESULT_SONG', song})
+    setPost: (post) => dispatch({type: 'SET_POST', post})
 })
 
 const PostSection = connect(stateToProperty, propertyToDispatchMapper)(Post);

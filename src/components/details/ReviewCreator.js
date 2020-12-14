@@ -11,21 +11,8 @@ import userService from '../../services/UserService';
 class Review extends React.Component {
     state = {
         searchQuery: "",
-        song: {
-            name: "",
-            artists: [{name: ""}],
-            album: {
-                images: [{
-                    url: ""
-                }]
-            },
-            id: '',
-            title: '',
-            artistId: [],
-            images: []
-        },
         review: {
-            id: "",
+            _id: "",
             creator: "",
             creatorId: "",
             songId: "",
@@ -33,7 +20,7 @@ class Review extends React.Component {
             text: ""
         },
         error: '',
-        currentUser: {id: ''},
+        currentUser: {_id: '', role: ''},
         reviewType: ''
     };
 
@@ -43,69 +30,68 @@ class Review extends React.Component {
 
         userService.getCurrentUser()
             .then(currentUser => {
-                if (currentUser.error) return;
-                this.setState(prevState => ({
-                    ...prevState,
-                    currentUser,
-                    reviewType
-                }))
+                if (!currentUser.error) {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        currentUser,
+                        reviewType
+                    }))
+                }
             })
 
         if (reviewType === 'edit') {
             reviewService.findReviewById(detailId)
                 .then(review => {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        review
-                    }))
+                    if (!review.error) {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            review
+                        }));
+                    } else {
+                        this.setState(prevState => ({
+                            ...prevState,
+                            error: 'Cannot find review with id.'
+                        }));
+                    }
                 })
         }
 
-        if (detailId.length > 10) {
+        if (detailId.length === 22) {
                 userService.getAccessToken()
                     .then(accessToken => {
                         spotifyService.findSong(detailId, accessToken)
                             .then(song => {
                                 if (!song.error) {
-                                    this.setState(prevState => ({
-                                        ...prevState,
-                                        noSong: false,
-                                        song
-                                    }));
+                                    this.props.setSong(song);
                                 } else {
                                     this.setState(prevState => ({
                                         ...prevState,
-                                        noSong: true
+                                        error: 'Cannot find Spotify song with id.'
                                     }));
                                 }
-                                //this.props.setSong(song)
                             });
                     })
-            } else if (detailId.length === 10 && reviewType === 'create') {
+            } else if (detailId.length === 24 && reviewType === 'create') {
                 // go to local database
                 songService.findSongById(detailId)
                     .then(song => {
                         if (!song.error) {
-                            this.setState(prevState => ({
-                                ...prevState,
-                                noSong: false,
-                                song
-                            }));
+                            this.props.setSong(song);
                         } else {
                             this.setState(prevState => ({
                                 ...prevState,
-                                noSong: true
+                                error: 'Cannot find song with id.'
                             }));
                         }
                     })
             }
         }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    /*componentDidUpdate(prevProps, prevState, snapshot) {
         const reviewType = this.props.match.params.reviewType;
         const detailId = this.props.match.params.detailId;
 
-        if (prevState.currentUser.id === '') {
+        if (prevState.currentUser._id === '') {
             console.log('update, current user')
             userService.getCurrentUser()
                 .then(currentUser => {
@@ -118,7 +104,7 @@ class Review extends React.Component {
                 })
         }
 
-        if (reviewType === 'edit' && prevState.review.id === '') {
+        if (reviewType === 'edit' && prevState.review._id === '') {
             reviewService.findReviewById(detailId)
                 .then(review => {
                     songService.findSongById(review.songId)
@@ -132,7 +118,7 @@ class Review extends React.Component {
                 })
         }
 
-        if (detailId.length > 10 && prevState.song.id !== detailId) {
+        if (detailId.length > 10 && prevState.song._id !== detailId) {
             console.log('update, access token')
                 userService.getAccessToken()
                     .then(accessToken => {
@@ -153,7 +139,7 @@ class Review extends React.Component {
                                 //this.props.setSong(song)
                             });
                     })
-            } else if (prevState.song.id === '' && reviewType === 'create') {
+            } else if (prevState.song._id === '' && reviewType === 'create') {
             console.log('update, local song')
                 // go to local database
                 songService.findSongById(detailId)
@@ -172,7 +158,7 @@ class Review extends React.Component {
                         }
                     })
             }
-    }
+    }*/
 
     createReview = () => {
         if (this.state.review.title === '' || this.state.review.text === '') {
@@ -183,14 +169,14 @@ class Review extends React.Component {
         } else {
             const review = {
                 creator: this.state.currentUser.username,
-                creatorId: this.state.currentUser.id,
-                songId: this.state.song.id,
+                creatorId: this.state.currentUser._id,
+                songId: this.props.song._id || this.props.song.id,
                 title: this.state.review.title,
                 text: this.state.review.text
             }
             reviewService.createReview(review)
                 .then(newReview => {
-                    this.props.history.push(`/details/reviews/${newReview.id}`);
+                    this.props.history.push(`/details/reviews/${newReview._id}`);
                 })
         }
     }
@@ -203,15 +189,16 @@ class Review extends React.Component {
             }))
         } else {
             const review = {
+                ... this.state.review,
                 creator: this.state.currentUser.username,
-                creatorId: this.state.currentUser.id,
-                songId: this.state.song.id,
+                creatorId: this.state.currentUser._id,
+                songId: this.props.song._id || this.props.song.id,
                 title: this.state.review.title,
                 text: this.state.review.text
             }
-            reviewService.updateReview(review)
+            reviewService.updateReview(review._id, review)
                 .then(newReview => {
-                    this.props.history.push(`/details/reviews/${newReview.id}`);
+                    this.props.history.push(`/details/reviews/${newReview._id}`);
                 })
         }
     }
@@ -229,13 +216,13 @@ class Review extends React.Component {
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
                 {
-                    (!this.state.noSong && this.state.currentUser.id !== '') &&
-                    <div className="border border-2 border-secondary">
+                    (this.state.error === '' && this.state.currentUser._id !== '') &&
+                    <div className="border border-2 border-secondary mt-2">
                         <div className="m-2">
                             <div>
                                 {this.state.reviewType === 'edit' ? 'You are editing your review for: ' : 'You are creating a review for: '}
-                                <Link to={`/details/songs/${this.state.song.id}`} className="ml-2">
-                                    {this.state.song.name || this.state.song.title}
+                                <Link to={`/details/songs/${this.props.song._id}`} className="ml-2">
+                                    {this.props.song.name || this.props.song.title}
                                 </Link>
                             </div>
                             {
@@ -275,23 +262,23 @@ class Review extends React.Component {
                                     Create Review
                                 </button>
                             }
-                            <Link to={`/details/songs/${this.state.song.id}`} className="btn btn-warning mx-2">
+                            <Link to={`/details/songs/${this.props.song._id || this.props.song.id}`} className="btn btn-warning mx-2">
                                 Cancel
                             </Link>
                         </div>
                     </div>
                 }
                 {
-                    (this.state.currentUser.id === '' || this.state.currentUser.role !== 'listener') &&
+                    (this.state.currentUser._id === '' || this.state.currentUser.role !== 'listener') &&
                     <div>
                         <p>You must be logged in as a Listener to create a review.</p>
                         <Link to="/login">Login</Link>
                     </div>
                 }
                 {
-                    (this.state.noSong && this.state.currentUser.id !== '') &&
+                    (this.state.error !== '') &&
                     <div className="my-2">
-                        <p className="d-inline">We couldn't find any song with this ID. Try a different </p>
+                        <p className="d-inline">{this.state.error} Try a different </p>
                         <Link to="/search" className="">search.</Link>
                     </div>
                 }
@@ -301,9 +288,11 @@ class Review extends React.Component {
 }
 
 const stateToProperty = (state) => ({
+    song: state.detailsReducer.song
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
+    setSong: (song) => dispatch({type: 'SET_SONG', song}),
 })
 
 const ReviewCreator = connect(stateToProperty, propertyToDispatchMapper)(Review);

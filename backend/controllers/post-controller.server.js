@@ -3,38 +3,42 @@ const artistService = require('../services/artist-service.server');
 
 module.exports = function (app) {
     app.get('/api/posts', (req, res) => {
-        const posts = postService.findAllPosts();
-        res.json(posts);
+        postService.findAllPosts().then(posts => res.json(posts));
     });
     app.get('/api/posts/:postId', (req, res) => {
         const postId = req.params.postId;
-        const post = postService.findPostById(postId);
-        if (post) res.json(post);
-        else res.json({error: "No post with id"});
+        postService.findPostById(postId).then(post => {
+            if (post) res.json(post);
+            else res.json({error: "No post with id"});
+        });
     });
     app.post('/api/posts', (req, res) => {
         const newPost = req.body;
-        const post = postService.createPost(newPost);
-        artistService.createPostForArtist(post.artistId, post.id);
-        if (post) res.json(post);
-        else res.json({error: "Could not create post"});
+        postService.createPost(newPost).then(post => {
+            if (post) {
+                artistService.createPostForArtist(post.artistId, post.id).then(status => res.json(post));
+            }
+            else res.json({error: "Could not create post"});
+        });
     });
     app.put('/api/posts/:postId', (req, res) => {
         const postId = req.params.postId;
         const newPost = req.body;
-        const post = postService.updatePost(postId, newPost);
-        if (post) res.json(post);
-        else res.json({error: "Could not update post"});
+        postService.updatePost(postId, newPost).then(status => {
+            if (status.ok === 1) res.json(newPost);
+            else res.json({error: "Could not update post"});
+        });
     });
     app.delete('/api/posts/:postId', (req, res) => {
         const postId = req.params.postId;
         const newPost = req.body;
-        const status = postService.deletePost(postId, newPost);
-        res.send(status);
+        postService.deletePost(postId, newPost).then(status => {
+            if (status.ok === 1) res.send(1);
+            else res.json({error: "Could not delete post"});
+        });
     });
     app.get('/api/posts/search/:query', (req, res) => {
         const query = req.params.query;
-        const posts = postService.queryPost(query);
-        res.json(posts);
+        postService.queryPost(query).then(posts => res.json(posts));
     });
 }

@@ -4,17 +4,11 @@ const findAllPosts = () => postsModel.find();
 
 const findPostById = (postId) => postsModel.findById(postId);
 
-const createPost = (post) => {
+const createPost = (post) => postsModel.create(post);
 
-}
+const updatePost = (postId, newPost) => postsModel.update({_id: postId}, {$set: newPost});
 
-const updatePost = (postId, newPost) => {
-
-}
-
-const deletePost = (postId) => {
-
-}
+const deletePost = (postId) => postsModel.remove({_id: postId});
 
 const queryPost = (query) => postsModel.find();
 

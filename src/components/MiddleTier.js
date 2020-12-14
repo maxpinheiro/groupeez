@@ -4,15 +4,14 @@ import {Redirect} from "react-router-dom";
 import queryString from 'querystring';
 
 import env from '../private.json';
-import {fetchTokens} from "../services/SpotifyService";
-
+import spotifyService from "../services/SpotifyService";
 import userService from '../services/UserService';
 
 const clientId = env.CLIENT_ID;
-const authorizeUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${encodeURIComponent('user-read-private user-read-email')}&redirect_uri=${encodeURIComponent('http://localhost:3000/callback')}`
+const authorizeUrl = (uri) => `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${encodeURIComponent('user-read-private user-read-email')}&redirect_uri=${encodeURIComponent(uri)}`
 
-export const RedirectPage = () => {
-    useEffect(() => window.location.replace(authorizeUrl));
+export const RedirectPage = (props) => {
+    useEffect(() => window.location.replace(authorizeUrl(`http://localhost:3000/callback/${props.match.params.callback}`)));
     return <p>Redirecting...</p>;
 }
 
@@ -20,15 +19,15 @@ class Callback extends React.Component {
     componentDidMount() {
         const authCode = queryString.parse(this.props.location.search)["?code"]
         this.props.setAuthorizationCode(authCode);
-        fetchTokens(authCode).then(response => {
+        spotifyService.fetchTokens(authCode, this.props.match.params.callback).then(response => {
             userService.setAccessToken(response.access_token)
-                .then(accessToken => {
-                    this.props.setTokens(accessToken, response.refresh_token);
+                .then(status => {
+                    this.props.setTokens(response.access_token, response.refresh_token);
                 })
         });
     }
     render() {
-        return <Redirect to="/search"/>
+        return <Redirect to={`/${this.props.match.params.callback || 'search'}`}/>
     }
 }
 

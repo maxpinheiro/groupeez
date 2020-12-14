@@ -6,38 +6,57 @@ import spotifyService from "../../services/SpotifyService";
 
 class Album extends React.Component {
     state = {
-        searchQuery: "",
-        album: {
-            name: "",
-            artists: [{name: ""}],
-            images: [{
-                url: ""
-            }]
-        },
-        noAlbum: true
+        error: ''
     };
 
     componentDidMount() {
         const detailId = this.props.detailId;
-        const accessToken = this.props.accessToken;
-        const spotify = this.props.spotify;
-        if (spotify) {
-            spotifyService.findAlbum(detailId, accessToken)
-                .then(album => {
-                    //this.props.setSong(song)
+        if (detailId.length === 22) { // /details/songs/spotifyId
+            spotifyService.findAlbum(detailId, this.props.accessToken).then(album => {
+                if (!album.error) { // found song on spotify
                     console.log(album);
-                    if (!album.error) {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            album,
-                            noAlbum: false
-                        }));
-                    }
-                });
+                    this.props.setAlbum(album);
+                } else if (album.error.status === 401) {
+                    spotifyService.refreshToken(this.props.refreshToken).then(response => {
+                        if (response.access_token) {
+                            spotifyService.findAlbum(detailId, response.access_token).then(album => {
+                                if (!album.error) { // found song on spotify
+                                    this.props.setAlbum(album);
+                                    this.props.setTokens(response.access_token, response.refresh_token);
+                                } else { // didnt find song on spotify
+                                    this.setState(prevState => ({
+                                        ...prevState,
+                                        error: 'Cannot find Spotify album with id.'
+                                    }))
+                                }
+                            })
+                        } else { // couldnt get refresh token
+                            this.setState(prevState => ({
+                                ...prevState,
+                                error: 'There was a problem authorizing with Spotify.'
+                            }))
+                        }
+                    })
+                } else { // didnt find song on spotify
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: 'Cannot find Spotify album with id.'
+                    }))
+                }
+            })
+        } else if (detailId.length === 24) { // /details/songs/localId
+            this.setState(prevState => ({
+                ...prevState,
+                error: 'Cannot find album with id.'
+            }));
         } else {
-            console.log('not on spotify');
+            this.setState(prevState => ({
+                ...prevState,
+                error: 'Cannot find album with id.'
+            }));
         }
     }
+
 
     render() {
         return (
@@ -48,21 +67,23 @@ class Album extends React.Component {
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
                 {
-                    !this.state.noAlbum &&
+                    this.props.album.id !== '' &&
                     <div className="border border-2 border-secondary container-fluid mt-2">
                         <div className="m-2">
-                            <p>Title: {this.state.album.name}</p>
-                            <p>Artist(s): {this.state.album.artists.map((artist, index) => (
-                                artist.name + (index < this.state.album.artists.length - 1 ? ', ' : '')
-                            ))}</p>
-                            <img src={this.state.album.images[0].url}  alt=""/>
+                            <p>Title: {this.props.album.name}</p>
+                            <p>Artist(s): {this.props.album.artists.map((artist, index) =>
+                                (<Link to={`/profile/${artist.id}`} id={artist.id}>
+                                    {artist.name + (index < this.props.album.artists.length - 1 ? ', ' : '')}
+                                </Link>)
+                            )}</p>
+                            <img src={this.props.album.images[0].url}  alt=""/>
                         </div>
                     </div>
                 }
                 {
-                    this.state.noAlbum &&
+                    this.state.error &&
                     <div className="my-2">
-                        <p className="d-inline">We couldn't find any album with this ID. Try a different </p>
+                        <p className="d-inline">{this.state.error} Try a different </p>
                         <Link to="/search" className="">search.</Link>
                     </div>
                 }
@@ -72,14 +93,15 @@ class Album extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    //accessToken: state.spotifyReducer.accessToken,
+    accessToken: state.spotifyReducer.accessToken,
     refreshToken: state.spotifyReducer.refreshToken,
-    song: state.spotifyReducer.resultSong,
-    searchQuery: state.spotifyReducer.searchQuery
+    searchQuery: state.spotifyReducer.searchQuery,
+    album: state.detailsReducer.album
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
-    setSong: (song) => dispatch({type: 'RESULT_SONG', song})
+    setAlbum: (album) => dispatch({type: 'SET_ALBUM', album}),
+    setTokens: (accessToken, refreshToken) => dispatch({type: "TOKENS", accessToken, refreshToken})
 })
 
 const AlbumSection = connect(stateToProperty, propertyToDispatchMapper)(Album);

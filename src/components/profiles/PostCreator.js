@@ -5,24 +5,18 @@ import queryString from "querystring";
 
 import postService from "../../services/PostService";
 import userService from '../../services/UserService';
-import artistService from '../../services/ArtistService';
 
 class Post extends React.Component {
     state = {
         post: {
-            id: "",
             type: "",
             artist: "",
             artistId: "",
             title: "",
             text: ""
         },
-        artist: {
-          id: "",
-          username: ""
-        },
         error: '',
-        currentUser: {id: ''},
+        currentUser: {_id: ''},
         postType: ''
     };
 
@@ -30,10 +24,22 @@ class Post extends React.Component {
         const postType = this.props.match.params.postType;
         const postId = this.props.match.params.postId;
 
-        if (postType === 'edit') {
+        userService.getCurrentUser()
+            .then(currentUser => {
+                if (!currentUser.error) {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        currentUser,
+                        postType
+                    }))
+                }
+            });
+
+        if (postType === 'edit' && postId) {
             postService.findPostById(postId)
                 .then(post => {
                     if (!post.error) {
+                        document.getElementById(post.type).checked = true;
                         this.setState(prevState => ({
                             ...prevState,
                             post,
@@ -42,43 +48,21 @@ class Post extends React.Component {
                     } else {
                         this.setState(prevState => ({
                             ...prevState,
-                            error: "We couldn't find any post with this id."
+                            error: 'Cannot find post with id.'
                         }))
                     }
                 })
+        } else if (postType === 'create') {
+            this.setState(prevState => ({
+                ...prevState,
+                post: {type: "",
+                    artist: "",
+                    artistId: "",
+                    title: "",
+                    text: ""},
+                postType
+            }))
         }
-
-        userService.getCurrentUser()
-            .then(currentUser => {
-                if (!currentUser.error) {
-                    if (currentUser.role === 'artist') {
-                        artistService.findArtistById(currentUser.id)
-                            .then(artist => {
-                                this.setState(prevState => ({
-                                    ...prevState,
-                                    artist,
-                                    currentUser
-                                }))
-                            })
-                    } else {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            error: "Only artists can make posts."
-                        }))
-                    }
-
-                } else {
-                    this.setState(prevState => ({
-                        ...prevState,
-                        error: "You must be logged in to make a post."
-                    }))
-                }
-
-            })
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-
     }
 
     createPost = () => {
@@ -91,14 +75,14 @@ class Post extends React.Component {
             const post = {
                 type: this.state.post.type,
                 artist: this.state.currentUser.username,
-                artistId: this.state.currentUser.id,
+                artistId: this.state.currentUser._id,
                 title: this.state.post.title,
                 text: this.state.post.text
             }
-            console.log(post);
+            //console.log(post);
             postService.createPost(post)
                 .then(newPost => {
-                    this.props.history.push(`/details/posts/${newPost.id}`);
+                    this.props.history.push(`/details/posts/${newPost._id}`);
                 })
         }
     }
@@ -111,16 +95,17 @@ class Post extends React.Component {
             }))
         } else {
             const post = {
+                _id: this.state.post._id,
                 type: this.state.post.type,
                 artist: this.state.currentUser.username,
-                artistId: this.state.currentUser.id,
+                artistId: this.state.currentUser._id,
                 title: this.state.post.title,
                 text: this.state.post.text
             }
             console.log(post);
-            postService.updatePost(post)
-                .then(newPost => {
-                    this.props.history.push(`/details/posts/${newPost.id}`);
+            postService.updatePost(post._id, post)
+                .then(status => {
+                    this.props.history.push(`/details/posts/${post._id}`);
                 })
         }
     }
@@ -136,8 +121,15 @@ class Post extends React.Component {
                     }
                 </span>
                 {
-                    (!this.state.noSong && this.state.currentUser.id !== '') &&
-                    <div className="border border-2 border-secondary">
+                    (this.state.currentUser._id === '' || this.state.currentUser.role !== 'artist') &&
+                    <div>
+                        <p>You must be logged in as an Artist to access posts.</p>
+                        <Link to="/login">Login</Link>
+                    </div>
+                }
+                {
+                    (this.state.currentUser._id !== '') &&
+                    <div className="border border-2 border-secondary mt-2">
                         <div className="m-2">
                             {
                                 this.state.error !== "" &&
@@ -152,7 +144,7 @@ class Post extends React.Component {
                                         <label className="form-check-label">Tour</label>
                                     </div>
                                     <div className="form-check mr-3">
-                                        <input className="form-check-input" type="radio" value="artist" id="message" name="roleInput"
+                                        <input className="form-check-input" type="radio" value="message" id="message" name="roleInput"
                                                onChange={(e) => this.setState(prevState => ({...prevState, post: {...prevState.post, type: e.target.value}}))}/>
                                         <label className="form-check-label">Message</label>
                                     </div>
@@ -180,10 +172,10 @@ class Post extends React.Component {
                             </div>
                             {
                                 this.state.postType === 'edit' ?
-                                <button onClick={this.createPost} className="btn btn-primary mx-2">
+                                <button onClick={this.savePost} className="btn btn-primary mx-2">
                                     Save Post
                                 </button> :
-                                <button onClick={this.savePost} className="btn btn-primary mx-2">
+                                <button onClick={this.createPost} className="btn btn-primary mx-2">
                                     Create Post
                                 </button>
                             }
@@ -194,14 +186,14 @@ class Post extends React.Component {
                     </div>
                 }
                 {
-                    (this.state.currentUser.id === '' || this.state.currentUser.role !== 'artist') &&
+                    (this.state.currentUser._id === '' || this.state.currentUser.role !== 'artist') &&
                     <div>
                         <p>You must be logged in as an Artist to create a review.</p>
                         <Link to="/login">Login</Link>
                     </div>
                 }
                 {
-                    (this.state.noSong && this.state.currentUser.id !== '') &&
+                    (this.state.noSong && this.state.currentUser._id !== '') &&
                     <div className="my-2">
                         <p className="d-inline">We couldn't find any song with this ID. Try a different </p>
                         <Link to="/search" className="">search.</Link>

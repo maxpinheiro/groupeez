@@ -3,24 +3,28 @@
     "username": "mpinheiro",
     "password": "thatsgreedy",
     "id": "7lj02xh15g",
+    "objectId": "5fd6c8b722c8ddd60ae7cbc9",
     "role": "listener"
   },
   {
     "username": "ofloody",
     "password": "nowayjose",
     "id": "c7st3sd724",
+    "objectId": "5fd6c8c722c8ddd60ae7cbca",
     "role": "listener"
   },
   {
     "username": "frankocean",
     "password": "pink&white",
     "id": "fb4gb3kwlh",
+    "objectId": "5fd6d20622c8ddd60ae7cbd9",
     "role": "artist"
   },
   {
     "username": "cosmic_monkey",
     "password": "maxiscool",
     "id": "45xsji3bb1",
+    "objectId": "5fd6d2dc22c8ddd60ae7cbda",
     "role": "artist"
   }
 ]

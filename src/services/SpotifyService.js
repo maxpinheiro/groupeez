@@ -36,7 +36,7 @@ export const findArtist = (artistId, accessToken) => {
 }
 
 
-export const fetchTokens = (authCode) => {
+export const fetchTokens = (authCode, callback) => {
     return fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
@@ -44,7 +44,7 @@ export const fetchTokens = (authCode) => {
         },
         body: queryString.stringify({
             code: authCode,
-            redirect_uri: 'http://localhost:3000/callback',
+            redirect_uri: `http://localhost:3000/callback/${callback || 'search'}`,
             grant_type: 'authorization_code',
             client_id: env.CLIENT_ID,
             client_secret: env.CLIENT_SECRET
@@ -52,7 +52,7 @@ export const fetchTokens = (authCode) => {
     }).then(response => response.json());
 }
 
-export const refreshToken = (refreshToken) => {
+export const refreshToken = (refreshToken, callback) => {
     return fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
@@ -60,7 +60,7 @@ export const refreshToken = (refreshToken) => {
         },
         body: queryString.stringify({
             refresh_token: refreshToken,
-            redirect_uri: 'http://localhost:3000/callback',
+            redirect_uri: `http://localhost:3000/callback/${callback || 'search'}`,
             grant_type: 'refresh_token',
             client_id: env.CLIENT_ID,
             client_secret: env.CLIENT_SECRET

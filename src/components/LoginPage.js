@@ -24,8 +24,8 @@ class Login extends React.Component {
                         error
                     }))
                 } else {
-                    //this.props.cookies.set('currentUser', user.id, {path: '/'});
-                    this.props.history.push('/profile');
+                    //this.props.cookies.set('currentUser', user._id, {path: '/'});
+                    this.props.history.push('/authorize/profile');
                 }
             })
     }

@@ -2,104 +2,65 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import queryString from "querystring";
-import userService from '../../services/UserService';
+
 import spotifyService from "../../services/SpotifyService";
 import songService from '../../services/SongService';
 
 class Song extends React.Component {
     state = {
-        searchQuery: "",
-        song: {
-            name: "",
-            artists: [{name: ""}],
-            album: {
-                images: [{
-                    url: ""
-                }]
-            },
-            id: ''
-        },
-        noSong: true,
-        spotify: false
+        error: ''
     };
 
     componentDidMount() {
         const detailId = this.props.detailId;
-        const accessToken = this.props.accessToken;
-        const spotify = this.props.spotify;
-        if (spotify) {
-            spotifyService.findSong(detailId, accessToken)
-                .then(song => {
-                    if (!song.error) {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            noSong: false,
-                            song,
-                            spotify: true
-                        }));
-                    }
-                    //this.props.setSong(song)
-                });
+        if (detailId.length === 22) { // /details/songs/spotifyId
+            spotifyService.findSong(detailId, this.props.accessToken).then(song => {
+                if (!song.error) { // found song on spotify
+                    this.props.setSong(song);
+                } else if (song.error.status === 401) {
+                    spotifyService.refreshToken(this.props.refreshToken).then(response => {
+                        if (response.access_token) {
+                            spotifyService.findSong(detailId, response.access_token).then(song => {
+                                if (!song.error) { // found song on spotify
+                                    this.props.setSong(song);
+                                    this.props.setTokens(response.access_token, response.refresh_token);
+                                } else { // didnt find song on spotify
+                                    this.setState(prevState => ({
+                                        ...prevState,
+                                        error: 'Cannot find Spotify song with id.'
+                                    }))
+                                }
+                            })
+                        } else { // couldnt get refresh token
+                            this.setState(prevState => ({
+                                ...prevState,
+                                error: 'There was a problem authorizing with Spotify.'
+                            }))
+                        }
+                    })
+                } else { // didnt find song on spotify
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: 'Cannot find Spotify song with id.'
+                    }))
+                }
+            })
+        } else if (detailId.length === 24) { // /details/songs/localId
+            songService.findSongById(detailId).then(song => {
+                if (!song.error) { // found song in database
+                    this.props.setSong(song);
+                } else {
+                    this.setState(prevState => ({
+                        ...prevState,
+                        error: 'Cannot find song with id.'
+                    }));
+                }
+                })
         } else {
-            console.log('not on spotify');
-            // go to local database
-            songService.findSongById(detailId)
-                .then(song => {
-                    if (!song.error) {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            noSong: false,
-                            song,
-                            spotify: false
-                        }));
-                    } else {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            noSong: true,
-                            spotify: false
-                        }));
-                    }
-                })
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const detailId = this.props.detailId;
-        const accessToken = this.props.accessToken;
-        const spotify = this.props.spotify;
-        if (spotify && !prevProps.spotify) {
-            spotifyService.findSong(detailId, accessToken)
-                .then(song => {
-                    if (!song.error) {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            noSong: false,
-                            song,
-                            spotify: true
-                        }));
-                    }
-                    //this.props.setSong(song)
-                });
-        } else if (!spotify && prevProps.spotify) {
-            console.log('not on spotify');
-            // go to local database
-            songService.findSongById(detailId)
-                .then(song => {
-                    if (!song.error) {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            noSong: false,
-                            song,
-                            spotify: false
-                        }));
-                    } else {
-                        this.setState(prevState => ({
-                            ...prevState,
-                            noSong: true,
-                            spotify: false
-                        }));
-                    }
-                })
+            this.setState(prevState => ({
+                ...prevState,
+                error: 'Cannot find song with id.'
+            }));
         }
     }
 
@@ -112,39 +73,41 @@ class Song extends React.Component {
                     <Link to="/search" className="mx-2">Search for something else</Link>
                 </span>
                 {
-                    !this.state.noSong &&
+                    (this.props.song._id !== '' || this.props.song.id !== '') &&
                     <div className="border border-2 border-secondary mt-2">
                         <div className="m-2">
                             {
-                                this.state.spotify &&
+                                this.props.song.id &&
                                 <div>
-                                    <p>Title: {this.state.song.name}</p>
-                                    <p>Artist(s): {this.state.song.artists.map((artist, index) =>
-                                        (<Link to={`/profile/${artist.id}`}>
-                                            {artist.name + (index < this.state.song.artists.length - 1 ? ', ' : '')}
+                                    <p>Title: {this.props.song.name}</p>
+                                    <p>Artist(s): {this.props.song.artists.map((artist, index) =>
+                                        (<Link to={`/profile/${artist.id}`} id={artist.id}>
+                                            {artist.name + (index < this.props.song.artists.length - 1 ? ', ' : '')}
                                         </Link>)
                                     )}</p>
-                                    <img src={this.state.song.album.images[0].url}  alt=""/>
+                                    <img src={this.props.song.album.images[0].url}  alt=""/>
                                 </div>
                             }
                             {
-                                !this.state.spotify &&
+                                this.props.song._id &&
                                 <div>
-                                    <p>Title: {this.state.song.title}</p>
-                                    <p>Artist(s): {this.state.song.artists.map((artist, index) => (
-                                        (artist) + (index < this.state.song.artists.length - 1 ? ', ' : '')
+                                    <p>Title: {this.props.song.title}</p>
+                                    <p>Artist(s): {this.props.song.artists.map((artist, index) => (
+                                        (<Link to={`/profile/${this.props.song.artistIds[index]}`} id={this.props.song.artistIds[index]}>
+                                            {artist + (index < this.props.song.artists.length - 1 ? ', ' : '')}
+                                        </Link>)
                                     ))}</p>
-                                    <img src={this.state.song.images[0].url}  alt=""/>
+                                    <img src={this.props.song.images[0]}  alt=""/>
                                 </div>
                             }
-                            <Link to={`/review/create/${this.state.song.id}`}>Leave a review!</Link>
+                            <Link to={`/reviews/create/${this.props.song._id}`}>Leave a review!</Link>
                         </div>
                     </div>
                 }
                 {
-                    this.state.noSong &&
+                    this.state.error !== "" &&
                     <div className="my-2">
-                        <p className="d-inline">We couldn't find any song with this ID. Try a different </p>
+                        <p className="d-inline">{this.state.error + 'Try a different'} </p>
                         <Link to="/search" className="">search.</Link>
                     </div>
                 }
@@ -154,14 +117,15 @@ class Song extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    //accessToken: state.spotifyReducer.accessToken,
+    searchQuery: state.spotifyReducer.searchQuery,
     refreshToken: state.spotifyReducer.refreshToken,
-    song: state.spotifyReducer.resultSong,
-    searchQuery: state.spotifyReducer.searchQuery
+    accessToken: state.spotifyReducer.accessToken,
+    song: state.detailsReducer.song
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
-    setSong: (song) => dispatch({type: 'RESULT_SONG', song})
+    setSong: (song) => dispatch({type: 'SET_SONG', song}),
+    setTokens: (accessToken, refreshToken) => dispatch({type: 'TOKENS', accessToken, refreshToken})
 })
 
 const SongSection = connect(stateToProperty, propertyToDispatchMapper)(Song);

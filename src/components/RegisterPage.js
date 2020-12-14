@@ -28,7 +28,7 @@ class Register extends React.Component {
                         error
                     }))
                 } else {
-                    this.props.history.push('/profile');
+                    this.props.history.push('/authorize/profile');
                 }
             })
     }

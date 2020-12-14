@@ -1,7 +1,7 @@
 const ss = require('string-similarity');
 
 const generateId = (length) => {
-    const options = 'abcdefghijklmnopqrstuvwxyz1234567890';
+    const options = 'abcdef1234567890';
     let result = "";
     while (result.length < length) {
         let idx = Math.floor(Math.random() * options.length);

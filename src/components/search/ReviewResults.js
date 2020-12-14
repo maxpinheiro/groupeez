@@ -1,10 +1,26 @@
 import {Link} from "react-router-dom";
-import queryString from "querystring";
 import React from "react";
 import {connect} from "react-redux";
 
+import reviewService from "../../services/ReviewService";
 
 class Review extends React.Component {
+    componentDidMount() {
+        const searchType = this.props.searchType;
+        const searchQuery = this.props.searchQuery;
+        //console.log('search type: ' + searchType + ' search query: ' + searchQuery);
+        if (searchQuery !== '' && searchType === 'reviews') {
+            this.searchReviews(searchQuery);
+        }
+    }
+
+    searchReviews = (query) => {
+        reviewService.queryReview(query)
+            .then(reviews => {
+                this.props.setReviews(reviews, query);
+            })
+    }
+
     render() {
         return (
 
@@ -21,9 +37,9 @@ class Review extends React.Component {
                     <tbody>
                     {
                         this.props.reviews.map(review =>
-                            <tr key={review.id}>
+                            <tr key={review._id}>
                                 <th>
-                                    <Link to={`/details/reviews/${review.id}`}>{review.title}</Link>
+                                    <Link to={`/details/reviews/${review._id}`}>{review.title}</Link>
                                 </th>
                                 <th>
                                     <Link to={`/profile/${review.creatorId}`}>{review.creator}</Link>
@@ -42,9 +58,13 @@ class Review extends React.Component {
 }
 
 const stateToProperty = (state) => ({
+    reviews: state.searchReducer.reviewResults,
+    searchType: state.searchReducer.searchType,
+    searchQuery: state.searchReducer.searchQuery
 });
 
 const propertyToDispatchMapper = (dispatch) => ({
+    setReviews: (reviews) => dispatch({type: 'SET_REVIEWS', reviews})
 });
 
 const ReviewResults = connect(stateToProperty, propertyToDispatchMapper)(Review);

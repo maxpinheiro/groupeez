@@ -10,20 +10,6 @@ import spotifyService from "../../services/SpotifyService";
 
 class Listener extends React.Component {
     state = {
-        listener: {
-            id: "",
-            username: "",
-            name: "",
-            bio: "",
-            profileUrl: "",
-            reviews: [],
-            favorites: [],
-            following: [],
-            friends: []
-        },
-        private: false,
-
-
     };
 
     componentDidMount() {
@@ -56,8 +42,8 @@ class Listener extends React.Component {
     findArtists = (artistIds) => Promise.all(artistIds.map(artistId => artistService.findArtistById(artistId)));
 
     findSongs = (songIds) => Promise.all(songIds.map(songId => {
-        if (songId.length === 10) return songService.findSongById(songId);
-        return spotifyService.findSong(songId, this.state.accessToken);
+        if (songId.length === 24) return songService.findSongById(songId);
+        return spotifyService.findSong(songId, this.props.accessToken);
     }));
 
     findGroupeez = (groupeeIds) => Promise.all(groupeeIds.map(groupeeId => listenerService.findListenerById(groupeeId)));
@@ -71,23 +57,13 @@ class Listener extends React.Component {
                             .then(friends => {
                                 this.findSongs(listener.favorites)
                                     .then(favorites => {
-                                        console.log({
+                                        this.props.setListener({
                                             ...listener,
                                             reviews,
                                             following,
                                             friends,
                                             favorites
-                                        });
-                                        this.setState(prevState => ({
-                                            ...prevState,
-                                            listener: {
-                                                ...listener,
-                                                reviews,
-                                                following,
-                                                friends,
-                                                favorites
-                                            }
-                                        }))
+                                        })
                                     })
                             })
                     })
@@ -99,18 +75,18 @@ class Listener extends React.Component {
             <div className="container-fluid border border-2 border-secondary">
 
                 <div className={"h1"}>
-                    {this.state.listener.name}
+                    {this.props.listener.name}
                 </div>
                 <div className={"row"}>
                     <div className={"col-6"}>
                         <div style={{width: 100, height: 100}}>
-                            <img src={this.state.listener.profileUrl} alt={"img"} className={"img-thumbnail"} />
+                            <img src={this.props.listener.profileUrl} alt={"img"} className={"img-thumbnail"} />
                         </div>
                     </div>
                     <div className={"col-6"}>
                         <div className={"boarder m-2"}>
                             <div className={"h4"}>Bio</div>
-                            {this.state.listener.bio}
+                            {this.props.listener.bio}
                         </div>
                     </div>
                 </div>
@@ -121,12 +97,26 @@ class Listener extends React.Component {
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
                             {
-                                this.state.listener.favorites.map(song =>
-                                    <div key={song.id} className={"list-item"}>
-                                        <Link to={`/details/songs/${song.id}`} className="d-inline"> {song.title || song.name} </Link>
-                                        <div className={"ml-1 d-inline"}>
-                                            by <Link to={`/profile/${song.artists[0].id || song.artistIds[0]}`} className="d-inline"> {song.artists[0].name || song.artists[0]} </Link>
-                                        </div>
+                                this.props.listener.favorites.map(song =>
+                                    <div key={song._id ? song._id : song.id} className={"list-item"}>
+                                        {
+                                            song._id && !song.error &&
+                                            <div>
+                                                <Link to={`/details/songs/${song._id}`} className="d-inline"> {song.title} </Link>
+                                                <div className={"ml-1 d-inline"}>
+                                                    by <Link to={`/profile/${song.artistIds[0]}`} className="d-inline"> {song.artists[0]} </Link>
+                                                </div>
+                                            </div>
+                                        }
+                                        {
+                                            !song._id && !song.error &&
+                                            <div>
+                                                <Link to={`/details/songs/${song.id}`} className="d-inline"> {song.name} </Link>
+                                                <div className={"ml-1 d-inline"}>
+                                                    by <Link to={`/profile/${song.artists[0].id}`} className="d-inline"> {song.artists[0].name} </Link>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 )
                             }
@@ -138,11 +128,11 @@ class Listener extends React.Component {
                         </div>
                         <div className={"list-group overflow-auto boarder"}>
                             {
-                                this.state.listener.reviews.map(review =>
-                                    <div key={review.id}
+                                this.props.listener.reviews.map(review =>
+                                    <div key={review._id}
                                          className={"list-item"}>
                                         <div className={"float-left"}>
-                                            <Link to={`/details/reviews/${review.id}`}> {review.title} </Link>
+                                            <Link to={`/details/reviews/${review._id}`}> {review.title} </Link>
                                         </div>
                                     </div>
                                 )
@@ -159,11 +149,11 @@ class Listener extends React.Component {
                             </div>
                             <div className={"list-group overflow-auto"}>
                                 {
-                                    this.state.listener.following.map(artist =>
-                                        <div key={artist.id}
+                                    this.props.listener.following.map(artist =>
+                                        <div key={artist._id}
                                              className={"list-item"}>
                                             <div className={"float-left"}>
-                                                <Link to={`/profile/${artist.id}`}>
+                                                <Link to={`/profile/${artist._id}`}>
                                                     {artist.name}
                                                 </Link>
                                             </div>
@@ -178,10 +168,10 @@ class Listener extends React.Component {
                             </div>
                             <div className={"list-group"}>
                                 {
-                                    this.state.listener.friends.map(friend =>
-                                        <div key={friend.id}
+                                    this.props.listener.friends.map(friend =>
+                                        <div key={friend._id}
                                              className={"list-item"}>
-                                            <Link to={`/profile/${friend.id}`}>
+                                            <Link to={`/profile/${friend._id}`}>
                                                 {friend.username}
                                             </Link>
                                         </div>
@@ -198,10 +188,12 @@ class Listener extends React.Component {
 }
 
 const stateToProperty = (state) => ({
+    accessToken: state.spotifyReducer.accessToken,
+    listener: state.profileReducer.listener
 })
 
 const propertyToDispatchMapper = (dispatch) => ({
-
+    setListener: (listener) => dispatch({type: "SET_LISTENER", listener})
 })
 
 const ListenerSection = connect(stateToProperty, propertyToDispatchMapper)(Listener);

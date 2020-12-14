@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const artistsSchema = require('./users.schema.server');
+const artistsSchema = require('./artists.schema.server');
 
 const artistsModel = mongoose.model('ArtistsModel', artistsSchema);
 

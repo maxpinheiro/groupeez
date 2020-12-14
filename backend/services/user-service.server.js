@@ -16,7 +16,7 @@ const findUserById = (userId) => usersDao.findUserById(userId);
 const createUser = (user) => {
     if (user.role === 'artist') {
         artistService.createArtist(user);
-    } else {
+    } else if (user.role === 'listener') {
         listenerService.createListener(user);
     }
     return usersDao.createUser(user);

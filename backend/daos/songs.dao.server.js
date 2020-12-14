@@ -4,9 +4,7 @@ const findAllSongs = () => songsModel.find();
 
 const findSongById = (songId) => songsModel.findById(songId);
 
-const createSong = (song) => {
-
-};
+const createSong = (song) => songsModel.create(song);
 
 const querySong = (query) => songsModel.find();
 
