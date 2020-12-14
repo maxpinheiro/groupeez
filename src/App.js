@@ -9,9 +9,9 @@ import DetailsPage from "./components/details/DetailsPage";
 import LoginPage from "./components/LoginPage";
 import ProfilePage from "./components/profiles/ProfilePage";
 import RegisterPage from "./components/RegisterPage";
-import ReviewCreator from "./components/details/ReviewCreator";
+import HomePage from "./components/HomePage";
 import PostCreator from "./components/profiles/PostCreator";
-
+import ReviewCreator from "./components/details/ReviewCreator";
 
 const LandingPage = () =>
     <div className="container">
@@ -33,7 +33,7 @@ class App extends React.Component {
                         </Link>
                     </div>
                     <Switch>
-                        <Route exact path="/" component={LandingPage} />
+                        <Route exact path="/" component={HomePage} />
                         <Route exact path="/login" component={LoginPage} />
                         <Route exact path="/register" component={RegisterPage} />
                         <Route exact path="/profile" component={ProfilePage} />
