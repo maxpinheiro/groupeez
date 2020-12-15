@@ -90,6 +90,9 @@ class Listener extends React.Component {
             <div className="container-fluid border border-2 border-secondary">
 
                 <div className={"h1"}>
+                    {this.props.listener.username}
+                </div>
+                <div className={"h3"}>
                     {this.props.listener.name}
                 </div>
                 <div className={"row"}>
