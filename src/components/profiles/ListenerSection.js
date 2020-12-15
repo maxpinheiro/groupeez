@@ -77,13 +77,12 @@ class Listener extends React.Component {
     saveListenerBio = () => {
         let copy = this.props.listener;
         copy.bio = this.state.bio;
-        listenerService.updateListener(this.props.listener._id, copy)
-            .then(response => response.json());
-
-        this.setState((prevState) => ({
-            ...prevState,
+        listenerService.updateListener(this.props.listener._id, copy).then(status => {
+            this.setState((prevState) => ({
+                ...prevState,
                 editing: false,
-        }))
+            }))
+        });
     }
 
     render() {
@@ -102,28 +101,33 @@ class Listener extends React.Component {
                     <div className={"col-6"}>
                         {
                             !this.state.editing &&
-                            <div className={"border m-2"}>
-                                <div className={"h4"}>Bio</div>
-                                {this.props.listener.bio}
-                                {
-                                    this.props.private &&
-                                        <div className={"btn btn-warning"}
-                                            onClick={e => this.setState((prevProps) =>
-                                                ({...prevProps, editing: true}))}>
+                            <div className={"border"}>
+                                <div className="m-2">
+                                    <div className={"h4"}>Bio</div>
+                                    {this.props.listener.bio}
+                                    {
+                                        this.props.private &&
+                                        <div className={"btn btn-warning ml-4"}
+                                             onClick={e => this.setState((prevProps) =>
+                                                 ({...prevProps, editing: true, bio: this.props.listener.bio}))}>
                                             Edit
                                         </div>
-                                }
+                                    }
+                                </div>
+
                             </div>
                         }
                         {
                             this.props.private && this.state.editing &&
-                                <div className={"border m-2"}>
-                                    <div className={"h4"}>Editing Bio</div>
-                                    <input onChange={e => this.setState((prevProps) =>
-                                        ({...prevProps, bio: e.target.value}))}/>
-                                    <div className={"btn btn-success"}
-                                         onClick={e => this.saveListenerBio()}>
-                                        Save
+                                <div className={"border"}>
+                                    <div className="m-2">
+                                        <div className={"h4"}>Editing Bio</div>
+                                        <textarea value={this.state.bio} onChange={e => this.setState((prevProps) =>
+                                            ({...prevProps, bio: e.target.value}))}/>
+                                        <div className={"btn btn-success ml-4"}
+                                             onClick={this.saveListenerBio}>
+                                            Save
+                                        </div>
                                     </div>
                                 </div>
                         }

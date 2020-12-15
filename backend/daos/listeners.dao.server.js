@@ -10,7 +10,7 @@ const createListener = (listener) => listenersModel.create(listener);
 
 const queryListener = (query) => listenersModel.find();
 
-const updateListener = (listenerId, listener) => listenersModel.update({_id: listenerId}, {listener});
+const updateListener = (listenerId, listener) => listenersModel.update({_id: listenerId}, {$set: {bio: listener.bio}});
 
 const createReviewForListener = (listenerId, reviewId) => listenersModel.update({_id: listenerId}, {$push: {reviews: reviewId}});
 

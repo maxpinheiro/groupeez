@@ -12,7 +12,9 @@ app.use(session({
     secret: 'something'
 }));
 
-mongoose.connect('mongodb://localhost/groupeez', {useNewUrlParser: true});
+const connectionString = 'mongodb+srv://user:user>@cluster0.w3ooj.mongodb.net/groupeez?retryWrites=true&w=majority';
+mongoose.connect(connectionString, {useNewUrlParser: true});
+//mongoose.connect('mongodb://localhost/groupeez', {useNewUrlParser: true});
 
 // general preprocessing for all requests
 app.use((req, res, next) => {
@@ -35,4 +37,4 @@ require('./controllers/song-controller.server')(app);
 require('./controllers/review-controller.server')(app);
 require('./controllers/post-controller.server')(app);
 
-app.listen(4000, () => console.log("Listening on port 4000..."));
+app.listen(process.env.PORT || 4000, () => console.log("Listening on port" + (process.env.PORT || 4000) + "..."));

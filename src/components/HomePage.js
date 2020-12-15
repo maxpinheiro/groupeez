@@ -42,14 +42,7 @@ class HomePage extends React.Component {
                         userService.getCurrentUser()
                             .then(user => {
                                 if (!user.error) {
-                                    const feed = this.setPersonalFeed(user);
-                                    this.setState((prevState) => ({
-                                        ...prevState,
-                                        recentPosts: p,
-                                        newArtists: a,
-                                        loggedIn: true,
-                                        yourFeed: feed,
-                                    }));
+                                    this.setPersonalFeed(user, p, a);
                                 } else {
                                     this.setState((prevState) => ({
                                         ...prevState,
@@ -57,16 +50,12 @@ class HomePage extends React.Component {
                                         newArtists: a,
                                     }));
                                 }
-
-
-
                             });
                     });
             });
     }
 
-    setPersonalFeed = (user) => {
-
+    setPersonalFeed = (user, p, a) => {
         let f = [];
         if (user.role === "listener") {
             listenerService.findListenerById(user._id)
@@ -82,6 +71,13 @@ class HomePage extends React.Component {
                                                 postsService.findPostById(lastPost)
                                                     .then(post => {
                                                         f.push(post);
+                                                        this.setState((prevState) => ({
+                                                            ...prevState,
+                                                            recentPosts: p,
+                                                            newArtists: a,
+                                                            loggedIn: true,
+                                                            yourFeed: f,
+                                                        }));
                                                     });
                                             }
                                         }
@@ -101,13 +97,19 @@ class HomePage extends React.Component {
                                 postsService.findPostById(lastPost)
                                     .then(post => {
                                         f.push(post);
+                                        this.setState((prevState) => ({
+                                            ...prevState,
+                                            recentPosts: p,
+                                            newArtists: a,
+                                            loggedIn: true,
+                                            yourFeed: f,
+                                        }));
                                     });
                             }
                         }
                     }
                 })
         }
-        return f;
     };
 
     render() {
@@ -129,7 +131,9 @@ class HomePage extends React.Component {
                                 <div key={post._id} className={"card container m-2 "}>
                                     <div className={"card-body"}>
                                         <span className={"card-title"}>
-                                            <div className={"h3"}>{post.title}</div>
+                                            <Link to={`/details/posts/${post._id}`}>
+                                                <div className={"h3"}>{post.title}</div>
+                                            </Link>
                                             <div className={"h4"}>{post.artist.name}</div>
                                         </span>
                                         <div className={"card-text"}>{post.text} </div>
@@ -147,9 +151,11 @@ class HomePage extends React.Component {
                             this.state.newArtists.map(artist =>
                                 <div className={"card container m-2 "}>
                                     <div className={"card-body"}>
-                                        <div className={"card-title h3"}>
-                                            {artist.name}
-                                        </div>
+                                        <Link to={`/profile/${artist._id}`}>
+                                            <div className={"card-title h3"}>
+                                                {artist.name}
+                                            </div>
+                                        </Link>
                                         <div className={"card-text"}>{artist.bio}</div>
                                     </div>
                                 </div>
@@ -169,7 +175,9 @@ class HomePage extends React.Component {
                                         <div key={post._id} className={"card container m-2 "}>
                                             <div className={"card-body"}>
                                                 <div className={"card-title"}>
-                                            <div className={"h3"}>{post.title}</div>
+                                                    <Link to={`/details/posts/${post._id}`}>
+                                                        <div className={"h3"}>{post.title}</div>
+                                                    </Link>
                                                 </div>
                                                 <div className={"card-text"}>{post.text} </div>
                                             </div>

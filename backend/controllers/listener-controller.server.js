@@ -13,6 +13,14 @@ module.exports = function (app) {
             });
         }
     });
+    app.put('/api/listeners/:listenerId', (req, res) => {
+        const listenerId = req.params.listenerId;
+        const listener = req.body;
+        listenerService.updateListener(listenerId, listener).then(status => {
+            if (status.ok === 1) res.json(listener);
+            else res.json({error: "Could not update listener"});
+        });
+    });
     app.get('/api/listeners/search/:query', (req, res) => {
         const query = req.params.query;
         listenerService.queryListener(query).then(listeners => res.json(listeners));
