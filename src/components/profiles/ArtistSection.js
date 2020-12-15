@@ -113,6 +113,9 @@ class Artist extends React.Component {
         return (
             <div className="container-fluid border border-2 border-secondary">
                 <div className="m-2">
+                    <div className={"h3"}>
+                        {this.props.artist.username}
+                    </div>
                     <div className={"h1"}>
                         {this.props.artist.name}
                     </div>
