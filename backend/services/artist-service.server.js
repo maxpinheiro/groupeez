@@ -10,6 +10,8 @@ const createArtist = (artist) => artistsDao.createArtist(artist);
 
 const queryArtist = (query) => artistsDao.queryArtist(query);
 
+const updateArtist = (artistId, artist) => artistsDao.updateArtist(artistId, artist);
+
 const createPostForArtist = (artistId, postId) => artistsDao.createPostForArtist(artistId, postId);
 
 const deletePostForArtist = (artistId, postId) => artistsDao.deletePostForArtist(artistId, postId);
@@ -18,4 +20,4 @@ const createReviewForArtist = (artistUser, reviewId) => artistsDao.createReviewF
 
 const deleteReviewForArtist = (artistUser, reviewId) => artistsDao.deleteReviewForArtist(artistUser, reviewId);
 
-module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, queryArtist, createPostForArtist, deletePostForArtist, createReviewForArtist, deleteReviewForArtist};
+module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, queryArtist, updateArtist, createPostForArtist, deletePostForArtist, createReviewForArtist, deleteReviewForArtist};

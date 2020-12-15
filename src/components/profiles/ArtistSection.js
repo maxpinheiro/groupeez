@@ -12,7 +12,9 @@ import songService from "../../services/SongService";
 
 class Artist extends React.Component {
     state = {
-        error: ''
+        error: '',
+        editing: false,
+        bio: "",
     };
 
     componentDidMount() {
@@ -53,13 +55,6 @@ class Artist extends React.Component {
                     if (!artist.error) {
                         this.props.history.push(`/profile/${artist._id}`);
                     } else {
-                        // search spotify API
-                        /*
-                        spotifyService.findArtist(artistId)
-                            .then(artist => {
-
-                            })
-                        */
                     }
                 })
         } else if (artistId !== prevProps.artistId) {
@@ -103,6 +98,17 @@ class Artist extends React.Component {
             })
     }
 
+    saveListenerBio = () => {
+        let copy = this.props.artist;
+        copy.bio = this.state.bio;
+        artistService.updateArtist(this.props.artist._id, copy).then(status => {
+            this.setState((prevState) => ({
+                ...prevState,
+                editing: false,
+            }))
+        });
+    }
+
     render() {
         return (
             <div className="container-fluid border border-2 border-secondary">
@@ -117,12 +123,37 @@ class Artist extends React.Component {
                             </div>
                         </div>
                         <div className={"col-6"}>
-                            <div className={"border"}>
-                                <div className="m-2">
-                                    <div className={"h4"}>Bio</div>
-                                    {this.props.artist.bio}
+                            {
+                                !this.state.editing &&
+                                <div className={"border"}>
+                                    <div className="m-2">
+                                        <div className={"h4"}>Bio</div>
+                                        {this.props.artist.bio}
+                                        {
+                                            this.props.private &&
+                                            <div className={"btn btn-warning ml-4"}
+                                                 onClick={e => this.setState((prevProps) =>
+                                                     ({...prevProps, editing: true, bio: this.props.artist.bio}))}>
+                                                Edit
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
+                            }
+                            {
+                                this.props.private && this.state.editing &&
+                                <div className={"border"}>
+                                    <div className="m-2">
+                                        <div className={"h4"}>Editing Bio</div>
+                                        <textarea value={this.state.bio} onChange={e => this.setState((prevProps) =>
+                                            ({...prevProps, bio: e.target.value}))}/>
+                                        <div className={"btn btn-success ml-4"}
+                                             onClick={this.saveListenerBio}>
+                                            Save
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
 

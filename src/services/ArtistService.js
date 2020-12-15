@@ -1,5 +1,5 @@
 const root = 'http://localhost:4000';
-const root2 = 'https://nameless-plateau-81307.herokuapp.com';
+
 const findAllArtists = () => {
     return fetch(`${root}/api/artists`)
         .then(response => response.json());
@@ -15,15 +15,14 @@ const findArtistBySpotifyId = (spotifyId) => {
         .then(response => response.json());
 };
 
-const createArtist = (listener) => {
-};
-
-const updateArtist = (listenerId, newListener) => {
-
-};
-
-const deleteArtist = (listenerId, newListener) => {
-
+const updateArtist = (artistId, newArtist) => {
+    return fetch(`${root}/api/artists/${artistId}`, {
+        method: `PUT`,
+        body: JSON.stringify(newArtist),
+        headers: {
+            "content-type" : "application/json"
+        }
+    }).then(response => response.json());
 };
 
 const queryArtist = (query) => {
@@ -31,4 +30,4 @@ const queryArtist = (query) => {
         .then(response => response.json());
 };
 
-export default {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, updateArtist, deleteArtist, queryArtist};
+export default {findAllArtists, findArtistById, findArtistBySpotifyId, updateArtist, queryArtist};

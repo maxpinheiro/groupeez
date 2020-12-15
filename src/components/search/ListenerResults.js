@@ -9,7 +9,7 @@ class Listener extends React.Component {
         const searchType = this.props.searchType;
         const searchQuery = this.props.searchQuery;
         //console.log('search type: ' + searchType + ' search query: ' + searchQuery);
-        if (searchQuery !== '' && searchType === 'listeners') {
+        if (searchQuery !== '' && searchType === 'groupeez') {
             this.searchGroupeez(searchQuery);
         }
     }

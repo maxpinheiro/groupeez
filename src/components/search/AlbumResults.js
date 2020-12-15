@@ -53,7 +53,7 @@ class Album extends React.Component {
                                 <th>
                                     {
                                         album.artists.map((artist, index) => (
-                                            <Link to={`/profile/${artist._id}`} id={index}>
+                                            <Link to={`/profile/${artist._id || artist.id}`} id={index}>
                                                 {artist.name + (index < album.artists.length - 1 ? ', ' : '')}
                                             </Link>
                                         ))

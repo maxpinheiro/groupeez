@@ -11,7 +11,7 @@ import ArtistResults from "./ArtistResults";
 import ListenerResults from "./ListenerResults";
 
 class Search extends React.Component {
-    state = {searchQuery: '', searchType: '', typeInput: ''};
+    state = {searchQuery: '', searchType: '', typeInput: '', searchInput: ''};
 
     componentDidMount() {
         const searchQuery = queryString.parse(this.props.location.search)["?criteria"];
@@ -20,7 +20,7 @@ class Search extends React.Component {
         if (searchQuery && searchType) {
             //console.log('q: ' + searchQuery + ', t: ' + searchType);
             document.getElementById(searchType).checked=true;
-            this.setState(prevState => ({...prevState, searchQuery, searchType}));
+            this.setState(prevState => ({...prevState, searchQuery, searchType, searchInput: searchQuery}));
             this.props.setSearch(searchType, searchQuery);
         }
     }
@@ -31,12 +31,12 @@ class Search extends React.Component {
         if ((searchQuery && searchType) && (searchType !== prevState.searchType || searchQuery !== prevState.searchQuery)) {
             //console.log('q: ' + searchQuery + ', t: ' + searchType);
             document.getElementById(searchType).checked=true;
-            this.setState(prevState => ({...prevState, searchQuery, searchType}));
+            this.setState(prevState => ({...prevState, searchQuery, searchType, searchInput: searchQuery}));
             this.props.setSearch(searchType, searchQuery);
 
         } else if ((!searchQuery && !searchType) && (prevState.searchQuery !== '' && prevState.searchType !== '')) {
             document.getElementById(prevState.searchType).checked=false;
-            this.setState({typeInput: '', searchQuery: '', searchType: ''});
+            this.setState({typeInput: '', searchQuery: '', searchType: '', searchInput: ''});
         }
 
     }
@@ -53,10 +53,10 @@ class Search extends React.Component {
                         }
                     </span>
                     <div className="input-group mt-2">
-                        <input className="form-control" placeholder="search for a song..." value={this.state.searchQuery}
-                               onChange={(e) => this.setState(prevState => ({...prevState, searchQuery: e.target.value}))}/>
+                        <input className="form-control" placeholder="search for a song..." value={this.state.searchInput}
+                               onChange={(e) => this.setState(prevState => ({...prevState, searchInput: e.target.value}))}/>
                         <div className="input-group-append">
-                            <Link className="btn btn-primary" to={`/search?${queryString.stringify({criteria: this.state.searchQuery, type: this.state.typeInput})}`}>
+                            <Link className="btn btn-primary" to={`/search?${queryString.stringify({criteria: this.state.searchInput, type: this.state.typeInput})}`}>
                                 Search
                             </Link>
                         </div>

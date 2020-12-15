@@ -1,5 +1,4 @@
 const root = 'http://localhost:4000';
-const root2 = 'https://nameless-plateau-81307.herokuapp.com';
 
 export const login = (username, password) => {
     return fetch(`${root}/api/login`, {

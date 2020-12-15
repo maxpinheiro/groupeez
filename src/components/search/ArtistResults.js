@@ -60,7 +60,7 @@ class Artist extends React.Component {
                                     <Link to={`/profile/${artist._id}`}>{artist.name}</Link>
                                 </th>
                                 <th>
-                                    {artist._id.length > 10 || artist.spotifyId.length > 10 ? "Yes" : "No"}
+                                    {(artist.popularity || (artist.spotifyId && artist.spotifyId.length === 22)) ? "Yes" : "No"}
                                 </th>
                                 <th>
                                     Artist
