@@ -12,4 +12,10 @@ const queryArtist = (query) => artistsModel.find();
 
 const createPostForArtist = (artistId, postId) => artistsModel.update({_id: artistId}, {$push: {posts: postId}});
 
-module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, queryArtist, createPostForArtist};
+const deletePostForArtist = (artistId, postId) => artistsModel.update({_id: artistId}, {$pull: {posts: postId}});
+
+const createReviewForArtist = (artistUser, reviewId) => artistsModel.update({username: artistUser}, {$push: {reviews: reviewId}});
+
+const deleteReviewForArtist = (artistUser, reviewId) => artistsModel.update({username: artistUser}, {$pull: {reviews: reviewId}});
+
+module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, queryArtist, createPostForArtist, deletePostForArtist, createReviewForArtist, deleteReviewForArtist};

@@ -14,4 +14,6 @@ const updateListener = (listenerId, listener) => listenersModel.update({_id: lis
 
 const createReviewForListener = (listenerId, reviewId) => listenersModel.update({_id: listenerId}, {$push: {reviews: reviewId}});
 
-module.exports = {findAllListeners, findListenerById, findListenerBySpotifyId, updateListener, createListener, queryListener, createReviewForListener};
+const deleteReviewForListener = (listenerId, reviewId) => listenersModel.update({_id: listenerId}, {$pull: {reviews: reviewId}});
+
+module.exports = {findAllListeners, findListenerById, findListenerBySpotifyId, updateListener, createListener, queryListener, createReviewForListener, deleteReviewForListener};

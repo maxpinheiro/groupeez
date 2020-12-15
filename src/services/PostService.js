@@ -28,9 +28,13 @@ const updatePost = (postId, post) => {
     }).then(response => response.json());
 };
 
-const deletePost = (postId) => {
+const deletePost = (postId, artistId) => {
     return fetch(`http://localhost:4000/api/posts/${postId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        body: JSON.stringify({artistId}),
+        headers: {
+            'content-type': 'application/json'
+        }
     }).then(response => response.json());
 };
 

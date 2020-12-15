@@ -110,6 +110,15 @@ class Post extends React.Component {
         }
     }
 
+    deletePost = () => {
+        if (this.state.post._id !== '') {
+            postService.deletePost(this.state.post._id, this.state.currentUser._id).then(status => {
+                this.props.history.push('/profile');
+            })
+        }
+
+    }
+
     render() {
         return (
             <div className="container-fluid">
@@ -120,13 +129,6 @@ class Post extends React.Component {
                             <p className="h3 d-inline mr-2">Create a Post</p>
                     }
                 </span>
-                {
-                    (this.state.currentUser._id === '' || this.state.currentUser.role !== 'artist') &&
-                    <div>
-                        <p>You must be logged in as an Artist to access posts.</p>
-                        <Link to="/login">Login</Link>
-                    </div>
-                }
                 {
                     (this.state.currentUser._id !== '') &&
                     <div className="border border-2 border-secondary mt-2">
@@ -182,13 +184,19 @@ class Post extends React.Component {
                             <Link to="/profile" className="btn btn-warning mx-2">
                                 Cancel
                             </Link>
+                            {
+                                this.state.postType === 'edit' &&
+                                <button onClick={this.deletePost} className="btn btn-danger mx-2">
+                                    Delete Post
+                                </button>
+                            }
                         </div>
                     </div>
                 }
                 {
                     (this.state.currentUser._id === '' || this.state.currentUser.role !== 'artist') &&
                     <div>
-                        <p>You must be logged in as an Artist to create a review.</p>
+                        <p>You must be logged in as an Artist to access posts.</p>
                         <Link to="/login">Login</Link>
                     </div>
                 }

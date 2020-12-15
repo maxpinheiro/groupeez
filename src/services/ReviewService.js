@@ -8,10 +8,10 @@ const findReviewById = (reviewId) => {
         .then(response => response.json());
 };
 
-const createReview = (newReview) => {
+const createReview = (newReview, artistUser) => {
     return fetch('http://localhost:4000/api/reviews', {
         method: 'POST',
-        body: JSON.stringify(newReview),
+        body: JSON.stringify({newReview, artistUser}),
         headers: {
             'content-type': 'application/json'
         }
@@ -28,9 +28,13 @@ const updateReview = (reviewId, review) => {
     }).then(response => response.json());
 };
 
-const deleteReview = (reviewId) => {
+const deleteReview = (reviewId, creatorId, artistUser) => {
     return fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        body: JSON.stringify({creatorId, artistUser}),
+        headers: {
+            'content-type': 'application/json'
+        }
     }).then(response => response.json());
 };
 

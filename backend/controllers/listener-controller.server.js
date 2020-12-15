@@ -6,10 +6,12 @@ module.exports = function (app) {
     });
     app.get('/api/listeners/:listenerId', (req, res) => {
         const listenerId = req.params.listenerId;
-        listenerService.findListenerById(listenerId).then(listener => {
-            if (listener) res.json(listener);
-            else res.json({error: "No listener with id"});
-        });
+        if (listenerId) {
+            listenerService.findListenerById(listenerId).then(listener => {
+                if (listener) res.json(listener);
+                else res.json({error: "No listener with id"});
+            });
+        }
     });
     app.get('/api/listeners/search/:query', (req, res) => {
         const query = req.params.query;
