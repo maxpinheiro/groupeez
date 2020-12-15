@@ -44,7 +44,7 @@ export const fetchTokens = (authCode, callback) => {
         },
         body: queryString.stringify({
             code: authCode,
-            redirect_uri: `http://localhost:3000/callback/${callback || 'search'}`,
+            redirect_uri: `https://nameless-plateau-81307.herokuapp.com/callback/${callback || 'search'}`,
             grant_type: 'authorization_code',
             client_id: env.CLIENT_ID,
             client_secret: env.CLIENT_SECRET

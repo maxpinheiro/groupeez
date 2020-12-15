@@ -22,38 +22,6 @@ const createUser = (user) => {
     return usersDao.createUser(user);
 }
 
-/*
-let users = [...(require('./users.json'))];
-
-const findAllUsers = () => users;
-
-const findUserByCredentials = (username) => users.find(user => user.username === username);
-
-const findUserById = (userId) => users.find(user => user.id === userId);
-
-const createUser = (user) => {
-    // can't have two users with the same username
-    if (users.find(u => u.username === user.username)) {
-        return null;
-    } else {
-        let id = generateId(10);
-        // can't have two users with the same id
-        while (users.find(u => u.id === id)) {
-            id = generateId(10);
-        }
-        users.push({id, username: user.username, password: user.password, role: user.role});
-        // add user to artist/listener database
-        if (user.role === 'artist') {
-            artistService.createArtist(user);
-        } else {
-            listenerService.createListener(user);
-        }
-
-        return {id, username: user.username, password: user.password, role: user.role};
-    }
-}
-*/
-
 const getCurrentUser = () => currentUser;
 const setCurrentUser = (user) => currentUser = user;
 

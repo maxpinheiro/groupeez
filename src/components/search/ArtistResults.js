@@ -76,7 +76,7 @@ class Artist extends React.Component {
 }
 
 const stateToProperty = (state) => ({
-    artist: state.searchReducer.artistResults,
+    artists: state.searchReducer.artistResults,
     searchType: state.searchReducer.searchType,
     searchQuery: state.searchReducer.searchQuery
 });

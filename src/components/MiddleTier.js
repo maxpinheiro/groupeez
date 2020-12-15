@@ -11,9 +11,8 @@ const clientId = env.CLIENT_ID;
 const authorizeUrl = (uri) => `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${encodeURIComponent('user-read-private user-read-email')}&redirect_uri=${encodeURIComponent(uri)}`
 
 export const RedirectPage = (props) => {
-    //useEffect(() => window.location.replace(authorizeUrl(`http://localhost:3000/callback/${props.match.params.callback}`)));
-    //https://nameless-plateau-81307.herokuapp.com/callback
-    useEffect(() => window.location.replace(authorizeUrl(`https://nameless-plateau-81307.herokuapp.com/callback/${props.match.params.callback}`)));
+    useEffect(() => window.location.replace(authorizeUrl(`http://localhost:3000/callback/${props.match.params.callback}`)));
+    //useEffect(() => window.location.replace(authorizeUrl(`https://nameless-plateau-81307.herokuapp.com/callback/${props.match.params.callback}`)));
     return <p>Redirecting...</p>;
 }
 

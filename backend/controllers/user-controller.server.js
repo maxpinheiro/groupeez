@@ -17,21 +17,6 @@ module.exports = function (app) {
                 res.json({error: "Invalid username"});
             }
         })
-        /*
-        userService.findUserByCredentials(username).then(user => {
-            console.log('user: ' + user.password + user.username);
-            if (user) {
-                if (user.password === password) {
-                    req.session['currentUser'] = user;
-                    userService.setCurrentUser(user);
-                    res.json(user);
-                } else {
-                    res.json({error: "Invalid password"});
-                }
-            } else {
-                res.json({error: "Invalid username"});
-            }
-        })*/
     });
 
     app.post('/api/register', (req, res) => {
@@ -57,6 +42,7 @@ module.exports = function (app) {
     });
 
     app.get('/api/users', (req, res) => {
+        console.log('users');
         userService.findAllUsers().then(users => {
             res.json(users);
         })

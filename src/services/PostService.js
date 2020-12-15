@@ -2,17 +2,17 @@ const root = 'http://localhost:4000';
 const root2 = 'https://nameless-plateau-81307.herokuapp.com';
 
 const findAllPosts = () => {
-    return fetch(`${root2}/api/posts`)
+    return fetch(`${root}/api/posts`)
         .then(response => response.json());
 };
 
 const findPostById = (postId) => {
-    return fetch(`${root2}/api/posts/${postId}`)
+    return fetch(`${root}/api/posts/${postId}`)
         .then(response => response.json());
 };
 
 const createPost = (newPost) => {
-    return fetch(`${root2}/api/posts`, {
+    return fetch(`${root}/api/posts`, {
         method: 'POST',
         body: JSON.stringify(newPost),
         headers: {
@@ -22,7 +22,7 @@ const createPost = (newPost) => {
 };
 
 const updatePost = (postId, post) => {
-    return fetch(`${root2}/api/posts/${postId}`, {
+    return fetch(`${root}/api/posts/${postId}`, {
         method: 'PUT',
         body: JSON.stringify(post),
         headers: {
@@ -32,7 +32,7 @@ const updatePost = (postId, post) => {
 };
 
 const deletePost = (postId, artistId) => {
-    return fetch(`${root2}/api/posts/${postId}`, {
+    return fetch(`${root}/api/posts/${postId}`, {
         method: 'DELETE',
         body: JSON.stringify({artistId}),
         headers: {
@@ -42,7 +42,7 @@ const deletePost = (postId, artistId) => {
 };
 
 const queryPost = (query) => {
-    return fetch(`${root2}/api/posts/search/${query}`)
+    return fetch(`${root}/api/posts/search/${query}`)
         .then(response => response.json());
 };
 
