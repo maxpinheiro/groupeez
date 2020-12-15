@@ -1,5 +1,5 @@
 const root = 'http://localhost:4000';
-const root2 = 'https://nameless-plateau-81307.herokuapp.com/';
+const root2 = 'https://nameless-plateau-81307.herokuapp.com';
 const findAllListeners = () => {
     return fetch(`${root2}/api/listeners`)
         .then(response => response.json());
