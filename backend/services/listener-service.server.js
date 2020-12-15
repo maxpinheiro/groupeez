@@ -9,6 +9,8 @@ const createListener = (listener) => listenersDao.createListener(listener);
 
 const queryListener = (query) => listenersDao.queryListener(query);
 
+const updateListener = (listenerId, listener) => listenersDao.updateListener(listenerId, listener);
+
 const createReviewForListener = (listenerId, reviewId) => listenersDao.createReviewForListener(listenerId, reviewId);
 
 /*
@@ -41,4 +43,4 @@ const createReviewForListener = (listenerId, reviewId) => {
 }
 */
 
-module.exports = {findAllListeners, findListenerById, createListener, queryListener, createReviewForListener}
+module.exports = {findAllListeners, findListenerById, createListener, queryListener, updateListener, createReviewForListener};

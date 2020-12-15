@@ -10,6 +10,8 @@ import spotifyService from "../../services/SpotifyService";
 
 class Listener extends React.Component {
     state = {
+        editing: false,
+        bio: "",
     };
 
     componentDidMount() {
@@ -21,6 +23,8 @@ class Listener extends React.Component {
                 }
             })
 
+        this.setState((prevProps) =>
+            ({...prevProps, bio: this.props.listener.bio}));
 
     }
 
@@ -68,6 +72,18 @@ class Listener extends React.Component {
                             })
                     })
             })
+    };
+
+    saveListenerBio = () => {
+        let copy = this.props.listener;
+        copy.bio = this.state.bio;
+        listenerService.updateListener(this.props.listener._id, copy)
+            .then(response => response.json());
+
+        this.setState((prevState) => ({
+            ...prevState,
+                editing: false,
+        }))
     }
 
     render() {
@@ -84,10 +100,33 @@ class Listener extends React.Component {
                         </div>
                     </div>
                     <div className={"col-6"}>
-                        <div className={"boarder m-2"}>
-                            <div className={"h4"}>Bio</div>
-                            {this.props.listener.bio}
-                        </div>
+                        {
+                            !this.state.editing &&
+                            <div className={"border m-2"}>
+                                <div className={"h4"}>Bio</div>
+                                {this.props.listener.bio}
+                                {
+                                    this.props.private &&
+                                        <div className={"btn btn-warning"}
+                                            onClick={e => this.setState((prevProps) =>
+                                                ({...prevProps, editing: true}))}>
+                                            Edit
+                                        </div>
+                                }
+                            </div>
+                        }
+                        {
+                            this.props.private && this.state.editing &&
+                                <div className={"border m-2"}>
+                                    <div className={"h4"}>Editing Bio</div>
+                                    <input onChange={e => this.setState((prevProps) =>
+                                        ({...prevProps, bio: e.target.value}))}/>
+                                    <div className={"btn btn-success"}
+                                         onClick={e => this.saveListenerBio()}>
+                                        Save
+                                    </div>
+                                </div>
+                        }
                     </div>
                 </div>
                 <div className={"row my-3"}>
