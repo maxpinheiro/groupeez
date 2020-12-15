@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import userService from '../services/UserService';
 import artistService from "../services/ArtistService";
 import listenerService from "../services/ListenerService";
+import {Link} from "react-router-dom";
 
 class HomePage extends React.Component {
 
@@ -68,7 +69,7 @@ class HomePage extends React.Component {
 
         let f = [];
         if (user.role === "listener") {
-            listenerService.findListenerById(user.id)
+            listenerService.findListenerById(user._id)
                 .then(listener => {
                     if (!listener.error) {
                         for (let i = 0; i < 5; i++) {
@@ -91,7 +92,7 @@ class HomePage extends React.Component {
                     }
                 })
         } else {
-            artistService.findArtistById(user.id)
+            artistService.findArtistById(user._id)
                 .then(artist => {
                     for (let i = 0; i < 5; i++) {
                         if (artist.posts.length > 0) {
@@ -114,15 +115,18 @@ class HomePage extends React.Component {
         console.log(this.state.yourFeed)
         return (
             <div className={"container-fluid"}>
-                <div className={"h1"}>Groupeez</div>
-
+                <span>
+                    <div className="h1 d-inline">Groupeez</div>
+                    <Link to="/login" className="ml-3 mr-1">Login</Link>
+                    <Link to="/authorize/search" className="mx-2">Search</Link>
+                </span>
 
                 <div className={"h2"}>Recent Posts:</div>
                 <div className={"row-cols-sm-2"}>
                     <div className={"col"}>
                         {
                             this.state.recentPosts.map(post =>
-                                <div key={post.id} className={"card container m-2 "}>
+                                <div key={post._id} className={"card container m-2 "}>
                                     <div className={"card-body"}>
                                         <span className={"card-title"}>
                                             <div className={"h3"}>{post.title}</div>
@@ -162,7 +166,7 @@ class HomePage extends React.Component {
                             <div className={"col"}>
                                 {
                                     this.state.yourFeed.map(post =>
-                                        <div key={post.id} className={"card container m-2 "}>
+                                        <div key={post._id} className={"card container m-2 "}>
                                             <div className={"card-body"}>
                                                 <div className={"card-title"}>
                                             <div className={"h3"}>{post.title}</div>

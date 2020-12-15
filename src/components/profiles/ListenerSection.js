@@ -10,6 +10,7 @@ import spotifyService from "../../services/SpotifyService";
 
 class Listener extends React.Component {
     state = {
+
     };
 
     componentDidMount() {

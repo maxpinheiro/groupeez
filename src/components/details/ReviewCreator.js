@@ -21,7 +21,8 @@ class Review extends React.Component {
         },
         error: '',
         currentUser: {_id: '', role: ''},
-        reviewType: ''
+        reviewType: '',
+        artistUser: ''
     };
 
     componentDidMount() {
@@ -87,79 +88,6 @@ class Review extends React.Component {
             }
         }
 
-    /*componentDidUpdate(prevProps, prevState, snapshot) {
-        const reviewType = this.props.match.params.reviewType;
-        const detailId = this.props.match.params.detailId;
-
-        if (prevState.currentUser._id === '') {
-            console.log('update, current user')
-            userService.getCurrentUser()
-                .then(currentUser => {
-                    if (currentUser.error) return;
-                    this.setState(prevState => ({
-                        ...prevState,
-                        currentUser,
-                        reviewType
-                    }))
-                })
-        }
-
-        if (reviewType === 'edit' && prevState.review._id === '') {
-            reviewService.findReviewById(detailId)
-                .then(review => {
-                    songService.findSongById(review.songId)
-                        .then(song => {
-                            this.setState(prevState => ({
-                                ...prevState,
-                                review,
-                                song
-                            }))
-                        })
-                })
-        }
-
-        if (detailId.length > 10 && prevState.song._id !== detailId) {
-            console.log('update, access token')
-                userService.getAccessToken()
-                    .then(accessToken => {
-                        spotifyService.findSong(detailId, accessToken)
-                            .then(song => {
-                                if (!song.error) {
-                                    this.setState(prevState => ({
-                                        ...prevState,
-                                        noSong: false,
-                                        song
-                                    }));
-                                } else {
-                                    this.setState(prevState => ({
-                                        ...prevState,
-                                        noSong: true
-                                    }));
-                                }
-                                //this.props.setSong(song)
-                            });
-                    })
-            } else if (prevState.song._id === '' && reviewType === 'create') {
-            console.log('update, local song')
-                // go to local database
-                songService.findSongById(detailId)
-                    .then(song => {
-                        if (!song.error) {
-                            this.setState(prevState => ({
-                                ...prevState,
-                                noSong: false,
-                                song
-                            }));
-                        } else {
-                            this.setState(prevState => ({
-                                ...prevState,
-                                noSong: true
-                            }));
-                        }
-                    })
-            }
-    }*/
-
     createReview = () => {
         if (this.state.review.title === '' || this.state.review.text === '') {
             this.setState(prevState => ({
@@ -174,7 +102,7 @@ class Review extends React.Component {
                 title: this.state.review.title,
                 text: this.state.review.text
             }
-            reviewService.createReview(review)
+            reviewService.createReview(review, this.state.artistUser)
                 .then(newReview => {
                     this.props.history.push(`/details/reviews/${newReview._id}`);
                 })
@@ -200,6 +128,22 @@ class Review extends React.Component {
                 .then(newReview => {
                     this.props.history.push(`/details/reviews/${newReview._id}`);
                 })
+        }
+    }
+
+    deleteReview = () => {
+        if (this.state.review._id !== '') {
+            songService.findSongById(this.state.review.songId).then(song => {
+                if (!song.error) {
+                    reviewService.deleteReview(this.state.review._id, this.state.currentUser._id, song.artistIds[0]).then(status => {
+                        this.props.history.push('/profile');
+                    })
+                } else {
+                    reviewService.deleteReview(this.state.review._id, this.state.currentUser._id).then(status => {
+                        this.props.history.push('/profile');
+                    })
+                }
+            })
         }
     }
 
@@ -241,6 +185,15 @@ class Review extends React.Component {
                                               className="form-control" placeholder="review text" rows="3" value={this.state.review.text}
                                               id="titleFld"/>
                                     </div>
+                                    {
+                                        this.state.reviewType === 'create' &&
+                                        <div className="input-group">
+                                            <label className="form-check-label my-auto mr-2">Artist has a Groupeez account? add username: </label>
+                                            <input onChange={(e) => this.setState(prevState => ({...prevState, artistUser: e.target.value}))}
+                                                   type="text" className="form-control" placeholder="artist username" value={this.state.artistUser}
+                                                   id="artistUserFld"/>
+                                        </div>
+                                    }
                                 </div>
                                 <div className="col mt-2 border">
                                     <div className="m-2">
@@ -265,6 +218,12 @@ class Review extends React.Component {
                             <Link to={`/details/songs/${this.props.song._id || this.props.song.id}`} className="btn btn-warning mx-2">
                                 Cancel
                             </Link>
+                            {
+                                this.state.reviewType === 'edit' &&
+                                <button onClick={this.deleteReview} className="btn btn-danger mx-2">
+                                    Delete Review
+                                </button>
+                            }
                         </div>
                     </div>
                 }
