@@ -215,9 +215,15 @@ class Review extends React.Component {
                                     Create Review
                                 </button>
                             }
-                            <Link to={`/details/songs/${this.props.song._id || this.props.song.id}`} className="btn btn-warning mx-2">
-                                Cancel
-                            </Link>
+                            {
+                                this.state.reviewType === 'edit' ?
+                                <Link to={`/details/reviews/${this.state.review._id}`} className="btn btn-warning mx-2">
+                                    Cancel
+                                </Link> :
+                                <Link to={`/details/songs/${this.props.song._id || this.props.song.id}`} className="btn btn-warning mx-2">
+                                    Cancel
+                                </Link>
+                            }
                             {
                                 this.state.reviewType === 'edit' &&
                                 <button onClick={this.deleteReview} className="btn btn-danger mx-2">
