@@ -17,7 +17,7 @@ class Song extends React.Component {
             spotifyService.findSong(detailId, this.props.accessToken).then(song => {
                 if (!song.error) { // found song on spotify
                     this.props.setSong(song);
-                } else if (song.error.status === 401) {
+                } else if (song.error.status) {
                     spotifyService.refreshToken(this.props.refreshToken).then(response => {
                         if (response.access_token) {
                             spotifyService.findSong(detailId, response.access_token).then(song => {

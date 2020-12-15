@@ -78,7 +78,7 @@ class Song extends React.Component {
                                 <th>
                                     {
                                         song.artists.map((artist, index) => (
-                                            <Link to={`/profile/${artist._id}`}>
+                                            <Link to={`/profile/${artist._id || (song.artistIds && song.artistIds[index])}`}>
                                                 {(artist.name || artist) + (index < song.artists.length - 1 ? ', ' : '')}
                                             </Link>
                                         ))
