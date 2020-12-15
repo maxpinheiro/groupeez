@@ -1,10 +1,12 @@
+const root = 'http://localhost:4000';
+const root2 = 'https://nameless-plateau-81307.herokuapp.com/';
 const findAllListeners = () => {
-    return fetch('http://localhost:4000/api/listeners')
+    return fetch(`${root2}/api/listeners`)
         .then(response => response.json());
 };
 
 const findListenerById = (listenerId) => {
-    return fetch(`http://localhost:4000/api/listeners/${listenerId}`)
+    return fetch(`${root2}/api/listeners/${listenerId}`)
         .then(response => response.json());
 };
 
@@ -12,7 +14,7 @@ const createListener = (listener) => {
 };
 
 const updateListener = (listenerId, newListener) => {
-    return fetch(`http://localhost:4000/api/listeners/${listenerId}`, {
+    return fetch(`${root2}/api/listeners/${listenerId}`, {
         method: `PUT`,
         body: JSON.stringify(newListener),
         headers: {
@@ -27,7 +29,7 @@ const deleteListener = (listenerId, newListener) => {
 };
 
 const queryListener = (query) => {
-    return fetch(`http://localhost:4000/api/listeners/search/${query}`)
+    return fetch(`${root2}/api/listeners/search/${query}`)
         .then(response => response.json());
 };
 

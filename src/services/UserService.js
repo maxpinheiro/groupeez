@@ -1,5 +1,8 @@
+const root = 'http://localhost:4000';
+const root2 = 'https://nameless-plateau-81307.herokuapp.com/';
+
 export const login = (username, password) => {
-    return fetch('http://localhost:4000/api/login', {
+    return fetch(`${root2}/api/login`, {
         method: 'POST',
         body: JSON.stringify({username, password}),
         headers: {
@@ -9,7 +12,7 @@ export const login = (username, password) => {
 }
 
 export const register = (newUser) => {
-    return fetch('http://localhost:4000/api/register', {
+    return fetch(`${root2}/api/register`, {
         method: 'POST',
         body: JSON.stringify(newUser),
         headers: {
@@ -19,20 +22,20 @@ export const register = (newUser) => {
 }
 
 export const getCurrentUser = () => {
-    return fetch('http://localhost:4000/api/currentUser', {
+    return fetch(`${root2}/api/currentUser`, {
         withCredentials: true
     }).then(response => response.json());
 }
 export const getUserById = (userId) => {
-    return fetch(`http://localhost:4000/api/users/${userId}`).then(response => response.json());
+    return fetch(`${root2}/api/users/${userId}`).then(response => response.json());
 }
 
 export const getAccessToken= () => {
-    return fetch('http://localhost:4000/api/accessToken').then(response => response.json());
+    return fetch(`${root2}/api/accessToken`).then(response => response.json());
 }
 
 export const setAccessToken = (accessToken) => {
-    return fetch('http://localhost:4000/api/accessToken', {
+    return fetch(`${root2}/api/accessToken`, {
         method: 'POST',
         body: JSON.stringify({accessToken: accessToken, message: "ok"}),
         headers: {
@@ -42,11 +45,11 @@ export const setAccessToken = (accessToken) => {
 }
 
 export const getRefreshToken= () => {
-    return fetch('http://localhost:4000/api/accessToken').then(response => response.json());
+    return fetch(`${root2}/api/accessToken`).then(response => response.json());
 }
 
 export const setRefreshToken = (refreshToken) => {
-    return fetch('http://localhost:4000/api/refreshToken', {
+    return fetch(`${root2}/api/refreshToken`, {
         method: 'POST',
         body: JSON.stringify({refreshToken: refreshToken, message: "ok"}),
         headers: {

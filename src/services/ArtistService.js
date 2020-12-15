@@ -1,15 +1,17 @@
+const root = 'http://localhost:4000';
+const root2 = 'https://nameless-plateau-81307.herokuapp.com/';
 const findAllArtists = () => {
-    return fetch('http://localhost:4000/api/artists')
+    return fetch(`${root2}/api/artists`)
         .then(response => response.json());
 };
 
 const findArtistById = (artistId) => {
-    return fetch(`http://localhost:4000/api/artists/${artistId}`)
+    return fetch(`${root2}/api/artists/${artistId}`)
         .then(response => response.json());
 };
 
 const findArtistBySpotifyId = (spotifyId) => {
-    return fetch(`http://localhost:4000/api/artists/${spotifyId}`)
+    return fetch(`${root2}/api/artists/${spotifyId}`)
         .then(response => response.json());
 };
 

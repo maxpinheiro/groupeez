@@ -1,5 +1,8 @@
+const root = 'http://localhost:4000';
+const root2 = 'https://nameless-plateau-81307.herokuapp.com/';
+
 const findAllSongs = () => {
-    return fetch('http://localhost:4000/api/songs')
+    return fetch(`${root2}/api/songs`)
         .then(response => response.json());
 };
 
@@ -9,7 +12,7 @@ const findSongById = (songId) => {
 };
 
 const createSong = (newSong) => {
-    return fetch('http://localhost:4000/api/songs', {
+    return fetch(`${root2}/api/songs`, {
         method: 'POST',
         body: JSON.stringify(newSong),
         headers: {
@@ -19,7 +22,7 @@ const createSong = (newSong) => {
 };
 
 const updateSong = (songId, song) => {
-    return fetch(`http://localhost:4000/api/songs/${songId}`, {
+    return fetch(`${root2}/api/songs/${songId}`, {
         method: 'PUT',
         body: JSON.stringify(song),
         headers: {
@@ -29,13 +32,13 @@ const updateSong = (songId, song) => {
 };
 
 const deleteSong = (songId) => {
-    return fetch(`http://localhost:4000/api/songs/${songId}`, {
+    return fetch(`${root2}/api/songs/${songId}`, {
         method: 'DELETE'
     }).then(response => response.json());
 };
 
 const querySong = (query) => {
-    return fetch(`http://localhost:4000/api/songs/search/${query}`)
+    return fetch(`${root2}/api/songs/search/${query}`)
         .then(response => response.json());
 }
 

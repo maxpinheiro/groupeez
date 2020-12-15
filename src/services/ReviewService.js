@@ -1,15 +1,18 @@
+const root = 'http://localhost:4000';
+const root2 = 'https://nameless-plateau-81307.herokuapp.com/';
+
 const findAllReviews = () => {
-    return fetch('http://localhost:4000/api/reviews')
+    return fetch(`${root2}/api/reviews`)
         .then(response => response.json());
 };
 
 const findReviewById = (reviewId) => {
-    return fetch(`http://localhost:4000/api/reviews/${reviewId}`)
+    return fetch(`${root2}/api/reviews/${reviewId}`)
         .then(response => response.json());
 };
 
 const createReview = (newReview, artistUser) => {
-    return fetch('http://localhost:4000/api/reviews', {
+    return fetch(`${root2}/api/reviews`, {
         method: 'POST',
         body: JSON.stringify({newReview, artistUser}),
         headers: {
@@ -19,7 +22,7 @@ const createReview = (newReview, artistUser) => {
 };
 
 const updateReview = (reviewId, review) => {
-    return fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
+    return fetch(`${root2}/api/reviews/${reviewId}`, {
         method: 'PUT',
         body: JSON.stringify(review),
         headers: {
@@ -29,7 +32,7 @@ const updateReview = (reviewId, review) => {
 };
 
 const deleteReview = (reviewId, creatorId, artistUser) => {
-    return fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
+    return fetch(`${root2}/api/reviews/${reviewId}`, {
         method: 'DELETE',
         body: JSON.stringify({creatorId, artistUser}),
         headers: {
@@ -39,7 +42,7 @@ const deleteReview = (reviewId, creatorId, artistUser) => {
 };
 
 const queryReview = (query) => {
-    return fetch(`http://localhost:4000/api/reviews/search/${query}`)
+    return fetch(`${root2}/api/reviews/search/${query}`)
         .then(response => response.json());
 };
 
