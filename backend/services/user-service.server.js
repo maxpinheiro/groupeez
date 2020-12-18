@@ -14,6 +14,7 @@ const findUserByCredentials = (username) => usersDao.findUserByCredentials(usern
 const findUserById = (userId) => usersDao.findUserById(userId);
 
 const createUser = (user) => {
+    // TODO: make sure the IDs are the same for the user & listener/artist
     if (user.role === 'artist') {
         artistService.createArtist(user);
     } else if (user.role === 'listener') {

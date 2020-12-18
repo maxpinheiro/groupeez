@@ -22,7 +22,6 @@ class Review extends React.Component {
         error: '',
         currentUser: {_id: '', role: ''},
         reviewType: '',
-        artistUser: ''
     };
 
     componentDidMount() {
@@ -102,7 +101,7 @@ class Review extends React.Component {
                 title: this.state.review.title,
                 text: this.state.review.text
             }
-            reviewService.createReview(review, this.state.artistUser)
+            reviewService.createReview(review)
                 .then(newReview => {
                     this.props.history.push(`/details/reviews/${newReview._id}`);
                 })
@@ -185,15 +184,6 @@ class Review extends React.Component {
                                               className="form-control" placeholder="review text" rows="3" value={this.state.review.text}
                                               id="titleFld"/>
                                     </div>
-                                    {
-                                        this.state.reviewType === 'create' &&
-                                        <div className="input-group">
-                                            <label className="form-check-label my-auto mr-2">Artist has a Groupeez account? add username: </label>
-                                            <input onChange={(e) => this.setState(prevState => ({...prevState, artistUser: e.target.value}))}
-                                                   type="text" className="form-control" placeholder="artist username" value={this.state.artistUser}
-                                                   id="artistUserFld"/>
-                                        </div>
-                                    }
                                 </div>
                                 <div className="col mt-2 border">
                                     <div className="m-2">

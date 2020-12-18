@@ -16,8 +16,8 @@ const createPostForArtist = (artistId, postId) => artistsDao.createPostForArtist
 
 const deletePostForArtist = (artistId, postId) => artistsDao.deletePostForArtist(artistId, postId);
 
-const createReviewForArtist = (artistUser, reviewId) => artistsDao.createReviewForArtist(artistUser, reviewId);
+const createReviewForArtist = (artistId, reviewId) => artistsDao.createReviewForArtist(artistId, reviewId);
 
-const deleteReviewForArtist = (artistUser, reviewId) => artistsDao.deleteReviewForArtist(artistUser, reviewId);
+const deleteReviewForArtist = (artistId, reviewId) => artistsDao.deleteReviewForArtist(artistId, reviewId);
 
 module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, queryArtist, updateArtist, createPostForArtist, deletePostForArtist, createReviewForArtist, deleteReviewForArtist};

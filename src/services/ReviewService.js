@@ -10,10 +10,10 @@ const findReviewById = (reviewId) => {
         .then(response => response.json());
 };
 
-const createReview = (newReview, artistUser) => {
+const createReview = (newReview) => {
     return fetch(`${root}/api/reviews`, {
         method: 'POST',
-        body: JSON.stringify({newReview, artistUser}),
+        body: JSON.stringify(newReview),
         headers: {
             'content-type': 'application/json'
         }
@@ -30,10 +30,10 @@ const updateReview = (reviewId, review) => {
     }).then(response => response.json());
 };
 
-const deleteReview = (reviewId, creatorId, artistUser) => {
+const deleteReview = (reviewId, creatorId) => {
     return fetch(`${root}/api/reviews/${reviewId}`, {
         method: 'DELETE',
-        body: JSON.stringify({creatorId, artistUser}),
+        body: JSON.stringify({creatorId}),
         headers: {
             'content-type': 'application/json'
         }

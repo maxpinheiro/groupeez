@@ -16,8 +16,8 @@ const createPostForArtist = (artistId, postId) => artistsModel.update({_id: arti
 
 const deletePostForArtist = (artistId, postId) => artistsModel.update({_id: artistId}, {$pull: {posts: postId}});
 
-const createReviewForArtist = (artistUser, reviewId) => artistsModel.update({username: artistUser}, {$push: {reviews: reviewId}});
+const createReviewForArtist = (artistId, reviewId) => artistsModel.update({_id: artistId}, {$push: {reviews: reviewId}});
 
-const deleteReviewForArtist = (artistUser, reviewId) => artistsModel.update({username: artistUser}, {$pull: {reviews: reviewId}});
+const deleteReviewForArtist = (artistId, reviewId) => artistsModel.update({_id: artistId}, {$pull: {reviews: reviewId}});
 
 module.exports = {findAllArtists, findArtistById, findArtistBySpotifyId, createArtist, queryArtist, updateArtist, createPostForArtist, deletePostForArtist, createReviewForArtist, deleteReviewForArtist};

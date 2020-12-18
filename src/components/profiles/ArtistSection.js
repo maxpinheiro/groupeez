@@ -79,23 +79,14 @@ class Artist extends React.Component {
     findGroupeez = (groupeeIds) => Promise.all(groupeeIds.map(groupeeId => listenerService.findListenerById(groupeeId)));
 
     populateArtist = (artist) => {
-        this.findReviews(artist.reviews)
-            .then(reviews => {
-                this.findPosts(artist.posts)
-                    .then(posts => {
-                        this.findGroupeez(artist.groupeez)
-                            .then(groupeez => {
-                                this.findSongs(artist.library)
-                                    .then(library => this.props.setArtist({
-                                        ...artist,
-                                        reviews,
-                                        posts,
-                                        groupeez,
-                                        library
-                                    }))
-                            })
-                    })
-            })
+        Promise.all([this.findReviews(artist.reviews), this.findPosts(artist.posts), this.findGroupeez(artist.groupeez), this.findSongs(artist.library)])
+            .then(res => this.props.setArtist({
+                ...artist,
+                reviews: res[0],
+                posts: res[1],
+                groupeez: res[2],
+                library: res[3]
+            }))
     }
 
     saveListenerBio = () => {
@@ -109,13 +100,23 @@ class Artist extends React.Component {
         });
     }
 
+    logout = () => {
+        userService.logout().then(status => {})
+    }
+
     render() {
         return (
             <div className="container-fluid border border-2 border-secondary">
                 <div className="m-2">
-                    <div className={"h3"}>
-                        {this.props.artist.username}
-                    </div>
+                    <span>
+                        <div className={"h3 d-inline"}>
+                            {this.props.artist.username}
+                        </div>
+                        {
+                            this.props.private &&
+                            <Link to={'/'} onClick={this.logout} className="my-auto mx-3">Logout</Link>
+                        }
+                    </span>
                     <div className={"h1"}>
                         {this.props.artist.name}
                     </div>

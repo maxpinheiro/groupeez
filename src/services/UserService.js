@@ -20,6 +20,12 @@ export const register = (newUser) => {
     }).then(response => response.json());
 }
 
+export const logout = () => {
+    return fetch(`${root}/api/logout`, {
+        method: 'POST'
+    }).then(response => response.json());
+}
+
 export const getCurrentUser = () => {
     return fetch(`${root}/api/currentUser`, {
         withCredentials: true
@@ -57,4 +63,4 @@ export const setRefreshToken = (refreshToken) => {
     }).then(response => response.json());
 }
 
-export default {login, register, getCurrentUser, getUserById, getAccessToken, setAccessToken, getRefreshToken, setRefreshToken};
+export default {login, register, logout, getCurrentUser, getUserById, getAccessToken, setAccessToken, getRefreshToken, setRefreshToken};

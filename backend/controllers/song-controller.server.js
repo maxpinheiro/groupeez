@@ -6,10 +6,12 @@ module.exports = function (app) {
     });
     app.get('/api/songs/:songId', (req, res) => {
         const songId = req.params.songId;
-        songService.findSongById(songId).then(song => {
-            if (song) res.json(song);
-            else res.json({error: "No song with id"});
-        });
+        if (songId.length === 24) {
+            songService.findSongById(songId).then(song => {
+                if (song) res.json(song);
+                else res.json({error: "No song with id"});
+            });
+        } else res.json({error: "No song with id"});
     });
     app.get('/api/songs/search/:query', (req, res) => {
         const query = req.params.query;

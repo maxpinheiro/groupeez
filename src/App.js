@@ -2,6 +2,7 @@ import React from "react";
 import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import {FaUserCircle} from 'react-icons/fa';
 import {AiFillHome} from "react-icons/ai";
+import {FaSearch} from 'react-icons/fa';
 
 import SearchPage from './components/search/SearchPage';
 import {CallbackPage, RedirectPage} from "./components/MiddleTier";
@@ -28,7 +29,10 @@ class App extends React.Component {
                         <Link to={"/"} className="">
                             <AiFillHome />
                         </Link>
-                        <Link to={"/profile"} className="float-right">
+                        <Link to="/authorize/search" className="mx-2">
+                            <FaSearch />
+                        </Link>
+                        <Link to={"/profile"} className="">
                             <FaUserCircle />
                         </Link>
                     </div>

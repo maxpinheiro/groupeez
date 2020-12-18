@@ -100,7 +100,7 @@ class Song extends React.Component {
                                     <img src={this.props.song.images[0]}  alt=""/>
                                 </div>
                             }
-                            <Link to={`/reviews/create/${this.props.song._id}`}>Leave a review!</Link>
+                            <Link to={`/reviews/create/${this.props.song._id || this.props.song.id}`}>Leave a review!</Link>
                         </div>
                     </div>
                 }

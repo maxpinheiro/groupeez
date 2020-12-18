@@ -7,6 +7,7 @@ import artistService from "../../services/ArtistService";
 import listenerService from "../../services/ListenerService";
 import songService from "../../services/SongService";
 import spotifyService from "../../services/SpotifyService";
+import userService from "../../services/UserService";
 
 class Listener extends React.Component {
     state = {
@@ -53,25 +54,14 @@ class Listener extends React.Component {
     findGroupeez = (groupeeIds) => Promise.all(groupeeIds.map(groupeeId => listenerService.findListenerById(groupeeId)));
 
     populateListener = (listener) => {
-        this.findReviews(listener.reviews)
-            .then(reviews => {
-                this.findArtists(listener.following)
-                    .then(following => {
-                        this.findGroupeez(listener.friends)
-                            .then(friends => {
-                                this.findSongs(listener.favorites)
-                                    .then(favorites => {
-                                        this.props.setListener({
-                                            ...listener,
-                                            reviews,
-                                            following,
-                                            friends,
-                                            favorites
-                                        })
-                                    })
-                            })
-                    })
-            })
+        Promise.all([this.findReviews(listener.reviews), this.findArtists(listener.following), this.findGroupeez(listener.friends), this.findSongs(listener.favorites)])
+            .then(res => this.props.setListener({
+            ...listener,
+            reviews: res[0],
+            following: res[1],
+            friends: res[2],
+            favorites: res[3]
+        }))
     };
 
     saveListenerBio = () => {
@@ -85,13 +75,23 @@ class Listener extends React.Component {
         });
     }
 
+    logout = () => {
+        userService.logout().then(status => {})
+    }
+
     render() {
         return (
             <div className="container-fluid border border-2 border-secondary">
                 <div className="m-2">
-                    <div className={"h3"}>
-                        {this.props.listener.username}
-                    </div>
+                    <span>
+                        <div className={"h3 d-inline"}>
+                            {this.props.listener.username}
+                        </div>
+                        {
+                            this.props.private &&
+                            <Link to={'/'} onClick={this.logout} className="my-auto mx-3">Logout</Link>
+                        }
+                    </span>
                     <div className={"h1"}>
                         {this.props.listener.name}
                     </div>

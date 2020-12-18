@@ -32,7 +32,7 @@ module.exports = function (app) {
 
     app.post('/api/logout', (req, res) => {
         userService.setCurrentUser(null);
-        res.status(200);
+        res.json({message: "logged out"});
     });
 
     app.get('/api/currentUser', (req, res) => {
@@ -42,7 +42,6 @@ module.exports = function (app) {
     });
 
     app.get('/api/users', (req, res) => {
-        console.log('users');
         userService.findAllUsers().then(users => {
             res.json(users);
         })
@@ -50,7 +49,7 @@ module.exports = function (app) {
 
     app.get('/api/users/:userId', (req, res) => {
         const userId = req.params.userId;
-        if (userId !== 'undefined') {
+        if (userId) {
             userService.findUserById(userId).then(user => {
                 if (user) res.json(user);
                 else res.json({error: "No user with id"});
@@ -67,7 +66,7 @@ module.exports = function (app) {
     app.post('/api/accessToken', (req, res) => {
         const accessToken = req.body.accessToken;
         userService.setAccessToken(accessToken);
-        res.json({message: "all good"});
+        res.json({message: "access token set"});
     });
 
     app.get('/api/refreshToken', (req, res) => {
@@ -79,6 +78,6 @@ module.exports = function (app) {
     app.post('/api/refreshToken', (req, res) => {
         const refreshToken = req.body.refreshToken;
         userService.setRefreshToken(refreshToken);
-        res.json({message: "all good"});
+        res.json({message: "refresh token set"});
     });
 }
